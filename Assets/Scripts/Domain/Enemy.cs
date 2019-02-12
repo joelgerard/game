@@ -1,10 +1,9 @@
 ﻿using System;
-namespace Application
+
+public class Enemy
 {
-    public class NewClass
+    public Enemy()
     {
-        public NewClass()
-        {
-        }
     }
 }
+

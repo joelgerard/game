@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
     public DrawShape TrianglePrefab;
     public bool go = false;
 
+    [SerializeField] TrailRenderer trailPrefab;
+    TrailRenderer currentTrail;
 
 
 
@@ -52,7 +54,7 @@ public class GameController : MonoBehaviour
         //Debug.Log(Time.time);
         if (_allShapes.Count > 0 && go)
         {
-            Debug.Log(Time.time);
+            //Debug.Log(Time.time);
 
 
 
@@ -68,10 +70,43 @@ public class GameController : MonoBehaviour
                     !EventSystem.current.IsPointerOverGameObject();
         var canUpdateShape = CurrentShapeToDraw != null && IsDrawingShape;
 
+        var mouseDown = Input.GetKeyDown(KeyCode.Mouse0);
+
+        if (mouseDown)
+        {
+            Debug.Log("Mouse down");
+        }
+
         if (click) {
             Add(mousePos);
         } else if (canUpdateShape) {
             UpdateShapeVertex(mousePos);
+        }
+
+        if (((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
+        {
+            Debug.Log("Start drawing");
+            Plane plane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float distance;
+            if (plane.Raycast(ray, out distance))
+            {
+                if (currentTrail == null)
+                {
+                    currentTrail = Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
+                }
+                else
+                {
+                    currentTrail.transform.position = ray.GetPoint(distance);
+                }
+            }
+        }
+        else
+        {
+            if (currentTrail != null)
+            {
+                currentTrail = null;
+            }
         }
     }
 

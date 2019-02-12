@@ -3,7 +3,12 @@ guid: d07cd3c3a26c647b388059b980ebbf69
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - RectanglePrefab: {instanceID: 0}
+  - CirclePrefab: {instanceID: 0}
+  - TrianglePrefab: {instanceID: 0}
+  - trailPrefab: {fileID: 5937699014009640764, guid: 0e9f5642c303a4201b48cdd0200c1110,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
