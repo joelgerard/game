@@ -3,12 +3,25 @@ using System.Collections.Generic;
 
 public class Game
 {
-    public List<Soldier> Soldiers {get;set;} = new List<Soldier>();
+    public List<Army> Armies {get;set;} = new List<Army>();
 
-    public Soldier AddSoldier()
+    public void Initialize()
     {
-        Soldier soldier = new Soldier();
-        Soldiers.Add(soldier);
-        return soldier;
+        // Enemy
+        AddArmy();
+        
+
+        // Player
+        AddArmy();
+    }
+
+    public Army Player { get { return Armies[1]; } }
+    public Army Enemy { get { return Armies[0]; } }
+
+    public Army AddArmy()
+    {
+        Army army = new Army();
+        Armies.Add(army);
+        return army;
     }
 }

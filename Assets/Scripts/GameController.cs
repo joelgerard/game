@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <inheritdoc />
 /// <summary>
@@ -15,6 +16,9 @@ public class GameController : MonoBehaviour
     public DrawShape RectanglePrefab;
     public DrawShape CirclePrefab;
     public DrawShape TrianglePrefab;
+    public bool go = false;
+
+
 
 
     // Associates a draw mode to the prefab to instantiate
@@ -38,20 +42,19 @@ public class GameController : MonoBehaviour
     {
         // TODO: Is this slow?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
+        Game.Initialize();
+
+        //goButton.onClick.AddListener(GoButtonClicked);
     }
 
     void OutputTime()
     {
         //Debug.Log(Time.time);
-        if (_allShapes.Count > 0)
+        if (_allShapes.Count > 0 && go)
         {
             Debug.Log(Time.time);
 
-            foreach(DrawShape shape in _allShapes)
-            {
-                RaycastHit2D rh;
-                //shape.Move(0, 1, out rh);
-            }
+
 
             
         }
@@ -66,17 +69,19 @@ public class GameController : MonoBehaviour
         var canUpdateShape = CurrentShapeToDraw != null && IsDrawingShape;
 
         if (click) {
-            AddShapeVertex(mousePos);
+            Add(mousePos);
         } else if (canUpdateShape) {
             UpdateShapeVertex(mousePos);
         }
     }
 
+
+
     /// <summary>
     /// Adds a new vertex to the current shape at the given position, 
     /// or creates a new shape if it doesn't exist
     /// </summary>
-    private void AddShapeVertex(Vector2 position)
+    private void Add(Vector2 position)
     {
         if (CurrentShapeToDraw == null) {
             // No current shape -> instantiate a new shape and add two vertices:
@@ -99,6 +104,9 @@ public class GameController : MonoBehaviour
             CurrentShapeToDraw.UpdateShape(position);
             CurrentShapeToDraw = null;
             IsDrawingShape = false;
+
+            //Game.AddSoldier();
+
         } else {
             // Current shape exists -> add vertex if finished, 
             // otherwise start physics simulation and reset reference
@@ -110,6 +118,16 @@ public class GameController : MonoBehaviour
                 CurrentShapeToDraw.SimulatingPhysics = false;
                 CurrentShapeToDraw = null;
             }
+        }
+    }
+
+    public void GoButtonClicked()
+    {
+        go = true;
+        foreach (DrawShape shape in _allShapes)
+        {
+            RaycastHit2D rh;
+            shape.Move(0, 1, out rh);
         }
     }
 
