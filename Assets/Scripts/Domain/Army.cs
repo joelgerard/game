@@ -21,9 +21,10 @@ public class Army
 
     public Soldier AddSoldier()
     {
-        Soldier soldier = new Soldier();
+        /*Soldier soldier = new Soldier();
         Soldiers.Add(soldier);
-        return soldier;
+        return soldier;*/
+        return null;
     }
 
     public int AttackDirection { get { return attackDirections[Territory]; } }

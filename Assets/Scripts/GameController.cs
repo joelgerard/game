@@ -18,15 +18,20 @@ public class GameController : MonoBehaviour
     public DrawShape TrianglePrefab;
     public bool go = false;
 
+    public List<Soldier> soldiers = new List<Soldier>();
+
     [SerializeField] TrailRenderer trailPrefab;
-    TrailRenderer currentTrail;
+    private int currentPos = 0;
+    Navigator navigator = new Navigator();
+    UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
 
 
     // Associates a draw mode to the prefab to instantiate
     private Dictionary<DrawMode, DrawShape> _drawModeToPrefab;
 
-    private readonly List<DrawShape> _allShapes = new List<DrawShape>();
+    private readonly List<MonoBehaviour> _allShapes = new List<MonoBehaviour>();
+
 
     private DrawShape CurrentShapeToDraw { get; set; }
     private bool IsDrawingShape { get; set; }
@@ -42,24 +47,15 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        navigator.Path = trailRendererPath;
         // TODO: Is this slow?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
         Game.Initialize();
-
-        //goButton.onClick.AddListener(GoButtonClicked);
     }
 
     void OutputTime()
     {
-        //Debug.Log(Time.time);
-        if (_allShapes.Count > 0 && go)
-        {
-            //Debug.Log(Time.time);
-
-
-
-            
-        }
+        this.navigator.MoveUnits(this.soldiers);
     }
 
     private void Update()
@@ -74,40 +70,41 @@ public class GameController : MonoBehaviour
 
         if (mouseDown)
         {
-            Debug.Log("Mouse down");
+            Debug.Log("set tr to null");
+            trailRendererPath.TrailRenderer = null;
+            currentPos = 0;
         }
 
         if (click) {
             Add(mousePos);
-        } else if (canUpdateShape) {
-            UpdateShapeVertex(mousePos);
-        }
+        } 
+
 
         if (((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
         {
-            Debug.Log("Start drawing");
+            //Debug.Log("Start drawing");
             Plane plane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
             if (plane.Raycast(ray, out distance))
             {
-                if (currentTrail == null)
+                if (trailRendererPath.TrailRenderer == null)
                 {
-                    currentTrail = Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
+                    trailRendererPath.TrailRenderer = Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
+                    //trailRendererPath = new UnityTrailRendererPath(currentTrail);
+                    navigator.Path = trailRendererPath;
+                    Debug.Log("Path created");
                 }
                 else
                 {
-                    currentTrail.transform.position = ray.GetPoint(distance);
+                    trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
+                    navigator.Path = trailRendererPath;
                 }
+
+
             }
         }
-        else
-        {
-            if (currentTrail != null)
-            {
-                currentTrail = null;
-            }
-        }
+
     }
 
 
@@ -118,66 +115,20 @@ public class GameController : MonoBehaviour
     /// </summary>
     private void Add(Vector2 position)
     {
-        if (CurrentShapeToDraw == null) {
-            // No current shape -> instantiate a new shape and add two vertices:
-            // one for the initial position, and the other for the current cursor
-            var prefab = _drawModeToPrefab[Mode];
-            CurrentShapeToDraw = Instantiate(prefab);
-            CurrentShapeToDraw.name = "Shape " + _allShapes.Count;
-
-            CurrentShapeToDraw.AddVertex(position);
-            CurrentShapeToDraw.AddVertex(position);
-
-            position.x += 0.1f;
-            position.y += 0.1f;
-            CurrentShapeToDraw.AddVertex(position);
-
-            IsDrawingShape = true;
-            CurrentShapeToDraw.SimulatingPhysics = false;
-
-            _allShapes.Add(CurrentShapeToDraw);
-            CurrentShapeToDraw.UpdateShape(position);
-            CurrentShapeToDraw = null;
-            IsDrawingShape = false;
-
-            //Game.AddSoldier();
-
-        } else {
-            // Current shape exists -> add vertex if finished, 
-            // otherwise start physics simulation and reset reference
-            IsDrawingShape = !CurrentShapeToDraw.ShapeFinished;
-
-            if (IsDrawingShape) {
-                CurrentShapeToDraw.AddVertex(position);
-            } else {
-                CurrentShapeToDraw.SimulatingPhysics = false;
-                CurrentShapeToDraw = null;
-            }
-        }
+        SoldierRenderer sr = new SoldierRenderer();
+        MonoBehaviour soldierMono = sr.Draw(RectanglePrefab, position);
+        _allShapes.Add(soldierMono);
+        Soldier soldier = new Soldier(soldierMono.gameObject);
+        soldiers.Add(soldier);
     }
 
     public void GoButtonClicked()
     {
         go = true;
-        foreach (DrawShape shape in _allShapes)
-        {
-            RaycastHit2D rh;
-            shape.Move(0, 1, out rh);
-        }
+
     }
 
-    /// <summary>
-    /// Updates the current shape's latest vertex position to allow
-    /// a shape to be updated with the mouse cursor and redrawn
-    /// </summary>
-    private void UpdateShapeVertex(Vector2 position)
-    {
-        if (CurrentShapeToDraw == null) {
-            return;
-        }
 
-        CurrentShapeToDraw.UpdateShape(position);
-    }
 
     /// <summary>
     /// Controlled via Unity GUI button
