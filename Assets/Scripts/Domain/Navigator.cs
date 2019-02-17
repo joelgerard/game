@@ -11,33 +11,22 @@ public class Navigator
 
     }
 
-    public IPath Path { get; set; }
+    //public IPath Path { get; set; }
 
-    public Vector2 GetPoint(int index)
-    {
-        return new Vector2();
-    }
-
-    public Vector2 GetTargetPosition(Vector2 currentPosition)
-    {
-        return new Vector2();
-    }
-
-    public void MoveUnits(List<Soldier> soldiers)
+    public void MoveUnits(List<Soldier> soldiers, IPath Path)
     {
         if (Path == null)
         {
-            Debug.Log("Move units has path " + (Path != null));
             return;
         }
         int numPos = Path.Count();
         if (numPos > 0 && currentPos < numPos)
         {
-            Debug.Log("Moving");
             Vector2 targetPos = Path.GetPosition(currentPos);
 
             foreach (Soldier soldier in soldiers)
             {
+                // todo: what happens in test to delta time?
                 soldier.Position =
                         Vector2.MoveTowards(soldier.Position, targetPos, 3 * Time.deltaTime);
 
@@ -45,7 +34,7 @@ public class Navigator
                 if (Vector2.Distance(targetPos, soldier.Position) < 0.5)
                 {
                     currentPos++;
-                    // TODO: what if two units make it? fix
+                    // TODO: what if two units make it? fix. move out of for loop
                 }
             }
         }

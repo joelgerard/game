@@ -60,20 +60,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Controllers\ExplosionController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\GameController.cs" />
     <Compile Include="Assets\Scripts\Domain\Army.cs" />
     <Compile Include="Assets\Scripts\Domain\Enemy.cs" />
     <Compile Include="Assets\Scripts\Domain\Game.cs" />
     <Compile Include="Assets\Scripts\Domain\IPath.cs" />
     <Compile Include="Assets\Scripts\Domain\Navigator.cs" />
     <Compile Include="Assets\Scripts\Domain\Soldier.cs" />
-    <Compile Include="Assets\Scripts\DrawCircle.cs" />
-    <Compile Include="Assets\Scripts\DrawRectangle.cs" />
-    <Compile Include="Assets\Scripts\DrawShape.cs" />
-    <Compile Include="Assets\Scripts\DrawTriangle.cs" />
-    <Compile Include="Assets\Scripts\ExplosionController.cs" />
-    <Compile Include="Assets\Scripts\GameController.cs" />
-    <Compile Include="Assets\Scripts\MovingObject.cs" />
-    <Compile Include="Assets\Scripts\SoldierRenderer.cs" />
+    <Compile Include="Assets\Scripts\Renderers\DrawCircle.cs" />
+    <Compile Include="Assets\Scripts\Renderers\DrawRectangle.cs" />
+    <Compile Include="Assets\Scripts\Renderers\DrawShape.cs" />
+    <Compile Include="Assets\Scripts\Renderers\DrawTriangle.cs" />
+    <Compile Include="Assets\Scripts\Renderers\MovingObject.cs" />
+    <Compile Include="Assets\Scripts\Renderers\SoldierRenderer.cs" />
     <Compile Include="Assets\Scripts\TestPolygon.cs" />
     <Compile Include="Assets\Scripts\Triangulator.cs" />
     <Compile Include="Assets\Scripts\Unity\UnityTrailRendererPath.cs" />
