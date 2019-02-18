@@ -103,8 +103,4 @@ public class DrawTriangle : DrawShape
         return mesh;
     }
 
-    //protected override void OnCantMove<T>(T component)
-    //{
-    //    throw new NotImplementedException();
-    //}
 }

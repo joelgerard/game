@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Soldier
+public class Soldier : Unit
 {
     GameObject go;
 

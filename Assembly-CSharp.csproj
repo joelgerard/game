@@ -70,6 +70,10 @@
     <Compile Include="Assets\Scripts\Domain\Navigator.cs" />
     <Compile Include="Assets\Scripts\Domain\Soldier.cs" />
     <Compile Include="Assets\Scripts\Domain\Unit.cs" />
+    <Compile Include="Assets\Scripts\Lib\Diagnostics\Diagnostics.cs" />
+    <Compile Include="Assets\Scripts\Lib\Game\HSM\DefaultHsmClient.cs" />
+    <Compile Include="Assets\Scripts\Lib\Game\HSM\Hsm.cs" />
+    <Compile Include="Assets\Scripts\Lib\Game\HSM\UnityHsmClient.cs" />
     <Compile Include="Assets\Scripts\Renderers\DrawCircle.cs" />
     <Compile Include="Assets\Scripts\Renderers\DrawRectangle.cs" />
     <Compile Include="Assets\Scripts\Renderers\DrawShape.cs" />

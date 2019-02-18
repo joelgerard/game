@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public bool okToDrawTrail = true;
 
     public List<Soldier> soldiers = new List<Soldier>();
+    Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
 
     [SerializeField] TrailRenderer trailPrefab;
 
@@ -45,6 +46,7 @@ public class GameController : MonoBehaviour
             {DrawMode.Circle, CirclePrefab},
             {DrawMode.Triangle, TrianglePrefab}
         };
+
     }
 
     void Start()
@@ -52,11 +54,27 @@ public class GameController : MonoBehaviour
         // TODO: Is this slow, canonical unity way of doing things?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
         Game.Initialize();
+
+        DrawRectangle enemyBaseSquare = GameObject.Find("EnemyBaseSquare").gameObject.GetComponent<DrawRectangle>();
+        ArmyBase enemyBase = new ArmyBase
+        {
+            Allegiance = Allegiance.ENEMY
+        };
+        unitMap.Add(enemyBaseSquare.name, enemyBase);
+
+        DrawRectangle launchPad = GameObject.Find("PlayerBaseSquare").gameObject.GetComponent<DrawRectangle>();
+        ArmyBase playerBase = new ArmyBase
+        {
+            Allegiance = Allegiance.ALLY
+        };
+        unitMap.Add(launchPad.name, playerBase);
+
     }
 
     void OutputTime()
     {
         this.navigator.MoveUnits(this.soldiers, trailRendererPath);
+
     }
 
     private void Update()
@@ -116,12 +134,26 @@ public class GameController : MonoBehaviour
     private void Add(Vector2 position)
     {
         SoldierRenderer sr = new SoldierRenderer();
-        MonoBehaviour soldierMono = sr.Draw(RectanglePrefab, position);
+        DrawShape soldierMono = sr.Draw(RectanglePrefab, position);
+
+        // TODO: Is this needed?
         //_allShapes.Add(soldierMono);
+        soldierMono.OnEnterEvent += UnitMono_OnEnterEvent;
 
-
-        Soldier soldier = new Soldier(soldierMono.gameObject);
+        Soldier soldier = new Soldier(soldierMono.gameObject)
+        {
+            Allegiance = Allegiance.ALLY
+        };
         soldiers.Add(soldier);
+        unitMap.Add(soldierMono.name, soldier);
+    }
+
+    void UnitMono_OnEnterEvent(GameObject thisObject, GameObject otherObject)
+    {
+
+        Unit unit = unitMap[thisObject.name];
+        Unit otherUnit = unitMap[otherObject.name];
+        unit.Attack(otherUnit);
     }
 
 

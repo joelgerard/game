@@ -1,13 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
+// TODO: What is this class for?
 public class SoldierRenderer
 {
     public SoldierRenderer()
     {
     }
 
-    public MonoBehaviour Draw(DrawShape RectanglePrefab, Vector2 position)
+    public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position)
     {
         DrawShape CurrentShapeToDraw;
         var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];

@@ -11,12 +11,12 @@ public abstract class MovingObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        OnEnterEvent(this.gameObject, other.gameObject);
-        if (true)
-        {
+        // Something with mono is wierd here.
+        //Contract.Requires<ArgumentNullException>(other != null, "other");
+        Diagnostics.NotNull(other, "other");
+        Diagnostics.NotNull(other.gameObject, "other.gameObject");
+        Diagnostics.NotNull(this.gameObject, "this.gameObject");
 
-            Debug.Log("entered" + other.name + " _ " + other.tag);
-        }
+        OnEnterEvent?.Invoke(this.gameObject, other.gameObject);
     }
-
 }
