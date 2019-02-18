@@ -52,15 +52,6 @@ public class GameController : MonoBehaviour
         // TODO: Is this slow, canonical unity way of doing things?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
         Game.Initialize();
-
-        GameObject enemyBase = GameObject.Find("EnemyBaseSquare");
-        DrawRectangle dr = enemyBase.GetComponent<DrawRectangle>();
-        EventTrigger trigger = dr.GetComponent<EventTrigger>();
-        EventTrigger.Entry entry = new EventTrigger.Entry();
-        Collider c = enemyBase.GetComponent<Collider>();
-
-        //EventTrigger t = c.GetComponent<EventTrigger>();
-        Debug.Log("Trigger " + (trigger != null));
     }
 
     void OutputTime()
@@ -126,17 +117,8 @@ public class GameController : MonoBehaviour
     {
         SoldierRenderer sr = new SoldierRenderer();
         MonoBehaviour soldierMono = sr.Draw(RectanglePrefab, position);
-        _allShapes.Add(soldierMono);
+        //_allShapes.Add(soldierMono);
 
-        BoxCollider2D collider = soldierMono.GetComponent<BoxCollider2D>();
-        //Debug.Log("Colider " + (collider != null));
-
-        collider.isTrigger = true;
-
-
-
-        EventTrigger trigger = GetComponent<EventTrigger>();//soldierMono.GetComponent<EventTrigger>();
-        //Debug.Log("Trigger after add is " + (trigger != null));
 
         Soldier soldier = new Soldier(soldierMono.gameObject);
         soldiers.Add(soldier);

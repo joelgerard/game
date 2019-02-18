@@ -12,7 +12,7 @@ public class SoldierRenderer
         DrawShape CurrentShapeToDraw;
         var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
         CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);
-        CurrentShapeToDraw.name = "Shape " + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
+        CurrentShapeToDraw.name = "Soldier " + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
 
         CurrentShapeToDraw.AddVertex(position);
         CurrentShapeToDraw.AddVertex(position);
