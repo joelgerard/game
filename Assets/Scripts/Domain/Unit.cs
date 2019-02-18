@@ -21,7 +21,8 @@ public class Unit
     public void Attack(Unit otherUnit)
     {
         if (otherUnit.Allegiance != this.Allegiance)
-        { 
+        {
+            // TODO: Integrate HSM. 
             Debug.Log("Unit will attack");
         }
     }
