@@ -77,6 +77,11 @@ public class GameController : MonoBehaviour
 
     }
 
+    public static void Log(string msg)
+    {
+        Debug.Log(msg);
+    }
+
     private void Update()
     {
         var mousePos = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -105,7 +110,6 @@ public class GameController : MonoBehaviour
             Add(mousePos);
         } 
 
-
         if (!clickedInBase && ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
         {
             Plane plane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
@@ -123,6 +127,11 @@ public class GameController : MonoBehaviour
                     trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
                 }
             }
+        }
+
+        foreach (Unit unit in unitMap.Values)
+        {
+            unit.Update(Time.deltaTime);
         }
 
     }
@@ -144,6 +153,7 @@ public class GameController : MonoBehaviour
         {
             Allegiance = Allegiance.ALLY
         };
+        soldier.Init();
         soldiers.Add(soldier);
         unitMap.Add(soldierMono.name, soldier);
     }

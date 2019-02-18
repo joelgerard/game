@@ -18,7 +18,7 @@ public class Unit
     public Allegiance Allegiance {get;set;}
     public int HP { get; set; }
 
-    public void Attack(Unit otherUnit)
+    public virtual void Attack(Unit otherUnit)
     {
         if (otherUnit.Allegiance != this.Allegiance)
         {
@@ -26,4 +26,7 @@ public class Unit
             Debug.Log("Unit will attack");
         }
     }
+
+    public virtual void Update(float deltaTime) { }
+
 }

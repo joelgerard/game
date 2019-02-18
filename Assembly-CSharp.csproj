@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Domain\IPath.cs" />
     <Compile Include="Assets\Scripts\Domain\Navigator.cs" />
     <Compile Include="Assets\Scripts\Domain\Soldier.cs" />
+    <Compile Include="Assets\Scripts\Domain\SoldierHsm.cs" />
     <Compile Include="Assets\Scripts\Domain\Unit.cs" />
     <Compile Include="Assets\Scripts\Lib\Diagnostics\Diagnostics.cs" />
     <Compile Include="Assets\Scripts\Lib\Game\HSM\DefaultHsmClient.cs" />
