@@ -63,11 +63,13 @@
     <Compile Include="Assets\Scripts\Controllers\ExplosionController.cs" />
     <Compile Include="Assets\Scripts\Controllers\GameController.cs" />
     <Compile Include="Assets\Scripts\Domain\Army.cs" />
+    <Compile Include="Assets\Scripts\Domain\ArmyBase.cs" />
     <Compile Include="Assets\Scripts\Domain\Enemy.cs" />
     <Compile Include="Assets\Scripts\Domain\Game.cs" />
     <Compile Include="Assets\Scripts\Domain\IPath.cs" />
     <Compile Include="Assets\Scripts\Domain\Navigator.cs" />
     <Compile Include="Assets\Scripts\Domain\Soldier.cs" />
+    <Compile Include="Assets\Scripts\Domain\Unit.cs" />
     <Compile Include="Assets\Scripts\Renderers\DrawCircle.cs" />
     <Compile Include="Assets\Scripts\Renderers\DrawRectangle.cs" />
     <Compile Include="Assets\Scripts\Renderers\DrawShape.cs" />

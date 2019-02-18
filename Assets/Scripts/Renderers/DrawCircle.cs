@@ -26,7 +26,7 @@ public class DrawCircle : DrawShape
 
     private bool _simulating;
 
-    public override bool SimulatingPhysics
+    /*public override bool SimulatingPhysics
     {
         get { return _simulating; }
         set
@@ -34,7 +34,7 @@ public class DrawCircle : DrawShape
             _simulating = value;
             _rigidbody2D.bodyType = value ? RigidbodyType2D.Dynamic : RigidbodyType2D.Static;
         }
-    }
+    }*/
 
     private void Awake()
     {
@@ -127,8 +127,8 @@ public class DrawCircle : DrawShape
         return mesh;
     }
 
-    protected override void OnCantMove<T>(T component)
-    {
-        throw new System.NotImplementedException();
-    }
+    //protected override void OnCantMove<T>(T component)
+    //{
+    //    throw new System.NotImplementedException();
+    //}
 }

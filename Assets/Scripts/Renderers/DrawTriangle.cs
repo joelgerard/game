@@ -22,7 +22,7 @@ public class DrawTriangle : DrawShape
     
     public override bool ShapeFinished { get { return _vertices.Count >= 3; } }
 
-    private bool _simulating;
+    /*private bool _simulating;
     public override bool SimulatingPhysics
     {
         get { return _simulating; }
@@ -31,7 +31,7 @@ public class DrawTriangle : DrawShape
             _rigidbody2D.bodyType = value ? 
                 RigidbodyType2D.Dynamic : RigidbodyType2D.Static;
         }
-    }
+    }*/
 
     private void Awake()
     {
@@ -103,8 +103,8 @@ public class DrawTriangle : DrawShape
         return mesh;
     }
 
-    protected override void OnCantMove<T>(T component)
-    {
-        throw new NotImplementedException();
-    }
+    //protected override void OnCantMove<T>(T component)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

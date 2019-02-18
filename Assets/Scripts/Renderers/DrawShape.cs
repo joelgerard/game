@@ -16,7 +16,7 @@ public abstract class DrawShape : MovingObject
     /// The status of whether the shape is simulating its physics.
     /// Setting this property will enable or disable physics.
     /// </summary>
-    public abstract bool SimulatingPhysics { get; set; }
+    //public abstract bool SimulatingPhysics { get; set; }
 
     /// <summary>
     /// Adds a new vertex to the shape. The shape should 

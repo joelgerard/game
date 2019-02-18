@@ -12,7 +12,7 @@ public class SoldierRenderer
         DrawShape CurrentShapeToDraw;
         var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
         CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);
-        CurrentShapeToDraw.name = "Shape "; // TODO: Update name // + _allShapes.Count;
+        CurrentShapeToDraw.name = "Shape " + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
 
         CurrentShapeToDraw.AddVertex(position);
         CurrentShapeToDraw.AddVertex(position);
@@ -21,13 +21,9 @@ public class SoldierRenderer
         position.y += 0.1f;
         CurrentShapeToDraw.AddVertex(position);
 
-        //IsDrawingShape = true;
-        CurrentShapeToDraw.SimulatingPhysics = false;
-
 
         CurrentShapeToDraw.UpdateShape(position);
-        //CurrentShapeToDraw = null;
-        //IsDrawingShape = false;
+
         return CurrentShapeToDraw;
     }
 }

@@ -11,8 +11,6 @@ public class Navigator
 
     }
 
-    //public IPath Path { get; set; }
-
     public void MoveUnits(List<Soldier> soldiers, IPath Path)
     {
         if (Path == null)

@@ -24,22 +24,12 @@ public class DrawRectangle : DrawShape
         get { return _vertices.Count >= 2; }
     }
 
-    private bool _simulating;
-
-    public override bool SimulatingPhysics
-    {
-        get { return _simulating; }
-        set {
-            _simulating = value;
-            _rigidbody2D.bodyType = /*value ?*/ RigidbodyType2D.Dynamic /*: RigidbodyType2D.Static*/;
-        }
-    }
-
     private void Awake()
     {
         _meshFilter = GetComponent<MeshFilter>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _boxCollider2D = GetComponent<BoxCollider2D>();
+
         _lineRenderer = GetComponent<LineRenderer>();
 
         _rigidbody2D.useAutoMass = true;
@@ -47,7 +37,8 @@ public class DrawRectangle : DrawShape
 
     public override void AddVertex(Vector2 vertex)
     {
-        if (ShapeFinished) {
+        if (ShapeFinished)
+        {
             return;
         }
 
@@ -57,7 +48,8 @@ public class DrawRectangle : DrawShape
 
     public override void UpdateShape(Vector2 newVertex)
     {
-        if (_vertices.Count < 2) {
+        if (_vertices.Count < 2)
+        {
             return;
         }
 
@@ -90,7 +82,7 @@ public class DrawRectangle : DrawShape
         // Note: vertices must be adjacent to each other for Triangulator to work properly
         var v2 = new Vector2(v0.x, v1.y);
         var v3 = new Vector2(v1.x, v0.y);
-        var rectangleVertices = new[] {v0, v2, v1, v3};
+        var rectangleVertices = new[] { v0, v2, v1, v3 };
 
         // Find all the triangles in the shape
         var triangles = new Triangulator(rectangleVertices).Triangulate();
@@ -98,7 +90,8 @@ public class DrawRectangle : DrawShape
         // Assign each vertex the fill color
         var colors = Enumerable.Repeat(fillColor, rectangleVertices.Length).ToArray();
 
-        var mesh = new Mesh {
+        var mesh = new Mesh
+        {
             name = "Rectangle",
             vertices = rectangleVertices.ToVector3(),
             triangles = triangles,
@@ -110,10 +103,5 @@ public class DrawRectangle : DrawShape
         mesh.RecalculateTangents();
 
         return mesh;
-    }
-
-    protected override void OnCantMove<T>(T component)
-    {
-        throw new System.NotImplementedException();
     }
 }
