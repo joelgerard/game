@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static MovableUnit.MovableUnitHsm;
+using static Soldier.SoldierHsm;
 
 public class Navigator
 {
@@ -24,10 +26,12 @@ public class Navigator
 
             foreach (Soldier soldier in soldiers)
             {
-                // todo: what happens in test to delta time?
-                soldier.Position =
-                        Vector2.MoveTowards(soldier.Position, targetPos, 3 * Time.deltaTime);
-
+                if (soldier.StateMachine.IsInState<Moving>()) 
+                { 
+                    // todo: what happens in test to delta time?
+                    soldier.Position =
+                            Vector2.MoveTowards(soldier.Position, targetPos, 3 * Time.deltaTime);
+                }
                 // are any of the shapes near the current pos? If so move to the next one
                 if (Vector2.Distance(targetPos, soldier.Position) < 0.5)
                 {
@@ -36,7 +40,6 @@ public class Navigator
                 }
             }
         }
-
     }
 }
 

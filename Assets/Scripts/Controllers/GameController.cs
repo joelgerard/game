@@ -60,6 +60,7 @@ public class GameController : MonoBehaviour
         {
             Allegiance = Allegiance.ENEMY
         };
+        enemyBase.Init();
         unitMap.Add(enemyBaseSquare.name, enemyBase);
 
         DrawRectangle launchPad = GameObject.Find("PlayerBaseSquare").gameObject.GetComponent<DrawRectangle>();
@@ -67,12 +68,14 @@ public class GameController : MonoBehaviour
         {
             Allegiance = Allegiance.ALLY
         };
+        playerBase.Init();
         unitMap.Add(launchPad.name, playerBase);
 
     }
 
     void OutputTime()
     {
+
         this.navigator.MoveUnits(this.soldiers, trailRendererPath);
 
     }
@@ -125,6 +128,10 @@ public class GameController : MonoBehaviour
                 else
                 {
                     trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
+                }
+                foreach (Soldier soldier in soldiers)
+                {
+                    soldier.StartMoving();
                 }
             }
         }

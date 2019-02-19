@@ -8,7 +8,7 @@ namespace Hsm
         public static void Log(StateMachine aStateMachine, string aMessage)
         {
             //Util.Log(aMessage);
-            Console.Out.Write(aMessage); //@NOTE: We don't use WriteLine because Unity's version of Write outputs a newline
+            GameController.Log(aMessage); //@NOTE: We don't use WriteLine because Unity's version of Write outputs a newline
         }
 
         public static void LogError(StateMachine aStateMachine, string aMessage)

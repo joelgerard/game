@@ -1,5 +1,7 @@
 ﻿using System;
+using Hsm;
 using UnityEngine;
+using static Unit.UnitHsm;
 
 public enum Allegiance
 {
@@ -7,9 +9,13 @@ public enum Allegiance
     ENEMY
 }
 
-public class Unit
+public partial class Unit
 {
+    // TODO: no public
+    public Hsm.StateMachine StateMachine = new Hsm.StateMachine();
+    public partial class UnitHsm { }
 
+    protected bool startAttack = false;
 
     public Unit()
     {
@@ -18,15 +24,32 @@ public class Unit
     public Allegiance Allegiance {get;set;}
     public int HP { get; set; }
 
+    public virtual void Init()
+    {
+        StateMachine.Init<UnitHsm.Root>(this);
+        StateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
+    }
+
+
     public virtual void Attack(Unit otherUnit)
     {
         if (otherUnit.Allegiance != this.Allegiance)
         {
-            // TODO: Integrate HSM. 
-            Debug.Log("Unit will attack");
+            // TODO: Integrate HSM further. Better? Where should this "if" be? 
+            startAttack = true;
         }
     }
 
-    public virtual void Update(float deltaTime) { }
+    public virtual void Update(float deltaTime)
+    {
+        StateMachine.Update(deltaTime);
+    }
+
+    /** ############ SHARED STATES ########### */
+    // C# HSM doesn't yet support shared states.
+    protected virtual Transition GetNeutralTransition()
+    {
+        return Transition.Sibling<Neutral>();
+    }
 
 }
