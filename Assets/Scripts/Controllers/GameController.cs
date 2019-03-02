@@ -15,36 +15,15 @@ public class GameController : MonoBehaviour
     public DrawShape RectanglePrefab;
     public DrawShape CirclePrefab;
     public DrawShape TrianglePrefab;
-    public bool go = false;
+
 
     public bool okToDrawTrail = true;
-
-    Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
-
     [SerializeField] TrailRenderer trailPrefab;
-
     Navigator navigator = new Navigator();
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
-
-
-    // Associates a draw mode to the prefab to instantiate
-    private Dictionary<DrawMode, DrawShape> _drawModeToPrefab;
-
-    private readonly List<MonoBehaviour> _allShapes = new List<MonoBehaviour>();
-
-
-    private DrawShape CurrentShapeToDraw { get; set; }
-    private bool IsDrawingShape { get; set; }
-    
     private void Awake()
     {
-        _drawModeToPrefab = new Dictionary<DrawMode, DrawShape> {
-            {DrawMode.Rectangle, RectanglePrefab},
-            {DrawMode.Circle, CirclePrefab},
-            {DrawMode.Triangle, TrianglePrefab}
-        };
-
     }
 
     void Start()
@@ -96,13 +75,11 @@ public class GameController : MonoBehaviour
 
         if (!clickedInBase && ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
         {
-            Debug.Log("Clicked out of base");
             Plane plane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
             if (plane.Raycast(ray, out distance))
             {
-                Debug.Log("Drawing " + game.soldiers.Count.ToString());
                 if (okToDrawTrail)
                 {
                     trailRendererPath.TrailRenderer = Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
@@ -116,15 +93,8 @@ public class GameController : MonoBehaviour
                 {
 
                     soldier.StartMoving();
-                    Debug.Log("Move");
                 }
             }
-        }
-
-        // TODO: This has kind of moved to the game object
-        foreach (Unit unit in unitMap.Values)
-        {
-            unit.Update(Time.deltaTime);
         }
 
         // TODO: Move to game?
@@ -133,26 +103,5 @@ public class GameController : MonoBehaviour
             soldier.StateMachine.ProcessStateTransitions();
         }
         navigator.MoveUnits(game.soldiers, trailRendererPath);
-
     }
-
-
-
-
-
-
-
-
-
-    /// <summary>
-    /// The types of shapes that can be drawn, useful for
-    /// selecting shapes to draw
-    /// </summary>
-    public enum DrawMode
-    {
-        Rectangle,
-        Circle,
-        Triangle
-    }
-
 }
