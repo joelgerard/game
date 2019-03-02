@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class Soldier : MovableUnit
 {
-    GameObject go;
+
 
     public partial class SoliderHsm { }
 
@@ -23,18 +23,7 @@ public partial class Soldier : MovableUnit
 
 
 
-    // TODO: Move to unit
-    public Vector2 Position
-    {
-        get
-        { 
-            return this.go.transform.position; 
-        }
-        set
-        {
-            this.go.transform.position = value;
-        }
-    }
+
 
 
 

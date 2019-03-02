@@ -46,6 +46,14 @@ public partial class MovableUnit
                 //Debug.Log("entering attack");
             }
 
+            public override void Update(float aDeltaTime)
+            {
+                /*MovableUnit unit = (MovableUnit)Owner;
+                Navigator navigator = new Navigator();
+                navigator.MoveUnits(null,unit.Path);*/
+                base.Update(aDeltaTime);
+            }
+
             public override Transition GetTransition()
             {
                 if (Owner.startAttack)

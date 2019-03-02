@@ -11,8 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class GameController : MonoBehaviour
 {
-    public DrawMode Mode = DrawMode.Rectangle;
-    public Game Game = new Game();
+    public Game game = new Game();
     public DrawShape RectanglePrefab;
     public DrawShape CirclePrefab;
     public DrawShape TrianglePrefab;
@@ -20,7 +19,6 @@ public class GameController : MonoBehaviour
 
     public bool okToDrawTrail = true;
 
-    public List<Soldier> soldiers = new List<Soldier>();
     Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
 
     [SerializeField] TrailRenderer trailPrefab;
@@ -53,31 +51,13 @@ public class GameController : MonoBehaviour
     {
         // TODO: Is this slow, canonical unity way of doing things?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
-        Game.Initialize();
-
-        DrawRectangle enemyBaseSquare = GameObject.Find("EnemyBaseSquare").gameObject.GetComponent<DrawRectangle>();
-        ArmyBase enemyBase = new ArmyBase
-        {
-            Allegiance = Allegiance.ENEMY
-        };
-        enemyBase.Init();
-        unitMap.Add(enemyBaseSquare.name, enemyBase);
-
-        DrawRectangle launchPad = GameObject.Find("PlayerBaseSquare").gameObject.GetComponent<DrawRectangle>();
-        ArmyBase playerBase = new ArmyBase
-        {
-            Allegiance = Allegiance.ALLY
-        };
-        playerBase.Init();
-        unitMap.Add(launchPad.name, playerBase);
-
+        game.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab);
     }
 
     void OutputTime()
     {
-
-        this.navigator.MoveUnits(this.soldiers, trailRendererPath);
-
+        // TODO: Maybe this should just go in update?
+        // this.navigator.MoveUnits(game.soldiers, trailRendererPath);
     }
 
     public static void Log(string msg)
@@ -87,6 +67,7 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+
         var mousePos = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
 
@@ -110,16 +91,18 @@ public class GameController : MonoBehaviour
         okToDrawTrail |= mouseUp;
 
         if (click && clickedInBase) {
-            Add(mousePos);
+            game.AddSoldier(mousePos);
         } 
 
         if (!clickedInBase && ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
         {
+            Debug.Log("Clicked out of base");
             Plane plane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
             if (plane.Raycast(ray, out distance))
             {
+                Debug.Log("Drawing " + game.soldiers.Count.ToString());
                 if (okToDrawTrail)
                 {
                     trailRendererPath.TrailRenderer = Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
@@ -129,58 +112,37 @@ public class GameController : MonoBehaviour
                 {
                     trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
                 }
-                foreach (Soldier soldier in soldiers)
+                foreach (Soldier soldier in game.soldiers)
                 {
+
                     soldier.StartMoving();
+                    Debug.Log("Move");
                 }
             }
         }
 
+        // TODO: This has kind of moved to the game object
         foreach (Unit unit in unitMap.Values)
         {
             unit.Update(Time.deltaTime);
         }
 
-    }
-
-    /// <summary>
-    /// Adds a new vertex to the current shape at the given position, 
-    /// or creates a new shape if it doesn't exist
-    /// </summary>
-    private void Add(Vector2 position)
-    {
-        SoldierRenderer sr = new SoldierRenderer();
-        DrawShape soldierMono = sr.Draw(RectanglePrefab, position);
-
-        // TODO: Is this needed?
-        //_allShapes.Add(soldierMono);
-        soldierMono.OnEnterEvent += UnitMono_OnEnterEvent;
-
-        Soldier soldier = new Soldier(soldierMono.gameObject)
+        // TODO: Move to game?
+        foreach (Soldier soldier in game.soldiers)
         {
-            Allegiance = Allegiance.ALLY
-        };
-        soldier.Init();
-        soldiers.Add(soldier);
-        unitMap.Add(soldierMono.name, soldier);
-    }
+            soldier.StateMachine.ProcessStateTransitions();
+        }
+        navigator.MoveUnits(game.soldiers, trailRendererPath);
 
-    void UnitMono_OnEnterEvent(GameObject thisObject, GameObject otherObject)
-    {
-
-        Unit unit = unitMap[thisObject.name];
-        Unit otherUnit = unitMap[otherObject.name];
-        unit.Attack(otherUnit);
     }
 
 
-    /// <summary>
-    /// Controlled via Unity GUI button
-    /// </summary>
-    public void SetDrawMode(string mode)
-    {
-        Mode = (DrawMode) Enum.Parse(typeof(DrawMode), mode);
-    }
+
+
+
+
+
+
 
     /// <summary>
     /// The types of shapes that can be drawn, useful for

@@ -16,6 +16,7 @@ public partial class Unit
     public partial class UnitHsm { }
 
     protected bool startAttack = false;
+    protected GameObject go;
 
     public Unit()
     {
@@ -28,6 +29,19 @@ public partial class Unit
     {
         StateMachine.Init<UnitHsm.Root>(this);
         StateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
+    }
+
+
+    public Vector2 Position
+    {
+        get
+        {
+            return this.go.transform.position;
+        }
+        set
+        {
+            this.go.transform.position = value;
+        }
     }
 
 

@@ -2,6 +2,7 @@
 using UnityEngine;
 using Hsm;
 using SoldierState = Hsm.StateWithOwner<Soldier>;
+using static MovableUnit;
 
 
 // TODO: Partial????
