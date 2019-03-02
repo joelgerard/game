@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
 
     public bool okToDrawTrail = true;
     [SerializeField] TrailRenderer trailPrefab;
-    Navigator navigator = new Navigator();
+
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
     private void Awake()
@@ -91,17 +91,18 @@ public class GameController : MonoBehaviour
                 }
                 foreach (Soldier soldier in game.soldiers)
                 {
-
                     soldier.StartMoving();
                 }
             }
         }
 
-        // TODO: Move to game?
-        foreach (Soldier soldier in game.soldiers)
+        GameUpdate update = new GameUpdate
         {
-            soldier.StateMachine.ProcessStateTransitions();
-        }
-        navigator.MoveUnits(game.soldiers, trailRendererPath);
+            currentPath = trailRendererPath,
+            deltaTime = Time.deltaTime
+        };
+        game.Update(update);
+
+
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Game
 {
+    Navigator navigator = new Navigator();
     public List<Army> Armies {get;set;} = new List<Army>();
     public List<Soldier> soldiers = new List<Soldier>();
     Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
@@ -40,6 +41,15 @@ public class Game
         unitMap.Add(launchPad.name, playerBase);
 
 
+    }
+
+    public void Update(GameUpdate update)
+    {
+        foreach (Soldier soldier in soldiers)
+        {
+            soldier.StateMachine.ProcessStateTransitions();
+        }
+        navigator.MoveUnits(soldiers, update.currentPath);
     }
 
     public void AddSoldier(Vector2 position)
