@@ -21,17 +21,14 @@ public class Navigator
         {
             return;
         }
-        //Debug.Log("Moving?");
         int numPos = Path.Count();
         if (numPos > 0 && currentPos < numPos)
         {
-            //Debug.Log("Move all soldiers") ;
             Vector2 targetPos = Path.GetPosition(currentPos);
 
             foreach (Soldier soldier in soldiers)
             {
                 bool isMoving = soldier.StateMachine.IsInState<Moving>(); 
-                Debug.Log("Moving soldier " + isMoving);
                 if (isMoving) 
                 {
 

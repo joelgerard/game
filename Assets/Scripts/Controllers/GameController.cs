@@ -89,10 +89,8 @@ public class GameController : MonoBehaviour
                 {
                     trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
                 }
-                foreach (Soldier soldier in game.soldiers)
-                {
-                    soldier.StartMoving();
-                }
+                // TODO: Hmmm... Weak. 
+                game.Player.StartMoving();
             }
         }
 

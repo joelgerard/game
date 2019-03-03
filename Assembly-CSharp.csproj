@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Unity\GameUpdate.cs" />
     <Compile Include="Assets\Scripts\Unity\UnityTrailRendererPath.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
+    <None Include="Assets\Scripts\Domain\_ReadMe.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/joel/dev/git/war/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
