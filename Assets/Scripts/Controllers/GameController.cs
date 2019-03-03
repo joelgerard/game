@@ -11,16 +11,16 @@ using UnityEngine.UI;
 /// </summary>
 public class GameController : MonoBehaviour
 {
-    public GameService game = new GameService();
+    public GameService gameService = new GameService();
     public DrawShape RectanglePrefab;
     public DrawShape CirclePrefab;
     public DrawShape TrianglePrefab;
 
 
-    public bool okToDrawTrail = true;
+
     [SerializeField] TrailRenderer trailPrefab;
 
-    UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
+
 
     private void Awake()
     {
@@ -28,11 +28,9 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        // TODO: Is this slow, canonical unity way of doing things?
+        // TODO: Is this slow, canonical unity way of doing things? Use fixedUpdate?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
-        game.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab);
-
-
+        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab);
     }
 
     void OutputTime()
@@ -46,7 +44,6 @@ public class GameController : MonoBehaviour
         Debug.Log(msg);
     }
 
-    // TODO: This just needs to take input and feed it into the service.
     private void Update()
     {
 
@@ -59,51 +56,27 @@ public class GameController : MonoBehaviour
         var mouseDown = Input.GetKeyDown(KeyCode.Mouse0);
         var mouseUp = Input.GetKeyUp(KeyCode.Mouse0);
 
-        // TODO: Change to enum
-        bool clickedInBase = false;
-
-        Collider2D hitCollider = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        clickedInBase = (hitCollider != null && hitCollider.CompareTag("LaunchPad"));
-
-        if (mouseDown)
-        {
-            trailRendererPath.TrailRenderer = null;
-        }
-
-        okToDrawTrail |= mouseUp;
-
-        if (click && clickedInBase) {
-            game.AddSoldier(mousePos);
-        } 
-
-        if (!clickedInBase && ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
-        {
-            Plane plane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float distance;
-            if (plane.Raycast(ray, out distance))
-            {
-                if (okToDrawTrail)
-                {
-                    trailRendererPath.TrailRenderer = Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
-                    okToDrawTrail = false;
-                }
-                else
-                {
-                    trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
-                }
-                // TODO: Hmmm... Weak. 
-                game.game.Player.StartMoving();
-            }
-        }
-
         GameUpdate update = new GameUpdate
-        {
-            currentPath = trailRendererPath,
+        { 
             deltaTime = Time.deltaTime
         };
-        game.Update(update);
+        GameServiceUpdate gsUpdate = new GameServiceUpdate
+        {
+            GameUpdate = update,
+            MouseUp = mouseUp,
+            MouseDown = mouseDown,
+            MousePos = mousePos,
+            Click = click,
+            MainBehaviour = this
+        };
+        gameService.Update(gsUpdate);
 
+        //Collider2D hitCollider = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        //bool clickedInBase = (hitCollider != null && hitCollider.CompareTag("LaunchPad"));
 
+        //if (hitCollider != null)
+        //{
+        //    GameController.Log("y n ");
+        //}
     }
 }

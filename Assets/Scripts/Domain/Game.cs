@@ -43,10 +43,10 @@ public class Game
         unitMap.Add("PlayerBaseSquare", playerBase);
     }
 
-    public void Update(GameUpdate update, float deltaTime)
+    public void Update(GameUpdate update)
     {
         // TODO: Need to call this once per frame?
-        Player.Update(deltaTime, update.currentPath);
+        Player.Update(update.deltaTime, update.currentPath);
     }
 
 
