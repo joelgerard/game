@@ -6,6 +6,7 @@ public class Army
     public enum TerritoryType { North, South};
     private Dictionary<TerritoryType, int> attackDirections;
     Navigator navigator = new Navigator();
+    public ArmyBase ArmyBase { get; set; }
 
     public List<Soldier> Soldiers { get; set; } = new List<Soldier>();
 
@@ -18,13 +19,15 @@ public class Army
 
     }
 
-    public void Update(IPath path)
+
+    public void Update(float deltaTime, IPath path)
     {
         foreach (Soldier soldier in Soldiers)
         {
             soldier.StateMachine.ProcessStateTransitions();
+            soldier.StateMachine.UpdateStates(deltaTime);
         }
-        navigator.MoveUnits(Soldiers, path);
+        navigator.MoveUnits(deltaTime, Soldiers, path);
     }
 
     public TerritoryType Territory { get; set; } = TerritoryType.South;
@@ -32,6 +35,7 @@ public class Army
     public Soldier AddSoldier(Soldier soldier)
     {
         Soldiers.Add(soldier);
+
         /*Soldier soldier = new Soldier();
         Soldiers.Add(soldier);
         return soldier;*/

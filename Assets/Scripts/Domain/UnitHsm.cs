@@ -44,7 +44,6 @@ public partial class Unit
 
             public override Transition GetTransition()
             {
-
                 if (Owner.startAttack)
                 {
                     return Transition.Sibling<Attack>();
@@ -61,8 +60,21 @@ public partial class Unit
                 var root = GetOuterState<Root>(); // Test being able to grab Root from inner state
             }
 
+            public override void Update(float aDeltaTime)
+            {
+                // TODO: Should this use state values?
+                Owner.startAttack = Owner.enemy.Damage(1);
+                base.Update(aDeltaTime);
+            }
+
             public override Transition GetTransition()
             {
+                if (Owner.enemy == null || Owner.enemy.HP <= 0)
+                {
+                    // TODO: This doesn't seem right. What if you are
+                    // moving and fighting?
+                    return Owner.GetNeutralTransition();  //Transition.Sibling<Neutral>();
+                }
                 //Debug.Log("In Attack.GetTrans");
                 /*if (FindInnerState<Driving>() != null)
                 {

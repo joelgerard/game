@@ -31,6 +31,8 @@ public class GameController : MonoBehaviour
         // TODO: Is this slow, canonical unity way of doing things?
         InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
         game.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab);
+
+
     }
 
     void OutputTime()

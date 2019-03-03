@@ -16,6 +16,11 @@ public partial class Unit
     public partial class UnitHsm { }
 
     protected bool startAttack = false;
+    protected Unit enemy = null;
+
+    public event OnDestroyed OnDestroyedEvent;
+    public delegate void OnDestroyed(Unit unitDestroyed);
+
     protected GameObject go;
 
     public Unit()
@@ -29,6 +34,7 @@ public partial class Unit
     {
         StateMachine.Init<UnitHsm.Root>(this);
         StateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
+        HP = 10;
     }
 
 
@@ -44,6 +50,15 @@ public partial class Unit
         }
     }
 
+    public virtual bool Damage(int damage)
+    {
+        HP -= damage;
+        if (HP < 1 && OnDestroyedEvent != null)
+        {
+            OnDestroyedEvent(this);
+        }
+        return HP > 0;
+    }
 
     public virtual void Attack(Unit otherUnit)
     {
@@ -51,6 +66,7 @@ public partial class Unit
         {
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
             startAttack = true;
+            enemy = otherUnit;
         }
     }
 

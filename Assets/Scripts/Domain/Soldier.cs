@@ -20,12 +20,5 @@ public partial class Soldier : MovableUnit
 
     }
 
-
-
-
-
-
-
-
     public float SpeedWeight { get; }
 }

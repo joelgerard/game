@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: This is a mixture of unity game and domain game. 
 public class Game
 {
 
@@ -28,8 +29,12 @@ public class Game
         {
             Allegiance = Allegiance.ENEMY
         };
+
         enemyBase.Init();
         unitMap.Add(enemyBaseSquare.name, enemyBase);
+        // TODO: Lame
+        Enemy.ArmyBase = enemyBase;
+        enemyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
 
         // Player
@@ -46,9 +51,15 @@ public class Game
 
     }
 
+    void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
+    {
+        Debug.Log("You win.");
+    }
+
     public void Update(GameUpdate update)
     {
-        Player.Update(update.currentPath);
+        // TODO: Need to call this once per frame?
+        Player.Update(Time.deltaTime, update.currentPath);
     }
 
     public void AddSoldier(Vector2 position)

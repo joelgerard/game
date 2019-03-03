@@ -1,0 +1,8 @@
+﻿Next/Current
+
+- Working on attacking the other unit. Need to save which unit is being
+attacked.
+
+3/2 
+
+- Lots moved out of the controller.

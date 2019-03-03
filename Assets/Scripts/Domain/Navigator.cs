@@ -15,7 +15,7 @@ public class Navigator
 
     // TODO: Should this be in a state update for the army?
     // the state update has delta time. 
-    public void MoveUnits(List<Soldier> soldiers, IPath Path)
+    public void MoveUnits(float deltaTime, List<Soldier> soldiers, IPath Path)
     {
         if (Path == null)
         {
@@ -32,9 +32,9 @@ public class Navigator
                 if (isMoving) 
                 {
 
-                    // todo: what happens in test to delta time?
+
                     soldier.Position =
-                            Vector2.MoveTowards(soldier.Position, targetPos, 3 * Time.deltaTime);
+                            Vector2.MoveTowards(soldier.Position, targetPos, soldier.Speed * deltaTime);
                 }
                 // are any of the shapes near the current pos? If so move to the next one
                 if (Vector2.Distance(targetPos, soldier.Position) < 0.5)
