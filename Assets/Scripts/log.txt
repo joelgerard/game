@@ -1,8 +1,11 @@
 ﻿Next/Current
 
-- Working on attacking the other unit. Need to save which unit is being
-attacked.
+- Create a domain Game oject and move all the game logic to it without any 
+unity runtime dependencies on monobehaviours. 
+
 
 3/2 
 
 - Lots moved out of the controller.
+- Worked on attacking the other unit. Need to save which unit is being
+attacked.

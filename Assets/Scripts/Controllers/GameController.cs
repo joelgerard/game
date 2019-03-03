@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class GameController : MonoBehaviour
 {
-    public Game game = new Game();
+    public GameService game = new GameService();
     public DrawShape RectanglePrefab;
     public DrawShape CirclePrefab;
     public DrawShape TrianglePrefab;
@@ -46,6 +46,7 @@ public class GameController : MonoBehaviour
         Debug.Log(msg);
     }
 
+    // TODO: This just needs to take input and feed it into the service.
     private void Update()
     {
 
@@ -92,7 +93,7 @@ public class GameController : MonoBehaviour
                     trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
                 }
                 // TODO: Hmmm... Weak. 
-                game.Player.StartMoving();
+                game.game.Player.StartMoving();
             }
         }
 
