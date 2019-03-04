@@ -13,13 +13,16 @@ public class GameService
     // TODO: Make private
     public Game game = new Game();
 
-    public bool okToDrawTrail = true;
     public DrawShape RectanglePrefab;
     public DrawShape CirclePrefab;
     public DrawShape TrianglePrefab;
     TrailRenderer trailPrefab;
+    PathRenderer pathRenderer;
 
+    // TODO: Remove
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
+
+
 
     public void Initialize(DrawShape rectanglePrefab, DrawShape circlePrefab, DrawShape trianglePrefab, TrailRenderer trailPrefab)
     {
@@ -27,15 +30,27 @@ public class GameService
         this.TrianglePrefab = trianglePrefab;
         this.CirclePrefab = circlePrefab;
         this.trailPrefab = trailPrefab;
+
+        pathRenderer = new PathRenderer(trailPrefab);
+        pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
+
+
         game.Initialize();
 
     }
+
+    void PathRenderer_OnReadyEvent()
+    {
+        // TODO: Hmmm... Weak. Should this directly control the game?
+        game.Player.StartMoving();
+    }
+
 
     public void Update(GameServiceUpdate update)
     {
         bool clickedInBase = false;
 
-        Collider2D hitCollider = Physics2D.OverlapPoint(update.MousePos/*Input.mousePosition*/);
+        Collider2D hitCollider = Physics2D.OverlapPoint(update.MousePos);
         clickedInBase = (hitCollider != null && hitCollider.CompareTag("LaunchPad"));
 
         if (update.MouseDown)
@@ -43,36 +58,24 @@ public class GameService
             trailRendererPath.TrailRenderer = null;
         }
 
-        okToDrawTrail |= update.MouseUp;
+        pathRenderer.StartDrawing |= update.MouseUp;
 
         if (update.Click && clickedInBase)
         {
             AddSoldier(update.MousePos);
         }
 
-        if (!clickedInBase && ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0)))
+        bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));
+
+        // TODO: Some cleanup with all these inputs. 
+        if (!clickedInBase && clickAndDragging)
         {
-            // TODO: Should all this drawing stuff be in here?
-            Plane plane = new Plane(Camera.main.transform.forward * -1, update.MainBehaviour.transform.position);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float distance;
-            if (plane.Raycast(ray, out distance))
-            {
-                if (okToDrawTrail)
-                {
-                    trailRendererPath.TrailRenderer = Object.Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
-                    okToDrawTrail = false;
-                }
-                else
-                {
-                    trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
-                }
-                // TODO: Hmmm... Weak. 
-                game.Player.StartMoving();
-            }
+            // Start drawing path.
+            trailRendererPath = pathRenderer.Draw(update.MainBehaviour.transform.position);
         }
 
         update.GameUpdate.currentPath = trailRendererPath;
+
         // TODO: Need to call this once per frame?
         game.Update(update.GameUpdate);
     }
