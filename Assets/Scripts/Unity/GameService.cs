@@ -34,15 +34,19 @@ public class GameService
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
 
-
         game.Initialize();
+
+        // TODO: Fix this. I guess we can bind all these things at once.
+        // Must be a better way to do this.
+        SoldierRenderer sr = new SoldierRenderer();
+        game.Enemy.ArmyBase.OnDamagedEvent += sr.DrawDamage;
 
     }
 
     void PathRenderer_OnReadyEvent()
     {
-        // TODO: Hmmm... Weak. Should this directly control the game?
-        game.Player.StartMoving();
+        // TODO: Give it the path?
+        game.OnPathReady();
     }
 
 
@@ -65,12 +69,11 @@ public class GameService
             AddSoldier(update.MousePos);
         }
 
+        // TODO: Some cleanup with all these inputs
         bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));
 
-        // TODO: Some cleanup with all these inputs. 
         if (!clickedInBase && clickAndDragging)
         {
-            // Start drawing path.
             trailRendererPath = pathRenderer.Draw(update.MainBehaviour.transform.position);
         }
 
@@ -86,8 +89,12 @@ public class GameService
         DrawShape soldierMono = sr.Draw(RectanglePrefab, position);
         soldierMono.OnEnterEvent += UnitMono_OnEnterEvent;
 
-        game.OnAddSoldier(soldierMono.gameObject);
+        Soldier soldier = game.OnAddSoldier(soldierMono.gameObject);
+        soldier.OnDamagedEvent+=sr.DrawDamage;
     }
+
+
+
 
     void UnitMono_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {

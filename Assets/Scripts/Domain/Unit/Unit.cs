@@ -21,6 +21,9 @@ public partial class Unit
     public event OnDestroyed OnDestroyedEvent;
     public delegate void OnDestroyed(Unit unitDestroyed);
 
+    public event OnDamaged OnDamagedEvent;
+    public delegate void OnDamaged(Unit unitDamaged, float percentHealth);
+
     protected GameObject go;
 
     public Unit()
@@ -28,15 +31,23 @@ public partial class Unit
     }
 
     public Allegiance Allegiance {get;set;}
-    public int HP { get; set; }
+    public float HP { get; set; }
+    public float TotalHP { get; set; }
 
     public virtual void Init()
     {
         StateMachine.Init<UnitHsm.Root>(this);
         StateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
-        HP = 10;
+        TotalHP = HP = 10;
     }
 
+    public float PercentHealth
+    {
+        get
+        {
+            return HP / TotalHP;
+        }
+    }
 
     public Vector2 Position
     {
@@ -50,12 +61,16 @@ public partial class Unit
         }
     }
 
-    public virtual bool Damage(int damage)
+    public virtual bool Damage(float damage)
     {
         HP -= damage;
-        if (HP < 1 && OnDestroyedEvent != null)
+        if (HP <= 0 && OnDestroyedEvent != null)
         {
             OnDestroyedEvent(this);
+        }
+        else
+        {
+            OnDamagedEvent?.Invoke(this, PercentHealth);
         }
         return HP > 0;
     }

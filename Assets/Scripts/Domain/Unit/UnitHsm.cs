@@ -63,7 +63,7 @@ public partial class Unit
             public override void Update(float aDeltaTime)
             {
                 // TODO: Should this use state values?
-                Owner.startAttack = Owner.enemy.Damage(1);
+                Owner.startAttack = Owner.enemy.Damage(1.0f * aDeltaTime);
                 base.Update(aDeltaTime);
             }
 

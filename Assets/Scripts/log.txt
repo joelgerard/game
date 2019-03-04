@@ -1,7 +1,9 @@
 ﻿Next/Current
 
-- Create a domain Game oject and move all the game logic to it without any 
-unity runtime dependencies on monobehaviours. 
+- Create tests that show the game class has no unity depencies.
+- Created the event when a unit takes damage. Now make sure it can affect the
+unity object. However, the bases are drawn statically, not at runtime, so need to hook their
+objects. 
 
 
 3/2 
@@ -9,3 +11,5 @@ unity runtime dependencies on monobehaviours.
 - Lots moved out of the controller.
 - Worked on attacking the other unit. Need to save which unit is being
 attacked.
+- Create a domain Game oject and move all the game logic to it without any 
+unity runtime dependencies on monobehaviours. 

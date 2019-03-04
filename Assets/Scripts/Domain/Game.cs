@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This is the game as if it were a board game, i.e. no unity runtime stuff here.
+// Just logic. Should be able to instantiate and test this anywhere. 
 public class Game
 {
     public List<Army> Armies { get; set; } = new List<Army>();
     public Army Player { get { return Armies[1]; } }
     public Army Enemy { get { return Armies[0]; } }
 
-    // TODO: Make private
-    public Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
+    // TODO: I guess string comp is expensive. 
+    private Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
 
     public Game()
     {
@@ -34,7 +36,6 @@ public class Game
 
         // Player
         AddArmy(); //TODO: Not yet used.
-
         ArmyBase playerBase = new ArmyBase
         {
             Allegiance = Allegiance.ALLY
@@ -62,7 +63,12 @@ public class Game
         GameController.Log("You win.");
     }
 
-    public void OnAddSoldier(GameObject gameObject)
+    public void OnPathReady()
+    {
+        Player.StartMoving();
+    }
+
+    public Soldier OnAddSoldier(GameObject gameObject)
     {
         Soldier soldier = new Soldier(gameObject)
         {
@@ -73,6 +79,7 @@ public class Game
         soldier.Init();
         soldiers.Add(soldier);
         unitMap.Add(gameObject.name, soldier);
+        return soldier;
     }
 
     public void OnUnitsCollide(String unit1Name, String unit2Name)

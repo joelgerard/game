@@ -7,7 +7,7 @@ public partial class MovableUnit : Unit
     protected bool startMoving = false;
 
     public partial class MovableUnitHsm { }
-    public float Speed { get; set; } = 0.5f;
+    public float Speed { get; set; } = 1.5f;
 
     public MovableUnit()
     {

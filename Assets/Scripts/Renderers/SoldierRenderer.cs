@@ -4,13 +4,15 @@ using UnityEngine;
 // TODO: What is this class for?
 public class SoldierRenderer
 {
+    DrawShape CurrentShapeToDraw;
+
     public SoldierRenderer()
     {
     }
 
     public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position)
     {
-        DrawShape CurrentShapeToDraw;
+
         var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
         CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);
         CurrentShapeToDraw.name = "Soldier " + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
@@ -26,5 +28,10 @@ public class SoldierRenderer
         CurrentShapeToDraw.UpdateShape(position);
 
         return CurrentShapeToDraw;
+    }
+
+    public void DrawDamage(Unit unitDamaged, float percentHealth)
+    {
+        int i = 0;
     }
 }
