@@ -3,7 +3,7 @@
 - Create tests that show the game class has no unity depencies.
 - Created the event when a unit takes damage. Now make sure it can affect the
 unity object. However, the bases are drawn statically, not at runtime, so need to hook their
-objects. 
+objects. Going to have to write map stuff anyway so may as well do this quick and dirty now.
 
 
 3/2 
