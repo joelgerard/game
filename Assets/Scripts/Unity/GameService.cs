@@ -36,6 +36,8 @@ public class GameService
 
         game.Initialize();
 
+        DrawMap();
+
         // TODO: Fix this. I guess we can bind all these things at once.
         // Must be a better way to do this.
         SoldierRenderer sr = new SoldierRenderer();
@@ -93,7 +95,19 @@ public class GameService
         soldier.OnDamagedEvent+=sr.DrawDamage;
     }
 
-
+    protected void DrawMap()
+    {
+        ArmyBaseRenderer abr = new ArmyBaseRenderer();
+        Vector2 pos = new Vector2
+        {
+            x = 0.2f,
+            y = 3f
+        };
+        DrawShape enemyBase = abr.Draw(RectanglePrefab, pos);
+        DrawRectangle dr = new DrawRectangle();
+        dr.SetColorRed(enemyBase.gameObject);
+        enemyBase.name = "EnemyBaseSquare";
+    }
 
 
     void UnitMono_OnEnterEvent(GameObject thisObject, GameObject otherObject)

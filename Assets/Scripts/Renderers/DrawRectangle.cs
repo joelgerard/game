@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -103,5 +104,40 @@ public class DrawRectangle : DrawShape
         mesh.RecalculateTangents();
 
         return mesh;
+    }
+
+    public void SetColorRed(GameObject go)
+    {
+        Mesh mesh = go.GetComponent<MeshFilter>().mesh;
+        Vector3[] vertices = mesh.vertices;
+
+        // create new colors array where the colors will be created.
+        Color[] colors = new Color[vertices.Length];
+
+        for (int i = 0; i < vertices.Length; i++)
+            colors[i] = Color.Lerp(Color.red, Color.green, vertices[i].y);
+
+        // assign the array of colors to the Mesh.
+        mesh.colors = colors;
+    }
+
+    public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position, float height, float width)
+    {
+
+        var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
+        DrawShape CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);
+        CurrentShapeToDraw.name = Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
+
+        CurrentShapeToDraw.AddVertex(position);
+        CurrentShapeToDraw.AddVertex(position);
+
+        position.x += width;
+        position.y += height;
+        CurrentShapeToDraw.AddVertex(position);
+
+
+        CurrentShapeToDraw.UpdateShape(position);
+
+        return CurrentShapeToDraw;
     }
 }
