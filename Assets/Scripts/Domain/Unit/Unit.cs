@@ -24,7 +24,8 @@ public partial class Unit
     public event OnDamaged OnDamagedEvent;
     public delegate void OnDamaged(Unit unitDamaged, float percentHealth);
 
-    protected GameObject go;
+    // TODO: Think about this.
+    public GameObject GameObject { set; get; }
 
     public Unit()
     {
@@ -53,11 +54,11 @@ public partial class Unit
     {
         get
         {
-            return this.go.transform.position;
+            return this.GameObject.transform.position;
         }
         set
         {
-            this.go.transform.position = value;
+            this.GameObject.transform.position = value;
         }
     }
 
@@ -82,7 +83,13 @@ public partial class Unit
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
             startAttack = true;
             enemy = otherUnit;
+            otherUnit.Defend(this);
         }
+    }
+
+    public virtual void Defend(Unit attackingUnit)
+    {
+        // TODO: write this
     }
 
     public virtual void Update(float deltaTime)

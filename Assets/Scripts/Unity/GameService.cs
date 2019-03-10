@@ -40,8 +40,9 @@ public class GameService
 
         // TODO: Fix this. I guess we can bind all these things at once.
         // Must be a better way to do this.
-        SoldierRenderer sr = new SoldierRenderer();
-        game.Enemy.ArmyBase.OnDamagedEvent += sr.DrawDamage;
+        //SoldierRenderer sr = new SoldierRenderer();
+        ArmyBaseRenderer abr = new ArmyBaseRenderer();
+        game.Enemy.ArmyBase.OnDamagedEvent += abr.DrawDamage;
 
     }
 
@@ -104,8 +105,9 @@ public class GameService
             y = 3f
         };
         DrawShape enemyBase = abr.Draw(RectanglePrefab, pos);
-        DrawRectangle dr = new DrawRectangle();
-        dr.SetColorRed(enemyBase.gameObject);
+        game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
+        //DrawRectangle dr = new DrawRectangle();
+        //dr.SetColorRed(enemyBase.gameObject);
         enemyBase.name = "EnemyBaseSquare";
     }
 

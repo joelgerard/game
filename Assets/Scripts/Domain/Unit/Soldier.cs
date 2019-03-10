@@ -16,7 +16,7 @@ public partial class Soldier : MovableUnit
 
     public Soldier(GameObject go)
     {
-        this.go = go;
+        this.GameObject = go;
 
     }
 

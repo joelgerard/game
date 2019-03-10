@@ -87,5 +87,6 @@ public class Game
         Unit unit = unitMap[unit1Name];
         Unit otherUnit = unitMap[unit2Name];
         unit.Attack(otherUnit);
+        otherUnit.Attack(unit);
     }
 }

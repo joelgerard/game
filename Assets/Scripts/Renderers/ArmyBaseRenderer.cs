@@ -16,9 +16,9 @@ public class ArmyBaseRenderer
         return CurrentShapeToDraw;
     }
 
-    public void DrawDamage(float health)
+    public void DrawDamage(Unit unitDamaged, float percentHealth)
     {
-
+        DrawRectangle dr = new DrawRectangle();
+        dr.SetColorRed(unitDamaged.GameObject,1- percentHealth);
     }
-
 }
