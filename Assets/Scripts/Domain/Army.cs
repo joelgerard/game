@@ -28,6 +28,7 @@ public class Army
         {
             soldier.Update(deltaTime);
         }
+        ArmyBase.Update(deltaTime);
         navigator.MoveUnits(deltaTime, Soldiers, path);
     }
 

@@ -48,6 +48,9 @@ public class Game
     {
         // TODO: Need to call this once per frame?
         Player.Update(update.deltaTime, update.currentPath);
+
+        // TODO: Enemy doesn't move yet.
+        Enemy.Update(update.deltaTime, null);
     }
 
 
@@ -83,11 +86,14 @@ public class Game
         return soldier;
     }
 
+    // TODO: Why does this take strings?
     public void OnUnitsCollide(String unit1Name, String unit2Name)
     {
         Unit unit = unitMap[unit1Name];
         Unit otherUnit = unitMap[unit2Name];
         unit.Attack(otherUnit);
+
+        // TODO: This is wrong. Units shouldn't automatically counter-attack.
         otherUnit.Attack(unit);
     }
 }

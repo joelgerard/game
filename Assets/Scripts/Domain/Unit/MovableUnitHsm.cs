@@ -34,12 +34,11 @@ public partial class MovableUnit
                     return Transition.Sibling<Moving>();
                 }
 
-                return Transition.None();
+                return base.GetTransition();
             }
         }
 
-        public class MovableAttack : Unit.UnitHsm.Attack
-        { }
+
 
         public class Moving : MovableUnitState
         {
