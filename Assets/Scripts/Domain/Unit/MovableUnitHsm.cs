@@ -38,6 +38,9 @@ public partial class MovableUnit
             }
         }
 
+        public class MovableAttack : Unit.UnitHsm.Attack
+        { }
+
         public class Moving : MovableUnitState
         {
             public override void OnEnter()

@@ -22,10 +22,11 @@ public class Army
 
     public void Update(float deltaTime, IPath path)
     {
+
+        // TODO: Must be a better way than this.
         foreach (Soldier soldier in Soldiers)
         {
-            soldier.StateMachine.ProcessStateTransitions();
-            soldier.StateMachine.UpdateStates(deltaTime);
+            soldier.Update(deltaTime);
         }
         navigator.MoveUnits(deltaTime, Soldiers, path);
     }

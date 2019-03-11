@@ -27,7 +27,40 @@ namespace Tests
         [Test]
         public void TestBattle()
         {
-            ArmyBase armyBase = new ArmyBase();
+            //Game game = new Game();
+            //game.Initialize();
+
+            ArmyBase armyBase = new ArmyBase
+            {
+                Allegiance = Allegiance.ENEMY
+            };
+            armyBase.Init();
+
+            Soldier soldier = new Soldier
+            {
+                Allegiance = Allegiance.ALLY
+            };
+            soldier.Init();
+
+            // Moves into neutral.
+            // TODO: Why do I have this state.
+            soldier.Update(1);
+            armyBase.Update(1);
+            Assert.True(soldier.StateMachine.IsInState<Unit.UnitHsm.Neutral>());
+
+            soldier.Attack(armyBase);
+
+            // Moves into attack
+            soldier.Update(1);
+            armyBase.Update(1);
+
+            Unit.UnitHsm.Attack attack = new Unit.UnitHsm.Attack();
+
+            MovableUnit.MovableUnitHsm.Attack state = soldier.StateMachine.FindState<MovableUnit.MovableUnitHsm.Attack>(); //<Unit.UnitHsm.Attack>();
+            Assert.NotNull(state);
+
+            //Assert.True(soldier.StateMachine.IsInState<Unit.UnitHsm.Attack>());
+
         }
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use

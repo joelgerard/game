@@ -70,9 +70,10 @@ public class Game
 
     public Soldier OnAddSoldier(GameObject gameObject)
     {
-        Soldier soldier = new Soldier(gameObject)
+        Soldier soldier = new Soldier()
         {
-            Allegiance = Allegiance.ALLY
+            Allegiance = Allegiance.ALLY,
+            GameObject = gameObject
         };
         
         List<Soldier> soldiers = Player.Soldiers;
