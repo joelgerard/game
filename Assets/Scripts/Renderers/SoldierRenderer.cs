@@ -13,7 +13,7 @@ public class SoldierRenderer
     public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position)
     {
         DrawRectangle dr = new DrawRectangle();
-        CurrentShapeToDraw = dr.Draw(RectanglePrefab, position, 0.1f, 0.1f);
+        CurrentShapeToDraw = dr.Draw(RectanglePrefab, position, 0.1f, 0.1f,"Soldier");
 
         //var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
         //CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);

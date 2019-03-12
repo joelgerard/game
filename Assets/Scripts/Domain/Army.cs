@@ -28,12 +28,14 @@ public class Army
         {
             soldier.Update(deltaTime);
         }
-        ArmyBase.Update(deltaTime);
+        // TODO: remove ?.
+        ArmyBase?.Update(deltaTime);
         navigator.MoveUnits(deltaTime, Soldiers, path);
     }
 
     public TerritoryType Territory { get; set; } = TerritoryType.South;
 
+    // TODO: Returns Soldier?
     public Soldier AddSoldier(Soldier soldier)
     {
         Soldiers.Add(soldier);

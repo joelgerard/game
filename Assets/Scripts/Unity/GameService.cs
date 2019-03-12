@@ -41,7 +41,7 @@ public class GameService
         // TODO: Fix this. I guess we can bind all these things at once.
         // Must be a better way to do this.
         //SoldierRenderer sr = new SoldierRenderer();
-        ArmyBaseRenderer abr = new ArmyBaseRenderer();
+        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
         game.Enemy.ArmyBase.OnDamagedEvent += abr.DrawDamage;
 
     }
@@ -98,17 +98,17 @@ public class GameService
 
     protected void DrawMap()
     {
-        ArmyBaseRenderer abr = new ArmyBaseRenderer();
+        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
         Vector2 pos = new Vector2
         {
             x = 0.2f,
             y = 3f
         };
-        DrawShape enemyBase = abr.Draw(RectanglePrefab, pos);
+        DrawShape enemyBase = abr.Draw(RectanglePrefab, pos, "EnemyBaseSquare");
+
+        // TODO: Blerg. Shouldn't the game build itself?
         game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
-        //DrawRectangle dr = new DrawRectangle();
-        //dr.SetColorRed(enemyBase.gameObject);
-        enemyBase.name = "EnemyBaseSquare";
+        enemyBase.name = enemyBase.gameObject.name;
     }
 
 

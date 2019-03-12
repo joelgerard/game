@@ -44,6 +44,8 @@ public class Game
         unitMap.Add("PlayerBaseSquare", playerBase);
     }
 
+
+
     public void Update(GameUpdate update)
     {
         // TODO: Need to call this once per frame?
@@ -89,11 +91,14 @@ public class Game
     // TODO: Why does this take strings?
     public void OnUnitsCollide(String unit1Name, String unit2Name)
     {
+        Diagnostics.KeyExists(unitMap, unit1Name);
+        Diagnostics.KeyExists(unitMap, unit2Name);
+
         Unit unit = unitMap[unit1Name];
         Unit otherUnit = unitMap[unit2Name];
         unit.Attack(otherUnit);
 
         // TODO: This is wrong. Units shouldn't automatically counter-attack.
-        otherUnit.Attack(unit);
+        //otherUnit.Attack(unit);
     }
 }

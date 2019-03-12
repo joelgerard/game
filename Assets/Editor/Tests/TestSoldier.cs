@@ -9,21 +9,30 @@ namespace Tests
     [TestFixture()]
     public class TestSoldier
     {
+        class SoldierBase
+        {
+            public ArmyBase armyBase = new ArmyBase
+            {
+                Allegiance = Allegiance.ENEMY
+            };
+            public Soldier soldier = new Soldier
+            {
+                Allegiance = Allegiance.ALLY
+            };
+
+            public SoldierBase()
+            {
+                armyBase.Init();
+                soldier.Init();
+            }
+        }
 
         [Test]
         public void StandingUnitsCanAttack()
         {
-            ArmyBase armyBase = new ArmyBase
-            {
-                Allegiance = Allegiance.ENEMY
-            };
-            armyBase.Init();
-
-            Soldier soldier = new Soldier
-            {
-                Allegiance = Allegiance.ALLY
-            };
-            soldier.Init();
+            SoldierBase sBase = new SoldierBase();
+            ArmyBase armyBase = sBase.armyBase;
+            Soldier soldier = sBase.soldier;
 
             // Moves into neutral.
             // TODO: Why do I have this state.
@@ -36,17 +45,9 @@ namespace Tests
         [Test]
         public void MovingUnitsCanAttack()
         {
-            ArmyBase armyBase = new ArmyBase
-            {
-                Allegiance = Allegiance.ENEMY
-            };
-            armyBase.Init();
-
-            Soldier soldier = new Soldier
-            {
-                Allegiance = Allegiance.ALLY
-            };
-            soldier.Init();
+            SoldierBase sBase = new SoldierBase();
+            ArmyBase armyBase = sBase.armyBase;
+            Soldier soldier = sBase.soldier;
 
             // Moves into neutral.
             // TODO: Why do I have this state.
@@ -60,17 +61,9 @@ namespace Tests
         [Test]
         public void UnitsDontAutoCounterAttack()
         {
-            ArmyBase armyBase = new ArmyBase
-            {
-                Allegiance = Allegiance.ENEMY
-            };
-            armyBase.Init();
-
-            Soldier soldier = new Soldier
-            {
-                Allegiance = Allegiance.ALLY
-            };
-            soldier.Init();
+            SoldierBase sBase = new SoldierBase();
+            ArmyBase armyBase = sBase.armyBase;
+            Soldier soldier = sBase.soldier;
 
             // Moves into neutral.
             // TODO: Why do I have this state.

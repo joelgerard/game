@@ -123,12 +123,18 @@ public class DrawRectangle : DrawShape
         mesh.colors = colors;
     }
 
-    public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position, float height, float width)
+    public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position, float height, float width, string namePrefix)
+    {
+        string name = namePrefix + "_" + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
+        return Draw(name, RectanglePrefab, position, height, width);
+    }
+
+    public DrawShape Draw(String name, DrawShape RectanglePrefab, Vector2 position, float height, float width)
     {
 
         var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
         DrawShape CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);
-        CurrentShapeToDraw.name = Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
+        CurrentShapeToDraw.name = name;
 
         CurrentShapeToDraw.AddVertex(position);
         CurrentShapeToDraw.AddVertex(position);
