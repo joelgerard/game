@@ -127,13 +127,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1888107523943466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5177e9d1463a44e0cb14cbf8317a93b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e43f641b8ee54f2792b402e665b70be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTime: 0.01
-  blockingLayer:
-    serializedVersion: 2
-    m_Bits: 0
   FillColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!120 &120223099928912480
 LineRenderer:

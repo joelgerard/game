@@ -13,9 +13,9 @@ public class GameService
     // TODO: Make private
     public Game game = new Game();
 
-    public DrawShape RectanglePrefab;
-    public DrawShape CirclePrefab;
-    public DrawShape TrianglePrefab;
+    public RectangleObject RectanglePrefab;
+    public Shape CirclePrefab;
+    public Shape TrianglePrefab;
     TrailRenderer trailPrefab;
     PathRenderer pathRenderer;
 
@@ -24,7 +24,7 @@ public class GameService
 
 
 
-    public void Initialize(DrawShape rectanglePrefab, DrawShape circlePrefab, DrawShape trianglePrefab, TrailRenderer trailPrefab)
+    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab)
     {
         this.RectanglePrefab = rectanglePrefab;
         this.TrianglePrefab = trianglePrefab;
@@ -40,10 +40,9 @@ public class GameService
 
         // TODO: Fix this. I guess we can bind all these things at once.
         // Must be a better way to do this.
-        //SoldierRenderer sr = new SoldierRenderer();
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
         game.Enemy.ArmyBase.OnDamagedEvent += abr.DrawDamage;
-
+        game.Enemy.ArmyBase.OnDestroyedEvent += abr.DrawDestroyed;
     }
 
     void PathRenderer_OnReadyEvent()
@@ -89,13 +88,15 @@ public class GameService
     public void AddSoldier(Vector2 position)
     {
         SoldierRenderer sr = new SoldierRenderer();
-        DrawShape soldierMono = sr.Draw(RectanglePrefab, position);
+        Shape soldierMono = sr.Draw(RectanglePrefab, position);
         soldierMono.OnEnterEvent += UnitMono_OnEnterEvent;
 
         Soldier soldier = game.OnAddSoldier(soldierMono.gameObject);
         soldier.OnDamagedEvent+=sr.DrawDamage;
+        soldier.OnDestroyedEvent += sr.DrawDestroyed;
     }
 
+    // TODO: Move out of here.
     protected void DrawMap()
     {
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
@@ -104,10 +105,11 @@ public class GameService
             x = 0.2f,
             y = 3f
         };
-        DrawShape enemyBase = abr.Draw(RectanglePrefab, pos, "EnemyBaseSquare");
+        Shape enemyBase = abr.Draw(RectanglePrefab, pos, "EnemyBaseSquare");
 
         // TODO: Blerg. Shouldn't the game build itself?
         game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
+        enemyBase.OnEnterEvent += UnitMono_OnEnterEvent;
         enemyBase.name = enemyBase.gameObject.name;
     }
 

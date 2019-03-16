@@ -12,9 +12,9 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     public GameService gameService = new GameService();
-    public DrawShape RectanglePrefab;
-    public DrawShape CirclePrefab;
-    public DrawShape TrianglePrefab;
+    public RectangleObject RectanglePrefab;
+    public Shape CirclePrefab;
+    public Shape TrianglePrefab;
 
 
 

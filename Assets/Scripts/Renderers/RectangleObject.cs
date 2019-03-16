@@ -8,7 +8,7 @@ using UnityEngine;
 /// A 2D physics rectangle that is drawn by specifying the positions of 
 /// its two opposite corners.
 /// </summary>
-public class DrawRectangle : DrawShape
+public class RectangleObject : Shape
 {
     public Color FillColor = Color.white;
 
@@ -106,6 +106,7 @@ public class DrawRectangle : DrawShape
         return mesh;
     }
 
+    // TODO: Why is this static?
     public static void SetColorRed(GameObject go, float saturation)
     {
         Color color = new Color(1, 1 - saturation, 1 - saturation);
@@ -113,17 +114,17 @@ public class DrawRectangle : DrawShape
         go.GetComponent<Renderer>().material.color = color;
     }
 
-    public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position, float height, float width, string namePrefix)
+    public RectangleObject Draw(RectangleObject RectanglePrefab, Vector2 position, float height, float width, string namePrefix)
     {
         string name = namePrefix + "_" + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
         return Draw(name, RectanglePrefab, position, height, width);
     }
 
-    public DrawShape Draw(String name, DrawShape RectanglePrefab, Vector2 position, float height, float width)
+    public RectangleObject Draw(String name, RectangleObject RectanglePrefab, Vector2 position, float height, float width)
     {
 
-        var prefab = RectanglePrefab; 
-        DrawShape CurrentShapeToDraw = Instantiate(prefab);
+        var prefab = RectanglePrefab;
+        RectangleObject CurrentShapeToDraw = Instantiate(prefab);
         CurrentShapeToDraw.name = name;
 
         CurrentShapeToDraw.AddVertex(position);

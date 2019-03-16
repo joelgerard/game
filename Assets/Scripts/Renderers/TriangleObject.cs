@@ -8,7 +8,7 @@ using UnityEngine;
 /// A 2D physics triangle that is drawn by specifying the positions of 
 /// its three vertices.
 /// </summary>
-public class DrawTriangle : DrawShape 
+public class TriangleObject : Shape 
 {
     public Color FillColor = Color.white;
 	

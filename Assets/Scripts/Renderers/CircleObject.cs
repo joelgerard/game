@@ -7,7 +7,7 @@ using UnityEngine;
 /// A 2D physics circle that is drawn by specifying the positions of 
 /// its center and any outer edge point.
 /// </summary>
-public class DrawCircle : DrawShape
+public class CircleObject : Shape
 {
     public Color FillColor = Color.white;
 

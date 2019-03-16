@@ -3,31 +3,26 @@ using UnityEngine;
 
 public class ArmyBaseRenderer
 {
-    DrawShape CurrentShapeToDraw;
+    // TODO: Why is this here?
+    RectangleObject rectangle;
 
-    public ArmyBaseRenderer(DrawShape drawShape)
+    public ArmyBaseRenderer(RectangleObject drawShape)
     {
-        CurrentShapeToDraw = drawShape;
+        rectangle = drawShape;
     }
 
-    public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position, String name)
+    public RectangleObject Draw(RectangleObject RectanglePrefab, Vector2 position, String name)
     {
-        // TODO: This is wrong. Don't call new here.
-        //DrawRectangle dr = new DrawRectangle();
-        //CurrentShapeToDraw = dr.Draw(RectanglePrefab, position, 1.1f, 1.1f);
-
-        // TODO: unsafe cast
-        return ((DrawRectangle)CurrentShapeToDraw).Draw(name, RectanglePrefab, position, 1.1f, 1.1f);
-        //return CurrentShapeToDraw;
+        return rectangle.Draw(name, RectanglePrefab, position, 1.1f, 1.1f);
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)
     {
-        // TODO: This is wrong. Don't call new here.
-        //DrawRectangle dr = new DrawRectangle();
+        RectangleObject.SetColorRed(unitDamaged.GameObject,1- percentHealth);
+    }
 
-        // TODO: unsafe cast
-        //DrawRectangle dr = ((DrawRectangle)CurrentShapeToDraw);
-        DrawRectangle.SetColorRed(unitDamaged.GameObject,1- percentHealth);
+    public void DrawDestroyed(Unit unit)
+    {
+        UnityEngine.Object.Destroy(unit.GameObject);
     }
 }
