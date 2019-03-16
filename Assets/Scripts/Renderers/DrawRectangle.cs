@@ -106,21 +106,11 @@ public class DrawRectangle : DrawShape
         return mesh;
     }
 
-    public void SetColorRed(GameObject go, float saturation)
+    public static void SetColorRed(GameObject go, float saturation)
     {
-        Mesh mesh = go.GetComponent<MeshFilter>().mesh;
-        Vector3[] vertices = mesh.vertices;
+        Color color = new Color(1, 1 - saturation, 1 - saturation);
 
-        Color color = new Color(1, 1-saturation, 1-saturation);
-
-        // create new colors array where the colors will be created.
-        Color[] colors = new Color[vertices.Length];
-
-        for (int i = 0; i < vertices.Length; i++)
-            colors[i] = Color.Lerp(color, color, vertices[i].y);
-
-        // assign the array of colors to the Mesh.
-        mesh.colors = colors;
+        go.GetComponent<Renderer>().material.color = color;
     }
 
     public DrawShape Draw(DrawShape RectanglePrefab, Vector2 position, float height, float width, string namePrefix)
@@ -132,8 +122,8 @@ public class DrawRectangle : DrawShape
     public DrawShape Draw(String name, DrawShape RectanglePrefab, Vector2 position, float height, float width)
     {
 
-        var prefab = RectanglePrefab; //_drawModeToPrefab[Mode];
-        DrawShape CurrentShapeToDraw = UnityEngine.Object.Instantiate(prefab);
+        var prefab = RectanglePrefab; 
+        DrawShape CurrentShapeToDraw = Instantiate(prefab);
         CurrentShapeToDraw.name = name;
 
         CurrentShapeToDraw.AddVertex(position);

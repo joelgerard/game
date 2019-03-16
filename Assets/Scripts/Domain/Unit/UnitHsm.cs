@@ -57,7 +57,6 @@ public partial class Unit
         {
             public override void OnEnter()
             {
-                GameController.Log("In attack state");
                 var root = GetOuterState<Root>(); // Test being able to grab Root from inner state
             }
 
@@ -70,7 +69,6 @@ public partial class Unit
 
             public override Transition GetTransition()
             {
-                GameController.Log("In attack state - checking transtion");
                 if (Owner.enemy == null || Owner.enemy.HP <= 0)
                 {
                     // TODO: This doesn't seem right. What if you are

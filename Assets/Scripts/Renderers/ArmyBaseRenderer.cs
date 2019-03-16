@@ -17,8 +17,8 @@ public class ArmyBaseRenderer
         //CurrentShapeToDraw = dr.Draw(RectanglePrefab, position, 1.1f, 1.1f);
 
         // TODO: unsafe cast
-        ((DrawRectangle)CurrentShapeToDraw).Draw(name, RectanglePrefab, position, 1.1f, 1.1f);
-        return CurrentShapeToDraw;
+        return ((DrawRectangle)CurrentShapeToDraw).Draw(name, RectanglePrefab, position, 1.1f, 1.1f);
+        //return CurrentShapeToDraw;
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)
@@ -27,7 +27,7 @@ public class ArmyBaseRenderer
         //DrawRectangle dr = new DrawRectangle();
 
         // TODO: unsafe cast
-        DrawRectangle dr = ((DrawRectangle)CurrentShapeToDraw);
-        dr.SetColorRed(unitDamaged.GameObject,1- percentHealth);
+        //DrawRectangle dr = ((DrawRectangle)CurrentShapeToDraw);
+        DrawRectangle.SetColorRed(unitDamaged.GameObject,1- percentHealth);
     }
 }
