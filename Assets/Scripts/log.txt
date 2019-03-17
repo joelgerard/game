@@ -1,10 +1,14 @@
 ﻿Next/Current
 
 - Create tests that show the game class has no unity depencies.
+- Fix infinite loop bug and have a dead state. The GOs are destroyed, but not the domain objects.
+
+3/16
+
 - Created the event when a unit takes damage. Now make sure it can affect the
 unity object. However, the bases are drawn statically, not at runtime, so need to hook their
-objects. Going to have to write map stuff anyway so may as well do this quick and dirty now.
-
+objects. Going to have to write map stuff anyway so may as well do this quick and dirty now. 
+- Can destroy bases
 
 3/2 
 

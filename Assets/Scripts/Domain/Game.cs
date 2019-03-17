@@ -65,6 +65,8 @@ public class Game
 
     void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
     {
+        // TODO: This can be cleaned up DRY. 
+        unitMap.Remove(destroyedUnit.GameObject.name);
         GameController.Log("You win.");
     }
 
@@ -83,10 +85,18 @@ public class Game
         
         List<Soldier> soldiers = Player.Soldiers;
         soldier.Init();
+        soldier.OnDestroyedEvent+= Soldier_OnDestroyedEvent;
         soldiers.Add(soldier);
         unitMap.Add(gameObject.name, soldier);
         return soldier;
     }
+
+    void Soldier_OnDestroyedEvent(Unit unitDestroyed)
+    {
+        Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
+        unitMap.Remove(unitDestroyed.GameObject.name);
+    }
+
 
     // TODO: Why does this take strings?
     public void OnUnitsCollide(String unit1Name, String unit2Name)
