@@ -5,7 +5,7 @@
 /// A shape is a 2D physics object that can be drawn 
 /// by specifying its vertices.
 /// </summary>
-public abstract class Shape : MovingObject
+public abstract class Shape : MoveableObject
 {
     /// <summary>
     /// Whether all the points in the shape have been specified

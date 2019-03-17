@@ -87,9 +87,9 @@ public class GameService
 
     public void AddSoldier(Vector2 position)
     {
-        // TODO: Most of this can be dry.
+        // TODO: Be more dry?
         SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
-        MovingObject soldierMono = sr.Draw(position);
+        MoveableObject soldierMono = sr.Draw(position);
 
         Soldier soldier = game.OnAddSoldier(soldierMono.gameObject);
 
@@ -98,9 +98,8 @@ public class GameService
 
     public void AddEnemyBase(Vector2 position)
     {
-        // TODO: Most of this can be dry.
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
-        MovingObject enemyBase = abr.Draw(position, "EnemyBaseSquare");
+        MoveableObject enemyBase = abr.Draw(position, "EnemyBaseSquare");
 
         // TODO: Blerg. Shouldn't the game build itself?
         game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
@@ -109,9 +108,9 @@ public class GameService
         BindUnitEvents(abr, enemyBase, game.Enemy.ArmyBase);
     }
 
-    public void BindUnitEvents(IUnitRenderer renderer, MovingObject movingObject, Unit unit)
+    public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
     {
-        movingObject.OnEnterEvent += UnitMono_OnEnterEvent;
+        movingObject.OnEnterEvent += Shape_OnEnterEvent;
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
@@ -128,7 +127,7 @@ public class GameService
     }
 
 
-    void UnitMono_OnEnterEvent(GameObject thisObject, GameObject otherObject)
+    void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {
         game.OnUnitsCollide(thisObject.name, otherObject.name);
     }

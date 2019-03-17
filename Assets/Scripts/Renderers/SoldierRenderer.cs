@@ -10,12 +10,12 @@ public class SoldierRenderer : IUnitRenderer
         this.rectanglePrefab = rectanglePrefab;
     }
 
-    public MovingObject Draw(Vector2 position)
+    public MoveableObject Draw(Vector2 position)
     {
         return Draw(position, "Soldier_" + Guid.NewGuid().ToString());
     }
 
-    public MovingObject Draw(Vector2 position, string name)
+    public MoveableObject Draw(Vector2 position, string name)
     {
         RectangleObject dr = new RectangleObject();
         return dr.Draw(name, this.rectanglePrefab, position, 0.1f, 0.1f);

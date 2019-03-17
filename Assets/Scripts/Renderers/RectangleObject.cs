@@ -114,7 +114,7 @@ public class RectangleObject : Shape
         go.GetComponent<Renderer>().material.color = color;
     }
 
-    public MovingObject Draw(String name, RectangleObject RectanglePrefab, Vector2 position, float height, float width)
+    public MoveableObject Draw(String name, RectangleObject RectanglePrefab, Vector2 position, float height, float width)
     {
 
         var prefab = RectanglePrefab;
