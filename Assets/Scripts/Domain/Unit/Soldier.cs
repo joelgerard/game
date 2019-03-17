@@ -8,17 +8,11 @@ public partial class Soldier : MovableUnit
 
     public partial class SoliderHsm { }
 
-
-
-    //private Hsm.StateValue<int> StateValue_HP = new Hsm.StateValue<int>(100);
-
-
-        // TODO: Don't need this constructor.
-    /*public Soldier(GameObject go)
+    public override void Init()
     {
-        this.GameObject = go;
-
-    }*/
+        base.Init();
+        TotalHP = HP = 1;
+    }
 
     public float SpeedWeight { get; }
 }

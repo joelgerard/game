@@ -37,22 +37,18 @@ public class GameService
         game.Initialize();
 
         DrawMap();
-
-        // TODO: Fix this. I guess we can bind all these things at once.
-        // Must be a better way to do this.
-        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
-        game.Enemy.ArmyBase.OnDamagedEvent += abr.DrawDamage;
-        game.Enemy.ArmyBase.OnDestroyedEvent += abr.DrawDestroyed;
-    }
-
-    void PathRenderer_OnReadyEvent()
-    {
-        // TODO: Give it the path?
-        game.OnPathReady();
     }
 
 
     public void Update(GameServiceUpdate update)
+    {
+        update = ParseInput(update);
+
+        // TODO: Need to call this once per frame?
+        game.Update(update.GameUpdate);
+    }
+
+    private GameServiceUpdate ParseInput(GameServiceUpdate update)
     {
         bool clickedInBase = false;
 
@@ -68,7 +64,7 @@ public class GameService
 
         if (update.Click && clickedInBase)
         {
-            AddSoldier(update.MousePos);
+            PlayerBase_OnClick(update.MousePos);
         }
 
         // TODO: Some cleanup with all these inputs
@@ -80,9 +76,7 @@ public class GameService
         }
 
         update.GameUpdate.currentPath = trailRendererPath;
-
-        // TODO: Need to call this once per frame?
-        game.Update(update.GameUpdate);
+        return update;
     }
 
     public void AddSoldier(Vector2 position)
@@ -115,7 +109,7 @@ public class GameService
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
-    // TODO: Move out of here.
+    // TODO: Move out of here once Map is more complicated.
     protected void DrawMap()
     {
         Vector2 pos = new Vector2
@@ -126,11 +120,20 @@ public class GameService
         AddEnemyBase(pos);
     }
 
+    void PlayerBase_OnClick(Vector2 pos)
+    {
+        AddSoldier(pos);
+    }
 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {
         game.OnUnitsCollide(thisObject.name, otherObject.name);
     }
 
+    void PathRenderer_OnReadyEvent()
+    {
+        // TODO: Give it the path?
+        game.OnPathReady();
+    }
 
 }

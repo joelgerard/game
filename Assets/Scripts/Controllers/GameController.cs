@@ -70,13 +70,5 @@ public class GameController : MonoBehaviour
             MainBehaviour = this
         };
         gameService.Update(gsUpdate);
-
-        //Collider2D hitCollider = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        //bool clickedInBase = (hitCollider != null && hitCollider.CompareTag("LaunchPad"));
-
-        //if (hitCollider != null)
-        //{
-        //    GameController.Log("y n ");
-        //}
     }
 }
