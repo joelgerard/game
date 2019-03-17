@@ -1,19 +1,23 @@
 ﻿using System;
 using UnityEngine;
 
-public class ArmyBaseRenderer
+public class ArmyBaseRenderer : IUnitRenderer
 {
-    // TODO: Why is this here?
-    RectangleObject rectangle;
+    RectangleObject rectanglePrefab;
 
-    public ArmyBaseRenderer(RectangleObject drawShape)
+    public ArmyBaseRenderer(RectangleObject rectanglePrefab)
     {
-        rectangle = drawShape;
+        this.rectanglePrefab = rectanglePrefab;
     }
 
-    public RectangleObject Draw(RectangleObject RectanglePrefab, Vector2 position, String name)
+    public MovingObject Draw(Vector2 position, String name)
     {
-        return rectangle.Draw(name, RectanglePrefab, position, 1.1f, 1.1f);
+        return rectanglePrefab.Draw(name, rectanglePrefab, position, 1.1f, 1.1f);
+    }
+
+    public MovingObject Draw(Vector2 position)
+    {
+        return Draw(position, "Base_" + Guid.NewGuid().ToString());
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)

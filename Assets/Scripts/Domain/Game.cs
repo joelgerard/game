@@ -63,12 +63,7 @@ public class Game
         return army;
     }
 
-    void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
-    {
-        // TODO: This can be cleaned up DRY. 
-        unitMap.Remove(destroyedUnit.GameObject.name);
-        GameController.Log("You win.");
-    }
+
 
     public void OnPathReady()
     {
@@ -91,8 +86,16 @@ public class Game
         return soldier;
     }
 
+    void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
+    {
+        // TODO: This can be cleaned up DRY. 
+        unitMap.Remove(destroyedUnit.GameObject.name);
+        GameController.Log("You win.");
+    }
+
     void Soldier_OnDestroyedEvent(Unit unitDestroyed)
     {
+        // TODO: Feels like all the units and gameobjects can be managed at once. 
         Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
         unitMap.Remove(unitDestroyed.GameObject.name);
     }
@@ -107,8 +110,5 @@ public class Game
         Unit unit = unitMap[unit1Name];
         Unit otherUnit = unitMap[unit2Name];
         unit.Attack(otherUnit);
-
-        // TODO: This is wrong. Units shouldn't automatically counter-attack.
-        //otherUnit.Attack(unit);
     }
 }

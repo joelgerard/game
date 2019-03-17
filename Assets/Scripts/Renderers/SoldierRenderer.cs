@@ -1,20 +1,24 @@
 ﻿using System;
 using UnityEngine;
 
-// TODO: What is this class for?
-public class SoldierRenderer
+public class SoldierRenderer : IUnitRenderer
 {
-    RectangleObject rectangle;
+    RectangleObject rectanglePrefab;
 
-    public SoldierRenderer()
+    public SoldierRenderer(RectangleObject rectanglePrefab)
     {
+        this.rectanglePrefab = rectanglePrefab;
     }
 
-    public RectangleObject Draw(RectangleObject RectanglePrefab, Vector2 position)
+    public MovingObject Draw(Vector2 position)
+    {
+        return Draw(position, "Soldier_" + Guid.NewGuid().ToString());
+    }
+
+    public MovingObject Draw(Vector2 position, string name)
     {
         RectangleObject dr = new RectangleObject();
-        rectangle = dr.Draw(RectanglePrefab, position, 0.1f, 0.1f,"Soldier");
-        return rectangle;
+        return dr.Draw(name, this.rectanglePrefab, position, 0.1f, 0.1f);
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)

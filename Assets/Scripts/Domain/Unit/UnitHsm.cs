@@ -44,6 +44,7 @@ public partial class Unit
 
             public override Transition GetTransition()
             {
+                // TODO: Shouldn't this be shared?
                 if (Owner.startAttack)
                 {
                     return Transition.Sibling<Attack>();
@@ -57,11 +58,12 @@ public partial class Unit
         {
             public override void OnEnter()
             {
-                var root = GetOuterState<Root>(); // Test being able to grab Root from inner state
+                //var root = GetOuterState<Root>(); // Test being able to grab Root from inner state
             }
 
             public override void Update(float aDeltaTime)
             {
+                // TODO: The unit's amount of damage is hard coded.
                 // TODO: Should this use state values?
                 Owner.startAttack = Owner.enemy.Damage(1.0f * aDeltaTime);
                 base.Update(aDeltaTime);

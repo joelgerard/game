@@ -114,29 +114,23 @@ public class RectangleObject : Shape
         go.GetComponent<Renderer>().material.color = color;
     }
 
-    public RectangleObject Draw(RectangleObject RectanglePrefab, Vector2 position, float height, float width, string namePrefix)
-    {
-        string name = namePrefix + "_" + Guid.NewGuid().ToString(); // TODO: Update name // + _allShapes.Count;
-        return Draw(name, RectanglePrefab, position, height, width);
-    }
-
-    public RectangleObject Draw(String name, RectangleObject RectanglePrefab, Vector2 position, float height, float width)
+    public MovingObject Draw(String name, RectangleObject RectanglePrefab, Vector2 position, float height, float width)
     {
 
         var prefab = RectanglePrefab;
-        RectangleObject CurrentShapeToDraw = Instantiate(prefab);
-        CurrentShapeToDraw.name = name;
+        RectangleObject rect = Instantiate(prefab);
+        rect.name = name;
 
-        CurrentShapeToDraw.AddVertex(position);
-        CurrentShapeToDraw.AddVertex(position);
+        rect.AddVertex(position);
+        rect.AddVertex(position);
 
         position.x += width;
         position.y += height;
-        CurrentShapeToDraw.AddVertex(position);
+        rect.AddVertex(position);
 
 
-        CurrentShapeToDraw.UpdateShape(position);
+        rect.UpdateShape(position);
 
-        return CurrentShapeToDraw;
+        return rect;
     }
 }

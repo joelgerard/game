@@ -87,30 +87,44 @@ public class GameService
 
     public void AddSoldier(Vector2 position)
     {
-        SoldierRenderer sr = new SoldierRenderer();
-        Shape soldierMono = sr.Draw(RectanglePrefab, position);
-        soldierMono.OnEnterEvent += UnitMono_OnEnterEvent;
+        // TODO: Most of this can be dry.
+        SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
+        MovingObject soldierMono = sr.Draw(position);
 
         Soldier soldier = game.OnAddSoldier(soldierMono.gameObject);
-        soldier.OnDamagedEvent+=sr.DrawDamage;
-        soldier.OnDestroyedEvent += sr.DrawDestroyed;
+
+        BindUnitEvents(sr, soldierMono, soldier);
+    }
+
+    public void AddEnemyBase(Vector2 position)
+    {
+        // TODO: Most of this can be dry.
+        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
+        MovingObject enemyBase = abr.Draw(position, "EnemyBaseSquare");
+
+        // TODO: Blerg. Shouldn't the game build itself?
+        game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
+        enemyBase.name = enemyBase.gameObject.name;
+
+        BindUnitEvents(abr, enemyBase, game.Enemy.ArmyBase);
+    }
+
+    public void BindUnitEvents(IUnitRenderer renderer, MovingObject movingObject, Unit unit)
+    {
+        movingObject.OnEnterEvent += UnitMono_OnEnterEvent;
+        unit.OnDamagedEvent += renderer.DrawDamage;
+        unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
     // TODO: Move out of here.
     protected void DrawMap()
     {
-        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
         Vector2 pos = new Vector2
         {
             x = 0.2f,
             y = 3f
         };
-        Shape enemyBase = abr.Draw(RectanglePrefab, pos, "EnemyBaseSquare");
-
-        // TODO: Blerg. Shouldn't the game build itself?
-        game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
-        enemyBase.OnEnterEvent += UnitMono_OnEnterEvent;
-        enemyBase.name = enemyBase.gameObject.name;
+        AddEnemyBase(pos);
     }
 
 
