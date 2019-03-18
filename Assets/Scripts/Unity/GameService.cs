@@ -16,6 +16,9 @@ public class GameService
     public RectangleObject RectanglePrefab;
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
+
+    private GameObject playerBaseObject;
+
     TrailRenderer trailPrefab;
     PathRenderer pathRenderer;
 
@@ -24,7 +27,7 @@ public class GameService
 
 
 
-    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, RectangleObject playerBase)
+    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject playerBase)
     {
         Diagnostics.NotNull(playerBase, "PlayerBase");
 
@@ -32,6 +35,9 @@ public class GameService
         this.TrianglePrefab = trianglePrefab;
         this.CirclePrefab = circlePrefab;
         this.trailPrefab = trailPrefab;
+
+        // TODO: Remove
+        this.playerBaseObject = playerBase;
 
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
@@ -63,7 +69,7 @@ public class GameService
                 BindUnitEvents(sr, soldierMono, soldier);
 
                 // TODO: Move out of here. Part of AI. 
-                soldier.TargetPosition = this.game.Player.ArmyBase.Position;
+                soldier.TargetPosition = this.playerBaseObject.transform.position; //this.game.Player.ArmyBase.Position;
                 soldier.StartMoving();
             }
         }
@@ -146,10 +152,10 @@ public class GameService
         AddEnemyBase(pos);
 
         // TODO: Dynamically create player base.
-        
+
 
         // TODO: Clean up
-        game.Path.target = pos;
+        game.Path.target = this.playerBaseObject.transform.position;
     }
 
     void PlayerBase_OnClick(Vector2 pos)
