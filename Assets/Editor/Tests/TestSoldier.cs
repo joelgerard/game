@@ -74,6 +74,29 @@ namespace Tests
             Assert.False(armyBase.StateMachine.IsInState<Unit.UnitHsm.Attack>());
         }
 
+        [Test]
+        public void UnitsAttackAndOneDies()
+        {
+            Soldier ally = new Soldier
+            {
+                Allegiance = Allegiance.ALLY
+            };
+            Soldier enemy = new Soldier()
+            {
+                Allegiance = Allegiance.ENEMY
+            };
+            ally.Init();
+            enemy.Init();
+
+            while (enemy.HP > 0)
+            {
+                ally.Attack(enemy);
+                enemy.Attack(ally);
+            }
+
+
+        }
+
 
 
 

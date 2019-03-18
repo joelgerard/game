@@ -1,5 +1,6 @@
 ﻿using System;
 using Hsm;
+using UnityEngine;
 using static MovableUnit.MovableUnitHsm;
 
 public partial class MovableUnit : Unit
@@ -8,6 +9,7 @@ public partial class MovableUnit : Unit
 
     public partial class MovableUnitHsm { }
     public float Speed { get; set; } = 1.5f;
+    public Vector2 TargetPosition {get;set;}
 
     public MovableUnit()
     {

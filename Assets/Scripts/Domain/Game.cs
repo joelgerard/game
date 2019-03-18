@@ -10,6 +10,9 @@ public class Game
     public Army Player { get { return Armies[1]; } }
     public Army Enemy { get { return Armies[0]; } }
 
+    // TODO: This path is hard coded for now.
+    public Path Path { get; set; } = new Path();
+
     // TODO: I guess string comp is expensive. 
     private Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
 
@@ -50,11 +53,54 @@ public class Game
     {
         // TODO: Need to call this once per frame?
         Player.Update(update.deltaTime, update.currentPath);
-
-        // TODO: Enemy doesn't move yet.
-        Enemy.Update(update.deltaTime, null);
+        Enemy.Update(update.deltaTime, Path);
     }
 
+    // Used to control game logic like army growth etc.
+    public List<TurnUpdate> TurnUpdate()
+    {
+        List<TurnUpdate> updates = new List<TurnUpdate>();
+
+        if (Enemy.Soldiers.Count < 2)
+        { 
+            // TODO: Move this out of here. But for now, it's just a rough in.
+            Soldier soldier = AddEnemySoldier();
+            TurnUpdate tu = new TurnUpdate
+            {
+                Unit = soldier
+            };
+            updates.Add(tu);
+        }
+        return updates;
+    }
+
+    private Soldier AddEnemySoldier()
+    {
+        Vector2 pos = new Vector2
+        {
+            // TODO: This will blow up.
+            x = Enemy.ArmyBase.Position.x,
+            y = Enemy.ArmyBase.Position.y
+        };
+        Soldier soldier = new Soldier
+        {
+            Allegiance = Allegiance.ENEMY,
+            Position = pos
+
+        };
+        soldier.Name = "EnemySoldier_" + Guid.NewGuid().ToString();
+        soldier.Init();
+
+        unitMap.Add(soldier.Name, soldier);
+
+        //soldier.StartMoving();
+
+        Enemy.Soldiers.Add(soldier);
+
+        //TODO: Pass back to renderer.
+        return soldier;
+
+    }
 
     public Army AddArmy()
     {
@@ -95,7 +141,7 @@ public class Game
 
     void Soldier_OnDestroyedEvent(Unit unitDestroyed)
     {
-        // TODO: Feels like all the units and gameobjects can be managed at once. 
+        // TODO: Feels like all the units and gameobjects can be managed at once? 
         Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
         unitMap.Remove(unitDestroyed.GameObject.name);
     }

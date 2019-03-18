@@ -15,6 +15,8 @@ public partial class Unit
     public Hsm.StateMachine StateMachine = new Hsm.StateMachine();
     public partial class UnitHsm { }
 
+    private Vector2 position = new Vector2();
+
     protected bool startAttack = false;
     protected Unit enemy = null;
 
@@ -26,6 +28,8 @@ public partial class Unit
 
     // TODO: Think about this.
     public GameObject GameObject { set; get; }
+
+    public string Name { get; set; }
 
     public Unit()
     {
@@ -54,11 +58,26 @@ public partial class Unit
     {
         get
         {
-            return this.GameObject.transform.position;
+            // TODO: Think about this.
+            if (this.GameObject == null)
+            {
+                return position;
+            }
+            else 
+            { 
+                return this.GameObject.transform.position;
+            }
         }
         set
         {
-            this.GameObject.transform.position = value;
+            if (this.GameObject == null)
+            {
+                position = value;
+            }
+            else
+            { 
+                this.GameObject.transform.position = value;
+            }
         }
     }
 

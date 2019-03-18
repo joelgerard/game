@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
 
     [SerializeField] TrailRenderer trailPrefab;
 
+    //[SerializeField] RectangleObject PlayerBaseSquare;
 
 
     private void Awake()
@@ -28,21 +29,25 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GameObject baseObj = GameObject.Find("PlayerBaseSquare").gameObject;
+        // TODO: Remove
+        RectangleObject playerBase = (RectangleObject)baseObj.GetComponent<RectangleObject>();
         // TODO: Is this slow, canonical unity way of doing things? Use fixedUpdate?
-        InvokeRepeating("OutputTime", 0.1f, 0.1f);  //1s delay, repeat every 1s
-        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab);
+        InvokeRepeating("GameTurnUpdate", 0.1f, 0.1f);  //1s delay, repeat every 1s
+        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab, playerBase);
     }
 
-    void OutputTime()
+    void GameTurnUpdate()
     {
-        // TODO: Maybe this should just go in update?
-        // this.navigator.MoveUnits(game.soldiers, trailRendererPath);
+        gameService.GameTurnUpdate();
     }
 
     public static void Log(string msg)
     {
         Debug.Log(msg);
     }
+
+
 
     private void Update()
     {

@@ -10,7 +10,7 @@ public class ArmyBaseRenderer : IUnitRenderer
         this.rectanglePrefab = rectanglePrefab;
     }
 
-    public MoveableObject Draw(Vector2 position, String name)
+    public MoveableObject Draw(Vector2 position, string name)
     {
         return rectanglePrefab.Draw(name, rectanglePrefab, position, 1.1f, 1.1f);
     }
