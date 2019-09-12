@@ -10,6 +10,7 @@ public partial class MovableUnit : Unit
     public partial class MovableUnitHsm { }
     public float Speed { get; set; } = 1.5f;
     public Vector2 TargetPosition {get;set;}
+    public int IndexOnPath { get; set; } = 0;
 
     public MovableUnit()
     {
@@ -17,7 +18,13 @@ public partial class MovableUnit : Unit
 
     public void StartMoving()
     {
+        //GameController.Log("Start moving");
+        if (!startMoving)
+        {
+            IndexOnPath = 0;
+        }
         startMoving = true;
+
     }
 
     /** ############ SHARED STATES ########### */

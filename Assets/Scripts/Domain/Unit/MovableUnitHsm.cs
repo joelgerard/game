@@ -31,6 +31,7 @@ public partial class MovableUnit
 
                 if (((MovableUnit)Owner).startMoving)
                 {
+                    GameController.Log("Start moving");
                     return Transition.Sibling<Moving>();
                 }
 
@@ -44,6 +45,7 @@ public partial class MovableUnit
         {
             public override void OnEnter()
             {
+                GameController.Log("Starting to move");
                 //var root = GetOuterState<Root>(); // Test being able to grab Root from inner state
                 //Debug.Log("entering attack");
             }

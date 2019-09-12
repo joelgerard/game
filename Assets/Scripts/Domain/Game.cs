@@ -61,7 +61,8 @@ public class Game
     {
         List<TurnUpdate> updates = new List<TurnUpdate>();
 
-        if (Enemy.Soldiers.Count < 2)
+        // TODO: Add enemy soldiers here.
+        if (false && Enemy.Soldiers.Count < 2)
         { 
             // TODO: Move this out of here. But for now, it's just a rough in.
             Soldier soldier = AddEnemySoldier();
