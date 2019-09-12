@@ -6,8 +6,6 @@ using static Soldier.SoldierHsm;
 
 public class Navigator
 {
-    //private int currentPos = 0;
-
     public Navigator()
     {
 
@@ -55,6 +53,12 @@ public class Navigator
                     if (currentIndex != -1 && currentIndex < Path.Count()-1)
                     {
                         soldier.TargetPosition = Path.GetPosition(++soldier.IndexOnPath);
+                    }
+                    else 
+                    {
+                        // TODO: Start here <<>>. Soldier never stops moving at the end
+                        // of this path. 
+                        GameController.Log("Stop moving?"); 
                     }
                 }
 

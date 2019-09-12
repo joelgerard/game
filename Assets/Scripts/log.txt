@@ -1,10 +1,19 @@
 ﻿Next/Current
 
+- Hardest thing to deal with is state management. This needs fixing. Particularly:
+-- How do you change state?
+-- How do you know when state has changed?
+-- Take a look, for example, at moving an object. It's messed up
 - everything is broke. Unit test the navigator.
 - Create tests that show the game class has no unity depencies.
 - Fix infinite loop bug and have a dead state. The GOs are destroyed, but not the domain objects.
 - The lists of Unity objects and Game Entites needs cleaning up. 
 - Game should be creating all the objects, not the renderers. 
+
+
+9/12 
+
+- Fixed the navigation bug.
 
 3/17
 
