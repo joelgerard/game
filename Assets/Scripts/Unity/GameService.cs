@@ -42,6 +42,7 @@ public class GameService
 
         game.Initialize();
 
+        // TODO: This should just be another event eventually. 
         DrawMap();
     }
 
@@ -50,17 +51,30 @@ public class GameService
 
     public void Update(GameServiceUpdate update)
     {
+        // TODO: Need to call this once per frame?
+
+        // Get the input, which is compiled into a game update object.
+        // This includes events that the game will need to loop through, e.g.
+        // a player has added a solder to the base.
         update = ParseInput(update);
 
-        // TODO: Need to call this once per frame?
-        List<Unit> createdUnits = game.Update(update.GameUpdate);
-        foreach(Unit unit in createdUnits)
+        // Once the game has updated itself, it will return new objects that
+        // are in the game but have not been drawn or created on the Unity side.
+        RenderUnits(game.Update(update.GameUpdate));
+    }
+
+    private void RenderUnits(List<Unit> units)
+    {
+        foreach (Unit unit in units)
         {
             if (unit is Soldier)
             {
                 unit.GameObject = RenderSoldier(unit as Soldier);
             }
-
+            if (unit is ArmyBase)
+            {
+                unit.GameObject = RenderEnemyBase(unit as ArmyBase);
+            }
             game.OnUnitRenderedEvent(unit);
         }
     }
@@ -68,20 +82,6 @@ public class GameService
     public void GameTurnUpdate()
     {
         List<TurnUpdate> updates = game.TurnUpdate();
-        //foreach(TurnUpdate update in updates)
-        //{
-        //    if (update.Unit is Soldier soldier)
-        //    {
-        //        // TODO: Cleanup. Duplicated in a weird way. 
-        //        SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
-        //        MoveableObject soldierMono = sr.Draw(soldier.Position,soldier.Name);
-        //        BindUnitEvents(sr, soldierMono, soldier);
-
-        //        // TODO: Move out of here. Part of AI. 
-        //        soldier.TargetPosition = this.playerBaseObject.transform.position; //this.game.Player.ArmyBase.Position;
-        //        soldier.StartMoving();
-        //    }
-        //}
     }
 
     private GameServiceUpdate ParseInput(GameServiceUpdate update)
@@ -131,16 +131,13 @@ public class GameService
         return soldierMono.gameObject;
     }
 
-    public void AddEnemyBase(Vector2 position)
+    public GameObject RenderEnemyBase(ArmyBase armyBase)
     {
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
-        MoveableObject enemyBase = abr.Draw(position, "EnemyBaseSquare");
-
-        // TODO: Blerg. Shouldn't the game build itself?
-        game.Enemy.ArmyBase.GameObject = enemyBase.gameObject;
+        MoveableObject enemyBase = abr.Draw(armyBase.Position, "EnemyBaseSquare");
         enemyBase.name = enemyBase.gameObject.name;
-
         BindUnitEvents(abr, enemyBase, game.Enemy.ArmyBase);
+        return enemyBase.gameObject;
     }
 
     public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
@@ -153,12 +150,9 @@ public class GameService
     // TODO: Move out of here once Map is more complicated.
     protected void DrawMap()
     {
-        Vector2 pos = new Vector2
-        {
-            x = 0.2f,
-            y = 3f
-        };
-        AddEnemyBase(pos);
+        RenderUnits(game.DrawMap());
+
+        //AddEnemyBase(pos);
 
         // TODO: Remove add some soldiers.
         //AddSoldier(pos, Allegiance.ENEMY);

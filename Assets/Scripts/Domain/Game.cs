@@ -23,18 +23,7 @@ public class Game
     public void Initialize()
     {
 
-        // Enemy
-        AddArmy(); // TODO: This isn't doing anything.
-        ArmyBase enemyBase = new ArmyBase
-        {
-            Allegiance = Allegiance.ENEMY
-        };
 
-        enemyBase.Init();
-        unitMap.Add("EnemyBaseSquare", enemyBase);
-        // TODO: Lame
-        Enemy.ArmyBase = enemyBase;
-        enemyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
         // Player
         AddArmy(); //TODO: Not yet used.
@@ -49,9 +38,31 @@ public class Game
         GameController.Log("Path target is " + Path.target);
   }
 
-    private List<Unit> DrawMap()
+    // TODO: Public?
+    public List<Unit> DrawMap()
     {
+        // Enemy
+        AddArmy(); // TODO: This isn't doing anything.
+        ArmyBase enemyBase = new ArmyBase
+        {
+            Allegiance = Allegiance.ENEMY
+        };
 
+        enemyBase.Init();
+        // TODO: Lame
+        Enemy.ArmyBase = enemyBase;
+        enemyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
+        Vector2 pos = new Vector2
+        {
+            x = 0.2f,
+            y = 3f
+        };
+        enemyBase.Position = pos;
+
+        return new List<Unit>
+        {
+            enemyBase
+        };
     }
 
 
@@ -59,7 +70,6 @@ public class Game
     public List<Unit> Update(GameUpdate update)
     {
         List<Unit> createdUnits = new List<Unit>();
-        // TODO: No reason this is a stack really.
         foreach(GameEvent curEvent in update.GameEvents)
         {
             // TODO: consider moving to different function.
