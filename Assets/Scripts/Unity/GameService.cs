@@ -111,15 +111,22 @@ public class GameService
     // right now it's Input => Renderer => Game
     // Or maybe, the AI should drive the clicks in the same way a PLayer does?
     // Seems awkward. 
-    public void AddSoldier(Vector2 position)
+    public void AddSoldier(Vector2 position, Allegiance allegiance)
     {
         // TODO: Be more dry?
         SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
         MoveableObject soldierMono = sr.Draw(position);
 
-        Soldier soldier = game.OnAddSoldier(soldierMono.gameObject);
+        Soldier soldier = game.OnAddSoldier(soldierMono.gameObject, allegiance);
+
 
         BindUnitEvents(sr, soldierMono, soldier);
+
+        // TODO: Remove. Temp
+        if (allegiance == Allegiance.ENEMY)
+        {
+            soldier.StartMoving();
+        }
     }
 
     public void AddEnemyBase(Vector2 position)
@@ -151,6 +158,10 @@ public class GameService
         };
         AddEnemyBase(pos);
 
+        // TODO: Remove add some soldiers.
+        AddSoldier(pos, Allegiance.ENEMY);
+       
+
         // TODO: Dynamically create player base.
 
 
@@ -160,7 +171,8 @@ public class GameService
 
     void PlayerBase_OnClick(Vector2 pos)
     {
-        AddSoldier(pos);
+        GameController.Log("Click on " + pos.ToString());
+        AddSoldier(pos, Allegiance.ALLY);
     }
 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)

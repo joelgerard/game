@@ -20,7 +20,7 @@ namespace Tests
             {
                 name = "Soldier1"
             };
-            Soldier s = game.OnAddSoldier(go);
+            Soldier s = game.OnAddSoldier(go,Allegiance.ALLY);
             s.StartMoving();
             game.OnUnitsCollide("Soldier1", "EnemyBaseSquare");
             GameUpdate gu = new GameUpdate()

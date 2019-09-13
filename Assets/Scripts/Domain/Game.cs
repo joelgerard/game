@@ -37,6 +37,7 @@ public class Game
         enemyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
 
+
         // Player
         AddArmy(); //TODO: Not yet used.
         ArmyBase playerBase = new ArmyBase
@@ -45,7 +46,10 @@ public class Game
         };
         playerBase.Init();
         unitMap.Add("PlayerBaseSquare", playerBase);
-    }
+
+        Path.target = playerBase.Position;
+        GameController.Log("Path target is " + Path.target);
+  }
 
 
 
@@ -62,10 +66,11 @@ public class Game
         List<TurnUpdate> updates = new List<TurnUpdate>();
 
         // TODO: Add enemy soldiers here.
-        if (Enemy.Soldiers.Count < 2)
+        if (false && Enemy.Soldiers.Count < 2)
         { 
             // TODO: Move this out of here. But for now, it's just a rough in.
             Soldier soldier = AddEnemySoldier();
+            soldier.StartMoving();
             TurnUpdate tu = new TurnUpdate
             {
                 Unit = soldier
@@ -117,15 +122,16 @@ public class Game
         Player.StartMoving();
     }
 
-    public Soldier OnAddSoldier(GameObject gameObject)
+    public Soldier OnAddSoldier(GameObject gameObject, Allegiance allegiance)
     {
         Soldier soldier = new Soldier()
         {
-            Allegiance = Allegiance.ALLY,
+            Allegiance = allegiance,
             GameObject = gameObject
         };
-        
-        List<Soldier> soldiers = Player.Soldiers;
+
+        // TODO: If statement here is bad. 
+        List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
         soldier.Init();
         soldier.OnDestroyedEvent+= Soldier_OnDestroyedEvent;
         soldiers.Add(soldier);

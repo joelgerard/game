@@ -1,0 +1,16 @@
+﻿How-to:
+- Add a game object?
+- Change state?
+
+
+Add a game object?
+- Right now, when you click, the GameService creates the objects, which makes sense
+- However, it means you need to do everything in Unity space, not GameSpace (both area and logic).
+- I think the better thing to do is to have the Game create whatever it wants, and let the GameService (renderer)
+    deal with it. 
+
+// TODO: Need to decide on how this goes. 
+    // Maybe it should be: Input => Game => Renderer
+    // right now it's Input => Renderer => Game
+    // Or maybe, the AI should drive the clicks in the same way a PLayer does?
+    // Seems awkward.

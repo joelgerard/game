@@ -32,9 +32,15 @@ public class Navigator
                 // TODO: This is awkward.
                 if (soldier.IndexOnPath == 0)
                 {
-                    if (soldier.IndexOnPath != -1 && soldier.IndexOnPath < Path.Count() - 1)
+                    // FIXME: This pathRendere seems to start from 1? 
+                    // What is it? 0 or 1. It means the limits of the array aren't being
+                    // checked properly, e.g. in the case below. 
+                    // There are also two paths, the pathRenderer, and the plain
+                    // AI path so they need to match. 
+                    if (soldier.IndexOnPath != -1 && soldier.IndexOnPath < Path.Count())
                     {
-                        targetPos = Path.GetPosition(1);
+                        // TODO: Counts from 1?
+                        targetPos = Path.GetPosition(0);
                     }
                 }
 
@@ -46,18 +52,21 @@ public class Navigator
                 {
                     soldier.Position =
                         Vector2.MoveTowards(soldier.Position, targetPos, soldier.Speed * deltaTime);
+                    GameController.Log("Moving soldier towards " + targetPos.ToString());
                 }
                 else
                 {
                     int currentIndex = soldier.IndexOnPath; 
-                    if (currentIndex != -1 && currentIndex < Path.Count()-1)
+                    if (currentIndex != -1 && currentIndex < Path.Count())
                     {
-                        soldier.TargetPosition = Path.GetPosition(++soldier.IndexOnPath);
+                        soldier.TargetPosition = Path.GetPosition(soldier.IndexOnPath);
+                        soldier.IndexOnPath++;
+                        GameController.Log("Got pos to move to " + soldier.TargetPosition);
                     }
                     else 
                     {
                         // TODO: Start here <<>>. Soldier never stops moving at the end
-                        // of this path. 
+                        // of this path.    
                         GameController.Log("Stop moving?"); 
                     }
                 }

@@ -1,5 +1,8 @@
-﻿Next/Current
+﻿
 
+Next/Current
+
+- See HowTo. The biggest issue is a) how are objects created? Who creates them?
 - Hardest thing to deal with is state management. This needs fixing. Particularly:
 -- How do you change state?
 -- How do you know when state has changed?
@@ -9,11 +12,13 @@
 - Fix infinite loop bug and have a dead state. The GOs are destroyed, but not the domain objects.
 - The lists of Unity objects and Game Entites needs cleaning up. 
 - Game should be creating all the objects, not the renderers. 
+- What is called once per frame?
 
 
 9/12 
 
 - Fixed the navigation bug.
+- enemy attacks. hard coded.
 
 3/17
 
