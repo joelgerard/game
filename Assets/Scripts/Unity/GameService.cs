@@ -11,7 +11,7 @@ public class GameService
 {
 
     // TODO: Make private
-    public Game game = new Game();
+    private Game game = new Game();
 
     public RectangleObject RectanglePrefab;
     public Shape CirclePrefab;
@@ -24,8 +24,6 @@ public class GameService
 
     // TODO: Remove
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
-
-
 
     public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject playerBase)
     {
@@ -48,31 +46,42 @@ public class GameService
     }
 
 
+
+
     public void Update(GameServiceUpdate update)
     {
         update = ParseInput(update);
 
         // TODO: Need to call this once per frame?
-        game.Update(update.GameUpdate);
+        List<Unit> createdUnits = game.Update(update.GameUpdate);
+        foreach(Unit unit in createdUnits)
+        {
+            if (unit is Soldier)
+            {
+                unit.GameObject = RenderSoldier(unit as Soldier);
+            }
+
+            game.OnUnitRenderedEvent(unit);
+        }
     }
 
     public void GameTurnUpdate()
     {
         List<TurnUpdate> updates = game.TurnUpdate();
-        foreach(TurnUpdate update in updates)
-        {
-            if (update.Unit is Soldier soldier)
-            {
-                // TODO: Cleanup. Duplicated in a weird way. 
-                SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
-                MoveableObject soldierMono = sr.Draw(soldier.Position,soldier.Name);
-                BindUnitEvents(sr, soldierMono, soldier);
+        //foreach(TurnUpdate update in updates)
+        //{
+        //    if (update.Unit is Soldier soldier)
+        //    {
+        //        // TODO: Cleanup. Duplicated in a weird way. 
+        //        SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
+        //        MoveableObject soldierMono = sr.Draw(soldier.Position,soldier.Name);
+        //        BindUnitEvents(sr, soldierMono, soldier);
 
-                // TODO: Move out of here. Part of AI. 
-                soldier.TargetPosition = this.playerBaseObject.transform.position; //this.game.Player.ArmyBase.Position;
-                soldier.StartMoving();
-            }
-        }
+        //        // TODO: Move out of here. Part of AI. 
+        //        soldier.TargetPosition = this.playerBaseObject.transform.position; //this.game.Player.ArmyBase.Position;
+        //        soldier.StartMoving();
+        //    }
+        //}
     }
 
     private GameServiceUpdate ParseInput(GameServiceUpdate update)
@@ -91,7 +100,7 @@ public class GameService
 
         if (update.Click && clickedInBase)
         {
-            PlayerBase_OnClick(update.MousePos);
+            update.GameUpdate.GameEvents.Add(new HomeBaseClickEvent(update.MousePos));
         }
 
         // TODO: Some cleanup with all these inputs
@@ -106,27 +115,20 @@ public class GameService
         return update;
     }
 
-    // TODO: Need to decide on how this goes. 
-    // Maybe it should be: Input => Game => Renderer
-    // right now it's Input => Renderer => Game
-    // Or maybe, the AI should drive the clicks in the same way a PLayer does?
-    // Seems awkward. 
-    public void AddSoldier(Vector2 position, Allegiance allegiance)
+
+    public GameObject RenderSoldier(Soldier soldier)
     {
         // TODO: Be more dry?
         SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
-        MoveableObject soldierMono = sr.Draw(position);
-
-        Soldier soldier = game.OnAddSoldier(soldierMono.gameObject, allegiance);
-
-
+        MoveableObject soldierMono = sr.Draw(soldier.Position);
         BindUnitEvents(sr, soldierMono, soldier);
 
         // TODO: Remove. Temp
-        if (allegiance == Allegiance.ENEMY)
+        if (soldier.Allegiance == Allegiance.ENEMY)
         {
             soldier.StartMoving();
         }
+        return soldierMono.gameObject;
     }
 
     public void AddEnemyBase(Vector2 position)
@@ -159,7 +161,7 @@ public class GameService
         AddEnemyBase(pos);
 
         // TODO: Remove add some soldiers.
-        AddSoldier(pos, Allegiance.ENEMY);
+        //AddSoldier(pos, Allegiance.ENEMY);
        
 
         // TODO: Dynamically create player base.
@@ -167,12 +169,6 @@ public class GameService
 
         // TODO: Clean up
         game.Path.target = this.playerBaseObject.transform.position;
-    }
-
-    void PlayerBase_OnClick(Vector2 pos)
-    {
-        GameController.Log("Click on " + pos.ToString());
-        AddSoldier(pos, Allegiance.ALLY);
     }
 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)

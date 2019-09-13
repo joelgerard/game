@@ -8,6 +8,19 @@ Add a game object?
 - However, it means you need to do everything in Unity space, not GameSpace (both area and logic).
 - I think the better thing to do is to have the Game create whatever it wants, and let the GameService (renderer)
     deal with it. 
+- So when the base square is clicked, we do some collider logic.
+- From there, we pass this off to an event that says home base was clicked.
+- Then we create the new game object, and call the onsoldier added.
+- Side note: May need to think about GameTurnUpdate at the same time. 
+- Right now I have HomeBase_Click class which you can use to send the click event to the game.
+
+So this means that:
+1. GameService passes Game a list of event objects.
+2. Game parses them and returns a list of objects to be rendered AND connected.
+
+What we should do instead is:
+- Call the base object that was clicked (ClickEvent or AddEvent?) and have that deal with the logic.
+- Somehow then, this object needs to be passed back so that it's rendered. Put it on a stack?
 
 // TODO: Need to decide on how this goes. 
     // Maybe it should be: Input => Game => Renderer

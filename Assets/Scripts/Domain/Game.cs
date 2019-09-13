@@ -14,7 +14,7 @@ public class Game
     public Path Path { get; set; } = new Path();
 
     // TODO: I guess string comp is expensive. 
-    private Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
+    public Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
 
     public Game()
     {
@@ -24,7 +24,7 @@ public class Game
     {
 
         // Enemy
-        AddArmy();
+        AddArmy(); // TODO: This isn't doing anything.
         ArmyBase enemyBase = new ArmyBase
         {
             Allegiance = Allegiance.ENEMY
@@ -35,8 +35,6 @@ public class Game
         // TODO: Lame
         Enemy.ArmyBase = enemyBase;
         enemyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
-
-
 
         // Player
         AddArmy(); //TODO: Not yet used.
@@ -51,13 +49,39 @@ public class Game
         GameController.Log("Path target is " + Path.target);
   }
 
-
-
-    public void Update(GameUpdate update)
+    private List<Unit> DrawMap()
     {
+
+    }
+
+
+
+    public List<Unit> Update(GameUpdate update)
+    {
+        List<Unit> createdUnits = new List<Unit>();
+        // TODO: No reason this is a stack really.
+        foreach(GameEvent curEvent in update.GameEvents)
+        {
+            // TODO: consider moving to different function.
+            if (curEvent is HomeBaseClickEvent)
+            {
+                createdUnits.Add(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
+            }
+        }
         // TODO: Need to call this once per frame?
         Player.Update(update.deltaTime, update.currentPath);
         Enemy.Update(update.deltaTime, Path);
+        return createdUnits;
+    }
+
+    private Unit HomeBaseClickedEvent(HomeBaseClickEvent e)
+    {
+        return AddSoldier(Allegiance.ALLY, e.pos);
+    }
+
+    public void OnUnitRenderedEvent(Unit unit)
+    {
+        this.unitMap.Add(unit.GameObject.name, unit);
     }
 
     // Used to control game logic like army growth etc.
@@ -122,6 +146,23 @@ public class Game
         Player.StartMoving();
     }
 
+    public Soldier AddSoldier(Allegiance allegiance, Vector2 pos)
+    {
+        Soldier soldier = new Soldier()
+        {
+            Allegiance = allegiance,
+            Position = pos
+
+        };
+
+        // TODO: If statement here is bad. 
+        List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
+        soldier.Init();
+        soldier.OnDestroyedEvent += Soldier_OnDestroyedEvent;
+        soldiers.Add(soldier);
+        return soldier;
+    }
+
     public Soldier OnAddSoldier(GameObject gameObject, Allegiance allegiance)
     {
         Soldier soldier = new Soldier()
@@ -152,6 +193,7 @@ public class Game
         Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
         unitMap.Remove(unitDestroyed.GameObject.name);
     }
+
 
 
     // TODO: Why does this take strings?
