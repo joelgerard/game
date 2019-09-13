@@ -79,6 +79,7 @@ public class GameService
         }
     }
 
+    // TODO: This isn't used yet.
     public void GameTurnUpdate()
     {
         List<TurnUpdate> updates = game.TurnUpdate();

@@ -23,7 +23,8 @@ public class Game
     public void Initialize()
     {
 
-
+        //Enemy
+        AddArmy();
 
         // Player
         AddArmy(); //TODO: Not yet used.
@@ -42,29 +43,36 @@ public class Game
     public List<Unit> DrawMap()
     {
         // Enemy
-        AddArmy(); // TODO: This isn't doing anything.
-        ArmyBase enemyBase = new ArmyBase
-        {
-            Allegiance = Allegiance.ENEMY
-        };
-
-        enemyBase.Init();
-        // TODO: Lame
-        Enemy.ArmyBase = enemyBase;
-        enemyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
         Vector2 pos = new Vector2
         {
             x = 0.2f,
             y = 3f
         };
-        enemyBase.Position = pos;
+        Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, pos);
+        Enemy.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
+
+        // FIXME: Where is the name
+        //aasdflkj asdlfkja sdlfkj adsf
+
 
         return new List<Unit>
         {
-            enemyBase
+            Enemy.ArmyBase
         };
     }
 
+    private ArmyBase CreateBase(Allegiance allegiance, Vector2 pos)
+    {
+        ArmyBase unitBase = new ArmyBase
+        {
+            Allegiance = Allegiance.ENEMY
+        };
+
+        unitBase.Init();
+
+        unitBase.Position = pos;
+        return unitBase;
+    }
 
 
     public List<Unit> Update(GameUpdate update)
