@@ -64,7 +64,7 @@ public class Game
     {
         ArmyBase unitBase = new ArmyBase
         {
-            Allegiance = Allegiance.ENEMY
+            Allegiance = allegiance
         };
 
         unitBase.Init();

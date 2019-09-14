@@ -26,15 +26,10 @@ public class GameService
 
     public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab)
     {
-        //Diagnostics.NotNull(playerBase, "PlayerBase");
-
         this.RectanglePrefab = rectanglePrefab;
         this.TrianglePrefab = trianglePrefab;
         this.CirclePrefab = circlePrefab;
         this.trailPrefab = trailPrefab;
-
-        // TODO: Remove
-        //this.playerBaseObject = playerBase;
 
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
@@ -66,6 +61,7 @@ public class GameService
     {
         foreach (Unit unit in units)
         {
+            // TODO: Replace with generics?
             if (unit is Soldier)
             {
                 unit.GameObject = RenderSoldier(unit as Soldier);
@@ -98,7 +94,6 @@ public class GameService
             trailRendererPath.TrailRenderer = null;
         }
 
-        GameController.Log("StartDrawing is " + pathRenderer.StartDrawing);
         // FIXME: STartDrawing is initialized improperly. 
         // If you draw before clicking, you're fucked. 
         pathRenderer.StartDrawing |= update.MouseUp;
@@ -140,8 +135,6 @@ public class GameService
     {
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
         MoveableObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
-        GameController.Log("Render base " + armyBase.Name);
-        // enemyBase.name = enemyBase.gameObject.name;
         BindUnitEvents(abr, renderedBaseObject, armyBase);
         return renderedBaseObject.gameObject;
     }
