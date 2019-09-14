@@ -10,7 +10,6 @@ using UnityEngine;
 public class GameService
 {
 
-    // TODO: Make private
     private Game game = new Game();
 
     public RectangleObject RectanglePrefab;
@@ -90,7 +89,9 @@ public class GameService
         bool clickedInBase = false;
 
         Collider2D hitCollider = Physics2D.OverlapPoint(update.MousePos);
-        clickedInBase = (hitCollider != null && hitCollider.CompareTag("LaunchPad"));
+
+        clickedInBase = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == "PlayerBaseSquare");
+
 
         if (update.MouseDown)
         {
@@ -98,6 +99,8 @@ public class GameService
         }
 
         GameController.Log("StartDrawing is " + pathRenderer.StartDrawing);
+        // FIXME: STartDrawing is initialized improperly. 
+        // If you draw before clicking, you're fucked. 
         pathRenderer.StartDrawing |= update.MouseUp;
 
         if (update.Click && clickedInBase)
@@ -136,10 +139,11 @@ public class GameService
     public GameObject RenderBase(ArmyBase armyBase)
     {
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
-        MoveableObject enemyBase = abr.Draw(armyBase.Position, armyBase.Name);
+        MoveableObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
+        GameController.Log("Render base " + armyBase.Name);
         // enemyBase.name = enemyBase.gameObject.name;
-        BindUnitEvents(abr, enemyBase, game.Enemy.ArmyBase);
-        return enemyBase.gameObject;
+        BindUnitEvents(abr, renderedBaseObject, armyBase);
+        return renderedBaseObject.gameObject;
     }
 
     public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
