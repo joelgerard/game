@@ -17,7 +17,7 @@ public class GameService
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
 
-    private GameObject playerBaseObject;
+    //private GameObject playerBaseObject;
 
     TrailRenderer trailPrefab;
     PathRenderer pathRenderer;
@@ -25,9 +25,9 @@ public class GameService
     // TODO: Remove
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
-    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject playerBase)
+    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab)
     {
-        Diagnostics.NotNull(playerBase, "PlayerBase");
+        //Diagnostics.NotNull(playerBase, "PlayerBase");
 
         this.RectanglePrefab = rectanglePrefab;
         this.TrianglePrefab = trianglePrefab;
@@ -35,7 +35,7 @@ public class GameService
         this.trailPrefab = trailPrefab;
 
         // TODO: Remove
-        this.playerBaseObject = playerBase;
+        //this.playerBaseObject = playerBase;
 
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
@@ -73,7 +73,7 @@ public class GameService
             }
             if (unit is ArmyBase)
             {
-                unit.GameObject = RenderEnemyBase(unit as ArmyBase);
+                unit.GameObject = RenderBase(unit as ArmyBase);
             }
             game.OnUnitRenderedEvent(unit);
         }
@@ -97,6 +97,7 @@ public class GameService
             trailRendererPath.TrailRenderer = null;
         }
 
+        GameController.Log("StartDrawing is " + pathRenderer.StartDrawing);
         pathRenderer.StartDrawing |= update.MouseUp;
 
         if (update.Click && clickedInBase)
@@ -107,7 +108,7 @@ public class GameService
         // TODO: Some cleanup with all these inputs
         bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));
 
-        if (!clickedInBase && clickAndDragging)
+        if (!clickedInBase &&  clickAndDragging)
         {
             trailRendererPath = pathRenderer.Draw(update.MainBehaviour.transform.position);
         }
@@ -132,11 +133,11 @@ public class GameService
         return soldierMono.gameObject;
     }
 
-    public GameObject RenderEnemyBase(ArmyBase armyBase)
+    public GameObject RenderBase(ArmyBase armyBase)
     {
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
-        MoveableObject enemyBase = abr.Draw(armyBase.Position, "EnemyBaseSquare");
-        enemyBase.name = enemyBase.gameObject.name;
+        MoveableObject enemyBase = abr.Draw(armyBase.Position, armyBase.Name);
+        // enemyBase.name = enemyBase.gameObject.name;
         BindUnitEvents(abr, enemyBase, game.Enemy.ArmyBase);
         return enemyBase.gameObject;
     }
@@ -157,13 +158,13 @@ public class GameService
 
         // TODO: Remove add some soldiers.
         //AddSoldier(pos, Allegiance.ENEMY);
-       
+
 
         // TODO: Dynamically create player base.
 
 
         // TODO: Clean up
-        game.Path.target = this.playerBaseObject.transform.position;
+        //game.Path.target = new Vector2(0f, -3f); //this.playerBaseObject.transform.position;
     }
 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)

@@ -26,11 +26,16 @@ public class PathRenderer
         {
             if (StartDrawing)
             {
+                GameController.Log("Start drawing");
                 trailRendererPath.TrailRenderer = UnityEngine.Object.Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
                 StartDrawing = false;
             }
             else
             {
+                Diagnostics.NotNull(trailRendererPath, "trailRendererPath");
+                Diagnostics.NotNull(trailRendererPath.TrailRenderer, "trailRendererPath.TrailRenderer");
+                Diagnostics.NotNull(trailRendererPath.TrailRenderer.transform, "trailRendererPath.TrailRenderer.transform");
+                Diagnostics.NotNull(ray, "ray");
                 trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
             }
             OnReadyEvent?.Invoke();

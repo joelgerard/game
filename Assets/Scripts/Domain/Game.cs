@@ -28,14 +28,15 @@ public class Game
 
         // Player
         AddArmy(); //TODO: Not yet used.
-        ArmyBase playerBase = new ArmyBase
+
+        /*ArmyBase playerBase = new ArmyBase
         {
             Allegiance = Allegiance.ALLY
         };
         playerBase.Init();
         unitMap.Add("PlayerBaseSquare", playerBase);
 
-        Path.target = playerBase.Position;
+        Path.target = playerBase.Position;*/
         GameController.Log("Path target is " + Path.target);
   }
 
@@ -43,21 +44,19 @@ public class Game
     public List<Unit> DrawMap()
     {
         // Enemy
-        Vector2 pos = new Vector2
-        {
-            x = 0.2f,
-            y = 3f
-        };
-        Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, pos);
+        Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, new Vector2(0f, 3f));
+        Enemy.ArmyBase.Name = "EnemyBaseSquare";
         Enemy.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
-        // FIXME: Where is the name
-        //aasdflkj asdlfkja sdlfkj adsf
-
+        // Enemy
+        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
+        Player.ArmyBase.Name = "PlayerBaseSquare";
+        //Player.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
         return new List<Unit>
         {
             Enemy.ArmyBase
+            ,Player.ArmyBase
         };
     }
 
