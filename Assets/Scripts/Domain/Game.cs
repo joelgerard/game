@@ -64,12 +64,11 @@ public class Game
     {
         ArmyBase unitBase = new ArmyBase
         {
-            Allegiance = allegiance
+            Allegiance = allegiance,
+            Position = pos
         };
-
         unitBase.Init();
 
-        unitBase.Position = pos;
         return unitBase;
     }
 
