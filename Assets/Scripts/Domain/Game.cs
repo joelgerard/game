@@ -102,36 +102,6 @@ public class Game
         this.unitMap.Add(unit.GameObject.name, unit);
     }
 
-
-
-    private Soldier AddEnemySoldier()
-    {
-        Vector2 pos = new Vector2
-        {
-            // TODO: This will blow up.
-            x = Enemy.ArmyBase.Position.x,
-            y = Enemy.ArmyBase.Position.y
-        };
-        Soldier soldier = new Soldier
-        {
-            Allegiance = Allegiance.ENEMY,
-            Position = pos
-
-        };
-        soldier.Name = "EnemySoldier_" + Guid.NewGuid().ToString();
-        soldier.Init();
-
-        unitMap.Add(soldier.Name, soldier);
-
-        //soldier.StartMoving();
-
-        Enemy.Soldiers.Add(soldier);
-
-        //TODO: Pass back to renderer.
-        return soldier;
-
-    }
-
     public Army AddArmy()
     {
         Army army = new Army();
@@ -153,7 +123,6 @@ public class Game
 
         };
 
-        // TODO: If statement here is bad. 
         List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
         soldier.Init();
         soldier.OnDestroyedEvent += Soldier_OnDestroyedEvent;
@@ -161,22 +130,22 @@ public class Game
         return soldier;
     }
 
-    public Soldier OnAddSoldier(GameObject gameObject, Allegiance allegiance)
-    {
-        Soldier soldier = new Soldier()
-        {
-            Allegiance = allegiance,
-            GameObject = gameObject
-        };
+    //public Soldier OnAddSoldier(GameObject gameObject, Allegiance allegiance)
+    //{
+    //    Soldier soldier = new Soldier()
+    //    {
+    //        Allegiance = allegiance,
+    //        GameObject = gameObject
+    //    };
 
-        // TODO: If statement here is bad. 
-        List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
-        soldier.Init();
-        soldier.OnDestroyedEvent+= Soldier_OnDestroyedEvent;
-        soldiers.Add(soldier);
-        unitMap.Add(gameObject.name, soldier);
-        return soldier;
-    }
+    //    // TODO: If statement here is bad. 
+    //    List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
+    //    soldier.Init();
+    //    soldier.OnDestroyedEvent+= Soldier_OnDestroyedEvent;
+    //    soldiers.Add(soldier);
+    //    unitMap.Add(gameObject.name, soldier);
+    //    return soldier;
+    //}
 
     void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
     {
