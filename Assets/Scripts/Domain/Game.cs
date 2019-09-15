@@ -32,6 +32,33 @@ public class Game
         AddArmy(); //TODO: Not yet used.
   }
 
+    public List<Unit> Update(GameUpdate update)
+    {
+        List<Unit> createdUnits = new List<Unit>();
+        foreach(GameEvent curEvent in update.GameEvents)
+        {
+            // TODO: consider moving to different function.
+            if (curEvent is HomeBaseClickEvent)
+            {
+                createdUnits.Add(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
+            }
+        }
+        // TODO: Need to call this once per frame?
+        Player.Update(update.deltaTime, update.currentPath);
+        Enemy.Update(update.deltaTime, Path);
+
+        return createdUnits;
+    }
+
+    // Used to control game logic like army growth etc.
+    //public List<TurnUpdate> TurnUpdate()
+    public List<Unit> TurnUpdate()
+    {
+        List<Unit> createdUnits = new List<Unit>();
+        createdUnits.AddRange(AI.Update(this, Player, Enemy));
+        return createdUnits;
+    }
+
     // TODO: Public?
     public List<Unit> DrawMap()
     {
@@ -62,34 +89,6 @@ public class Game
         unitBase.Init();
 
         return unitBase;
-    }
-
-
-    public List<Unit> Update(GameUpdate update)
-    {
-        List<Unit> createdUnits = new List<Unit>();
-        foreach(GameEvent curEvent in update.GameEvents)
-        {
-            // TODO: consider moving to different function.
-            if (curEvent is HomeBaseClickEvent)
-            {
-                createdUnits.Add(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
-            }
-        }
-        // TODO: Need to call this once per frame?
-        Player.Update(update.deltaTime, update.currentPath);
-        Enemy.Update(update.deltaTime, Path);
-
-        return createdUnits;
-    }
-
-    // Used to control game logic like army growth etc.
-    //public List<TurnUpdate> TurnUpdate()
-    public List<Unit> TurnUpdate()
-    {
-        List<Unit> createdUnits = new List<Unit>();
-        createdUnits.AddRange(AI.Update(this, Player, Enemy));
-        return createdUnits;
     }
 
     private Unit HomeBaseClickedEvent(HomeBaseClickEvent e)

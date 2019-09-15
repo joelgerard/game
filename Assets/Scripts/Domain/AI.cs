@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class AI
 {
@@ -11,7 +12,16 @@ public class AI
     {
         List<Unit> units = new List<Unit>();
 
-        Soldier soldier = game.AddSoldier(Allegiance.ENEMY, enemy.ArmyBase.Position);
+        System.Random r = new System.Random();
+        double xOffset = r.NextDouble()/2;
+        double yOffset = r.NextDouble()/2;
+
+        Vector2 v = new Vector2(enemy.ArmyBase.Position.x + (float) xOffset,
+            enemy.ArmyBase.Position.y + (float) yOffset
+        );
+
+        Soldier soldier = game.AddSoldier(Allegiance.ENEMY, v);
+        soldier.StartMoving();
         units.Add(soldier);
 
         return units;
