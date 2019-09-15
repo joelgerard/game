@@ -157,6 +157,7 @@ public class Game
     {
         // TODO: Feels like all the units and gameobjects can be managed at once? 
         // FIXME: What is happening to all the gameobjects? Is this a bug?
+        // Whatever it is, it has a null reference bug. 
         Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
         unitMap.Remove(unitDestroyed.GameObject.name);
     }

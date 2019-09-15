@@ -36,6 +36,7 @@ namespace Tests
 
             //Assert.True(s.StateMachine.IsInState<Unit.UnitHsm.Attack>());
             //Assert.False(game.Enemy.ArmyBase.StateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.True(false);
         }
 
 
