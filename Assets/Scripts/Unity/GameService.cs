@@ -54,17 +54,10 @@ public class GameService
 
     private void RenderUnits(List<Unit> units)
     {
+        // TODO: Is dynamic a smell here?
         foreach (dynamic unit in units)
         {
-            // TODO: Replace with IOC?
-            if (unit is Soldier)
-            {
-                unit.GameObject = RenderUnit(unit as Soldier);
-            }
-            if (unit is ArmyBase)
-            {
-                unit.GameObject = RenderUnit(unit as ArmyBase);
-            }
+            unit.GameObject = RenderUnit(unit);
             game.OnUnitRenderedEvent(unit);
         }
     }
