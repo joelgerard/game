@@ -77,23 +77,31 @@ namespace Tests
         [Test]
         public void UnitsAttackAndOneDies()
         {
-            Assert.True(false);
-            //Soldier ally = new Soldier
-            //{
-            //    Allegiance = Allegiance.ALLY
-            //};
-            //Soldier enemy = new Soldier()
-            //{
-            //    Allegiance = Allegiance.ENEMY
-            //};
-            //ally.Init();
-            //enemy.Init();
+            Soldier ally = new Soldier
+            {
+                Allegiance = Allegiance.ALLY
+            };
+            Soldier enemy = new Soldier()
+            {
+                Allegiance = Allegiance.ENEMY
+            };
+            ally.Init();
+            enemy.Init();
 
-            //while (enemy.HP > 0)
-            //{
-            //    ally.Attack(enemy);
-            //    enemy.Attack(ally);
-            //}
+            int timeout = 100;
+            while (enemy.HP > 0)
+            {
+                ally.Attack(enemy);
+                enemy.Attack(ally);
+                ally.Update(1);
+                enemy.Update(1);
+                timeout--;
+                if (timeout == 0)
+                {
+                    Assert.Fail("Timeout");
+                    break;
+                }
+            }
 
 
         }

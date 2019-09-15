@@ -11,7 +11,6 @@ Next/Current
 - Create tests that show the game class has no unity depencies.
 - Fix infinite loop bug and have a dead state. The GOs are destroyed, but not the domain objects.
 - The lists of Unity objects and Game Entites needs cleaning up. 
-- Game should be creating all the objects, not the renderers. 
 - What is called once per frame?
 
 
