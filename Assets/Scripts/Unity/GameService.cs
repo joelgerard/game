@@ -40,8 +40,6 @@ public class GameService
 
     public void Update(GameServiceUpdate update)
     {
-        // TODO: Need to call this once per frame?
-
         // Get the input, which is compiled into a game update object.
         // This includes events that the game will need to loop through, e.g.
         // a player has added a solder to the base.
@@ -52,9 +50,15 @@ public class GameService
         RenderUnits(game.Update(update.GameUpdate));
     }
 
+    public void GameTurnUpdate()
+    {
+        RenderUnits(game.TurnUpdate());
+    }
+
     private void RenderUnits(List<Unit> units)
     {
-        // TODO: Is dynamic a smell here?
+        // TODO: Is dynamic a smell here? It is nice...
+        // Saves me messing around with interfaces.
         foreach (dynamic unit in units)
         {
             unit.GameObject = RenderUnit(unit);
@@ -62,11 +66,7 @@ public class GameService
         }
     }
 
-    // TODO: This isn't used yet.
-    public void GameTurnUpdate()
-    {
-        List<TurnUpdate> updates = game.TurnUpdate();
-    }
+
 
     private GameServiceUpdate ParseInput(GameServiceUpdate update)
     {

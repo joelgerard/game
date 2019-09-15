@@ -3,27 +3,22 @@
 - Change state?
 
 
-Add a game object?
-- Right now, when you click, the GameService creates the objects, which makes sense
-- However, it means you need to do everything in Unity space, not GameSpace (both area and logic).
-- I think the better thing to do is to have the Game create whatever it wants, and let the GameService (renderer)
-    deal with it. 
-- So when the base square is clicked, we do some collider logic.
-- From there, we pass this off to an event that says home base was clicked.
-- Then we create the new game object, and call the onsoldier added.
-- Side note: May need to think about GameTurnUpdate at the same time. 
-- Right now I have HomeBase_Click class which you can use to send the click event to the game.
+Program flow so far
 
-So this means that:
-1. GameService passes Game a list of event objects.
-2. Game parses them and returns a list of objects to be rendered AND connected.
+- GameController.cs is what Unity calls when the frame updates.
+- It passes off control to the GameService. The GameService coordinates
+parsing the input and decided what goes where. It sends events to Game.cs,
+which controls all of the game logic, and sends back render events for the 
+game service to deal with. 
+-- Game doesn't have ANY unity runtime stuff. You can test it with vanilla
+unit test stuff.
+-- GameService does. It's harder to unit test. It integrates the Domain and Unity runtime.
 
-What we should do instead is:
-- Call the base object that was clicked (ClickEvent or AddEvent?) and have that deal with the logic.
-- Somehow then, this object needs to be passed back so that it's rendered. Put it on a stack?
 
-// TODO: Need to decide on how this goes. 
-    // Maybe it should be: Input => Game => Renderer
-    // right now it's Input => Renderer => Game
-    // Or maybe, the AI should drive the clicks in the same way a PLayer does?
-    // Seems awkward.
+Events (WIP)
+- Currently, there are two kinds of events. 
+-- The first is when input is created. These events are sent to the game, which return objects
+to render. 
+-- The second, like when a soldier loses a battle, is using c# delegates.
+
+This requires some thinking and cleaning up.

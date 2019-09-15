@@ -9,11 +9,13 @@ public class Game
     public List<Army> Armies { get; set; } = new List<Army>();
     public Army Player { get { return Armies[1]; } }
     public Army Enemy { get { return Armies[0]; } }
+    public AI AI { get; set; } = new AI();
 
     // TODO: This path is hard coded for now.
     public Path Path { get; set; } = new Path();
 
     // TODO: I guess string comp is expensive. 
+    // TODO: Why is this here? 
     public Dictionary<string, Unit> unitMap = new Dictionary<string, Unit>();
 
     public Game()
@@ -77,6 +79,16 @@ public class Game
         // TODO: Need to call this once per frame?
         Player.Update(update.deltaTime, update.currentPath);
         Enemy.Update(update.deltaTime, Path);
+
+        return createdUnits;
+    }
+
+    // Used to control game logic like army growth etc.
+    //public List<TurnUpdate> TurnUpdate()
+    public List<Unit> TurnUpdate()
+    {
+        List<Unit> createdUnits = new List<Unit>();
+        createdUnits.AddRange(AI.Update(this, Player, Enemy));
         return createdUnits;
     }
 
@@ -90,25 +102,7 @@ public class Game
         this.unitMap.Add(unit.GameObject.name, unit);
     }
 
-    // Used to control game logic like army growth etc.
-    public List<TurnUpdate> TurnUpdate()
-    {
-        List<TurnUpdate> updates = new List<TurnUpdate>();
 
-        // TODO: Add enemy soldiers here.
-        if (false && Enemy.Soldiers.Count < 2)
-        { 
-            // TODO: Move this out of here. But for now, it's just a rough in.
-            Soldier soldier = AddEnemySoldier();
-            soldier.StartMoving();
-            TurnUpdate tu = new TurnUpdate
-            {
-                Unit = soldier
-            };
-            updates.Add(tu);
-        }
-        return updates;
-    }
 
     private Soldier AddEnemySoldier()
     {
@@ -194,6 +188,7 @@ public class Game
     void Soldier_OnDestroyedEvent(Unit unitDestroyed)
     {
         // TODO: Feels like all the units and gameobjects can be managed at once? 
+        // FIXME: What is happening to all the gameobjects? Is this a bug?
         Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
         unitMap.Remove(unitDestroyed.GameObject.name);
     }
