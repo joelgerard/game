@@ -16,8 +16,6 @@ public class GameService
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
 
-    //private GameObject playerBaseObject;
-
     TrailRenderer trailPrefab;
     PathRenderer pathRenderer;
 
@@ -40,9 +38,6 @@ public class GameService
         DrawMap();
     }
 
-
-
-
     public void Update(GameServiceUpdate update)
     {
         // TODO: Need to call this once per frame?
@@ -59,16 +54,16 @@ public class GameService
 
     private void RenderUnits(List<Unit> units)
     {
-        foreach (Unit unit in units)
+        foreach (dynamic unit in units)
         {
-            // TODO: Replace with generics?
+            // TODO: Replace with IOC?
             if (unit is Soldier)
             {
-                unit.GameObject = RenderSoldier(unit as Soldier);
+                unit.GameObject = RenderUnit(unit as Soldier);
             }
             if (unit is ArmyBase)
             {
-                unit.GameObject = RenderBase(unit as ArmyBase);
+                unit.GameObject = RenderUnit(unit as ArmyBase);
             }
             game.OnUnitRenderedEvent(unit);
         }
@@ -116,7 +111,7 @@ public class GameService
     }
 
 
-    public GameObject RenderSoldier(Soldier soldier)
+    public GameObject RenderUnit(Soldier soldier)
     {
         // TODO: Be more dry?
         SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
@@ -131,7 +126,7 @@ public class GameService
         return soldierMono.gameObject;
     }
 
-    public GameObject RenderBase(ArmyBase armyBase)
+    public GameObject RenderUnit(ArmyBase armyBase)
     {
         ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
         MoveableObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
@@ -150,18 +145,6 @@ public class GameService
     protected void DrawMap()
     {
         RenderUnits(game.DrawMap());
-
-        //AddEnemyBase(pos);
-
-        // TODO: Remove add some soldiers.
-        //AddSoldier(pos, Allegiance.ENEMY);
-
-
-        // TODO: Dynamically create player base.
-
-
-        // TODO: Clean up
-        //game.Path.target = new Vector2(0f, -3f); //this.playerBaseObject.transform.position;
     }
 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)

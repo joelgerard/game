@@ -28,16 +28,6 @@ public class Game
 
         // Player
         AddArmy(); //TODO: Not yet used.
-
-        /*ArmyBase playerBase = new ArmyBase
-        {
-            Allegiance = Allegiance.ALLY
-        };
-        playerBase.Init();
-        unitMap.Add("PlayerBaseSquare", playerBase);
-
-        Path.target = playerBase.Position;*/
-        GameController.Log("Path target is " + Path.target);
   }
 
     // TODO: Public?
@@ -155,8 +145,6 @@ public class Game
         return army;
     }
 
-
-
     public void OnPathReady()
     {
         Player.StartMoving();
@@ -209,7 +197,6 @@ public class Game
         Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
         unitMap.Remove(unitDestroyed.GameObject.name);
     }
-
 
 
     // TODO: Why does this take strings?
