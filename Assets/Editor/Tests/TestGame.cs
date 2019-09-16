@@ -15,28 +15,33 @@ namespace Tests
         {
             // TODO: Replace.
 
-            //Game game = new Game();
-            //game.Initialize();
+            Game game = new Game();
+            FakeGameService gameService = new FakeGameService(game);
 
-            //GameObject go = new GameObject
-            //{
-            //    name = "Soldier1"
-            //};
-            //Soldier s = game.OnAddSoldier(go,Allegiance.ALLY);
-            //s.StartMoving();
-            //game.OnUnitsCollide("Soldier1", "EnemyBaseSquare");
-            //GameUpdate gu = new GameUpdate()
-            //{
-            //    deltaTime=1,
-            //    currentPath=null
-            //};
+            game.Initialize();
+            gameService.RenderUnits(game.DrawMap());
 
 
-            //game.Update(gu);
 
-            //Assert.True(s.StateMachine.IsInState<Unit.UnitHsm.Attack>());
-            //Assert.False(game.Enemy.ArmyBase.StateMachine.IsInState<Unit.UnitHsm.Attack>());
-            Assert.True(false);
+            Soldier s = game.AddSoldier(Allegiance.ALLY, new Vector2(1f, 1f));
+            s.StartMoving();
+            s.Name = "Soldier1";
+            gameService.RenderUnit(s);
+
+            game.OnUnitsCollide("Soldier1", "EnemyBaseSquare");
+
+            GameUpdate gu = new GameUpdate()
+            {
+                deltaTime=1,
+                currentPath=null
+            };
+
+
+            game.Update(gu);
+
+            Assert.True(s.StateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.False(game.Enemy.ArmyBase.StateMachine.IsInState<Unit.UnitHsm.Attack>());
+
         }
 
 
