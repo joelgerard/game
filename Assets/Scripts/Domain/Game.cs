@@ -103,6 +103,9 @@ public class Game
 
     public void OnUnitRenderedEvent(Unit unit)
     {
+        // TODO: Think about this naming.
+        unit.Name = unit.GameObject.name;
+
         this.unitMap.Add(unit.GameObject.name, unit);
     }
 
@@ -181,6 +184,8 @@ public class Game
     {
         Diagnostics.KeyExists(unitMap, unit1Name);
         Diagnostics.KeyExists(unitMap, unit2Name);
+
+        GameController.Log("Unit " + unit1Name + " collided with " + unit2Name);
 
         Unit unit = unitMap[unit1Name];
         Unit otherUnit = unitMap[unit2Name];

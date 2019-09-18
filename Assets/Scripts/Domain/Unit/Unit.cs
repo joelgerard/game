@@ -101,8 +101,10 @@ public partial class Unit
 
     public virtual void Attack(Unit otherUnit)
     {
+
         if (otherUnit.Allegiance != this.Allegiance)
         {
+            GameController.Log(this.Name + " is attacking " + otherUnit.Name);
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
             startAttack = true;
             enemy = otherUnit;
