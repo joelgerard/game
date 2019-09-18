@@ -40,6 +40,11 @@ public class StateMachine
     {
     }
 
+    public void ResumePrevState()
+    {
+        States.Pop();
+    }
+
     public bool IsInState<T>()
     {
         if (States.Count > 0)
@@ -52,10 +57,37 @@ public class StateMachine
         }
     }
 
-    public State Update(State state)
+    // TODO: What does first, update or transition?
+    public State Transition(State desiredState)
     {
+        State.Transition transition = CurrentState.GetTransition(desiredState);
+
+        // TODO: DRY with update fn
+        if (transition != null)
+        {
+            if (transition.TransitionType == State.TransitionType.NORMAL)
+            {
+                SetState(transition.State);
+            }
+            else if (transition.TransitionType == State.TransitionType.TEMPORARY)
+            {
+                PushState(transition.State);
+            }
+            return transition.State;
+        }
+        else
+        {
+            // TODO: Null?
+            return null;
+        }
+    }
+
+    // FIXME: Update should update the state, not make a move to transition.
+    public State Update(Unit unit)
+    {
+        // all wrong here
         // TODO: Transition has a type inside.
-        State.Transition transition = CurrentState.GetTransition(state);
+        State.Transition transition = CurrentState.Update(unit);
         if (transition != null)
         {
             if (transition.TransitionType == State.TransitionType.NORMAL)

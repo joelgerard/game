@@ -154,7 +154,9 @@ public class Game
     void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
     {
         // TODO: This can be cleaned up DRY. 
-        unitMap.Remove(destroyedUnit.GameObject.name);
+        //unitMap.Remove(destroyedUnit.GameObject.name);
+        unitMap.Remove(destroyedUnit.Name);
+
         GameController.Log("You win.");
     }
 

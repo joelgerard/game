@@ -35,8 +35,9 @@ namespace Tests
 
             game.Update(gu);
 
-            Assert.True(s.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
-            Assert.False(game.Enemy.ArmyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.Fail();
+            //Assert.True(s.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            //Assert.False(game.Enemy.ArmyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
 
         }
 

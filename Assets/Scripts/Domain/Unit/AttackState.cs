@@ -1,5 +1,5 @@
 ﻿using System;
-public class AttackState : State
+public class AttackState : UnitState
 {
 
     public Transition Update(State state)
@@ -16,5 +16,20 @@ public class AttackState : State
     public override Transition GetTransition(State state)
     {
         throw new NotImplementedException();
+    }
+
+    public override Transition Update(Unit unit)
+    {
+        Transition transition = base.Update(unit);
+        if (transition != null)
+        {
+            return transition;
+        }
+        else
+        {
+            //throw new NotImplementedException();
+            // TODO: What about actually attacking? 
+            return null;
+        }
     }
 }

@@ -39,7 +39,8 @@ namespace Tests
             soldier.Update(1);
             soldier.Attack(armyBase);
             soldier.Update(1);
-            Assert.True(soldier.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.Fail();
+            //Assert.True(soldier.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
         }
 
         [Test]
@@ -55,7 +56,8 @@ namespace Tests
             soldier.StartMoving();
             soldier.Attack(armyBase);
             soldier.Update(1);
-            Assert.True(soldier.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.Fail();
+            //Assert.True(soldier.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
         }
 
         [Test]
@@ -71,7 +73,8 @@ namespace Tests
             soldier.StartMoving();
             soldier.Attack(armyBase);
             soldier.Update(1);
-            Assert.False(armyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.Fail();
+            //Assert.False(armyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
         }
 
         [Test]

@@ -20,6 +20,7 @@ public abstract class State
         public State State { get; set; }
     }
 
+    public abstract Transition Update(Unit unit);
     public abstract Transition GetTransition(State state);
 
 

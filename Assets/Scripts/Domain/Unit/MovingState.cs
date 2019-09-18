@@ -1,5 +1,5 @@
 ﻿using System;
-public class MovingState : State
+public class MovingState : UnitState
 {
     public MovingState()
     {
@@ -10,9 +10,17 @@ public class MovingState : State
     {
         if (state is AttackState)
         {
-            return new State.Transition(new AttackState(),State.TransitionType.TEMPORARY);
+       
+            return new Transition(new AttackState(),State.TransitionType.TEMPORARY);
         }
         // TODO: Return null?
+        return null;
+    }
+
+    public override Transition Update(Unit unit)
+    {
+        // TODO: Should we use the navigator to move in here?
+        //throw new NotImplementedException();
         return null;
     }
 }

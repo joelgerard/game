@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Hsm;
 using UnityEngine;
-using static Unit.UnitHsm;
 
 public enum Allegiance
 {
@@ -13,8 +12,8 @@ public enum Allegiance
 public partial class Unit
 {
     // TODO: no public
-    public Hsm.StateMachine oldStateMachine = new Hsm.StateMachine();
-    public partial class UnitHsm { }
+    //public Hsm.StateMachine oldStateMachine = new Hsm.StateMachine();
+    //public partial class UnitHsm { }
 
     private Vector2 position = new Vector2();
 
@@ -44,8 +43,10 @@ public partial class Unit
 
     public virtual void Init()
     {
-        oldStateMachine.Init<UnitHsm.Root>(this);
-        oldStateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
+        // TODO: Init new state machine?
+
+        //oldStateMachine.Init<UnitHsm.Root>(this);
+        //oldStateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
         TotalHP = HP = 10;
     }
 
@@ -105,7 +106,7 @@ public partial class Unit
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
             startAttack = true;
             enemy = otherUnit;
-            StateMachine.Update(new AttackState());
+            StateMachine.Transition(new AttackState());
             otherUnit.Defend(this);
         }
 
@@ -119,19 +120,28 @@ public partial class Unit
     public virtual void Update(float deltaTime)
     {
         //oldStateMachine.Update(deltaTime);
+
+        // TODO: Something is messed up here.
+        // Statemachine returns something???
+        StateMachine.Update(this);
+
         if (StateMachine.IsInState<AttackState>())
         {
             // TODO: Should this really be here? Shouldn't this be in 
             // Attack state update?
-            enemy?.Damage(1.0f * deltaTime);
+            bool? alive = enemy?.Damage(1.0f * deltaTime);
+            if (alive != null && alive == false)
+            {
+                StateMachine.ResumePrevState();
+            }
         }
     }
 
     /** ############ SHARED STATES ########### */
     // C# HSM doesn't yet support shared states.
-    protected virtual Transition GetNeutralTransition()
-    {
-        return Transition.Sibling<Neutral>();
-    }
+    //protected virtual Transition GetNeutralTransition()
+    //{
+    //    return Transition.Sibling<Neutral>();
+    //}
 
 }

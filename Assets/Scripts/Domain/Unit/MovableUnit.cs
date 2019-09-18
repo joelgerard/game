@@ -31,14 +31,14 @@ public partial class MovableUnit : Unit
         }
         startMoving = true;
 
-        StateMachine.Update(new MovingState());
+        StateMachine.Transition(new MovingState());
 
     }
 
     /** ############ SHARED STATES ########### */
     // C# HSM doesn't yet support shared states.
-    protected override Transition GetNeutralTransition()
-    {
-        return Transition.Sibling<MovableNeutral>();
-    }
+    //protected override Transition GetNeutralTransition()
+    //{
+    //    return Transition.Sibling<MovableNeutral>();
+    //}
 }
