@@ -13,14 +13,11 @@ namespace Tests
         [Test]
         public void UnitsDontAutoCounterAttack()
         {
-            // TODO: Replace.
-
             Game game = new Game();
             FakeGameService gameService = new FakeGameService(game);
 
             game.Initialize();
             gameService.RenderUnits(game.DrawMap());
-
 
 
             Soldier s = game.AddSoldier(Allegiance.ALLY, new Vector2(1f, 1f));
@@ -36,11 +33,10 @@ namespace Tests
                 currentPath=null
             };
 
-
             game.Update(gu);
 
-            Assert.True(s.StateMachine.IsInState<Unit.UnitHsm.Attack>());
-            Assert.False(game.Enemy.ArmyBase.StateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.True(s.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.False(game.Enemy.ArmyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
 
         }
 

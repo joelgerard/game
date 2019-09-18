@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Hsm;
 using UnityEngine;
 using static Unit.UnitHsm;
@@ -12,7 +13,7 @@ public enum Allegiance
 public partial class Unit
 {
     // TODO: no public
-    public Hsm.StateMachine StateMachine = new Hsm.StateMachine();
+    public Hsm.StateMachine oldStateMachine = new Hsm.StateMachine();
     public partial class UnitHsm { }
 
     private Vector2 position = new Vector2();
@@ -38,11 +39,13 @@ public partial class Unit
     public Allegiance Allegiance {get;set;}
     public float HP { get; set; }
     public float TotalHP { get; set; }
+    public StateMachine StateMachine { get; set; } = new StateMachine();
+
 
     public virtual void Init()
     {
-        StateMachine.Init<UnitHsm.Root>(this);
-        StateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
+        oldStateMachine.Init<UnitHsm.Root>(this);
+        oldStateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
         TotalHP = HP = 10;
     }
 
@@ -102,8 +105,10 @@ public partial class Unit
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
             startAttack = true;
             enemy = otherUnit;
+            StateMachine.Update(new AttackState());
             otherUnit.Defend(this);
         }
+
     }
 
     public virtual void Defend(Unit attackingUnit)
@@ -113,7 +118,13 @@ public partial class Unit
 
     public virtual void Update(float deltaTime)
     {
-        StateMachine.Update(deltaTime);
+        //oldStateMachine.Update(deltaTime);
+        if (StateMachine.IsInState<AttackState>())
+        {
+            // TODO: Should this really be here? Shouldn't this be in 
+            // Attack state update?
+            enemy?.Damage(1.0f * deltaTime);
+        }
     }
 
     /** ############ SHARED STATES ########### */

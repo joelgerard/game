@@ -65,7 +65,7 @@ public partial class Unit
             {
                 // TODO: The unit's amount of damage is hard coded.
                 // TODO: Should this use state values?
-                Owner.startAttack = Owner.enemy.Damage(1.0f * aDeltaTime);
+//Owner.startAttack = Owner.enemy.Damage(1.0f * aDeltaTime);
                 base.Update(aDeltaTime);
             }
 

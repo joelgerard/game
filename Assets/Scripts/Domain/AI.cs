@@ -11,6 +11,7 @@ public class AI
     public List<Unit> Update(Game game, Army player, Army enemy)
     {
         List<Unit> units = new List<Unit>();
+return units;
 
         System.Random r = new System.Random();
         double xOffset = r.NextDouble()/2;

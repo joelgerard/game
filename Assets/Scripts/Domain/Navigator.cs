@@ -23,7 +23,8 @@ public class Navigator
 
         foreach (Soldier soldier in soldiers)
         {
-            bool isMoving = soldier.StateMachine.IsInState<Moving>();
+            //bool isMoving = soldier.StateMachine.IsInState<Moving>();
+            bool isMoving = soldier.StateMachine.IsInState<MovingState>();
 
             Vector2 targetPos = soldier.TargetPosition;
             if (isMoving)

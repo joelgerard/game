@@ -91,6 +91,11 @@ public class Game
         return unitBase;
     }
 
+    private Army GetSoldierArmy(Unit soldier)
+    {
+        return (soldier.Allegiance == Allegiance.ALLY ? Player : Enemy);
+    }
+
     private Unit HomeBaseClickedEvent(HomeBaseClickEvent e)
     {
         return AddSoldier(Allegiance.ALLY, e.pos);
@@ -158,8 +163,14 @@ public class Game
         // TODO: Feels like all the units and gameobjects can be managed at once? 
         // FIXME: What is happening to all the gameobjects? Is this a bug?
         // Whatever it is, it has a null reference bug. 
-        Player.Soldiers.Remove(Player.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name));
+
+        // FIXME: This is only looking up player soldiers. What happens when the
+        // enemy soldier dies?
+        Army army = GetSoldierArmy(unitDestroyed);
+        // TODO: Why does this have to search by name when it already has the object?
+        Soldier soldier = army.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name);
         unitMap.Remove(unitDestroyed.GameObject.name);
+        army.Soldiers.Remove(soldier);
     }
 
 

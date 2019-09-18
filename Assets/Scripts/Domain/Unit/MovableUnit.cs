@@ -18,12 +18,20 @@ public partial class MovableUnit : Unit
 
     public void StartMoving()
     {
+        // TODO: In the neutral state, you can start moving.
+        // TODO: There should also be a universal state transition.
+        // That is, you can always start moving, or attacking from any
+        // state. Update state with the move transition. What should it call?
+        // Call the neutral updatestate function. ???????
+
         //GameController.Log("Start moving");
         if (!startMoving)
         {
             IndexOnPath = 0;
         }
         startMoving = true;
+
+        StateMachine.Update(new MovingState());
 
     }
 

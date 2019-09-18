@@ -22,8 +22,10 @@ public class FakeGameService
 
     public void RenderUnit(Unit unit)
     {
-        GameObject go = new GameObject();
-        go.name = (unit.Name ?? Guid.NewGuid().ToString());
+        GameObject go = new GameObject
+        {
+            name = (unit.Name ?? Guid.NewGuid().ToString())
+        };
         unit.GameObject = go;
         game.OnUnitRenderedEvent(unit);
     }
