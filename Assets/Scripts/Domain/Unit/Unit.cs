@@ -17,7 +17,7 @@ public partial class Unit
 
     private Vector2 position = new Vector2();
 
-    protected bool startAttack = false;
+
     protected Unit enemy = null;
 
     public event OnDestroyed OnDestroyedEvent;
@@ -110,7 +110,7 @@ public partial class Unit
         {
             GameController.Log(this.Name + " is attacking " + otherUnit.Name);
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
-            startAttack = true;
+
             enemy = otherUnit;
             StateMachine.Transition(new AttackState());
             otherUnit.Defend(this);
@@ -140,10 +140,6 @@ public partial class Unit
             // TODO: Should this really be here? Shouldn't this be in 
             // Attack state update?
             bool? alive = enemy?.Damage(1.0f * deltaTime);
-            if (Name.Contains("Base"))
-            {
-                GameController.Log("ATTACK FROM BASE to " + enemy?.Name + " HP => " + enemy?.HP);
-            }
             if (alive != null && alive == false)
             {
                 StateMachine.ResumePrevState();

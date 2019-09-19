@@ -30,7 +30,7 @@ public class NeutralState : State
         {
             return new State.Transition(new MovingState(),TransitionType.NORMAL);
         }
-        return null;
-        }
+        throw new ArgumentException("Cannot transition to the requested state. " + state.ToString(), "state");
+    }
 }
         

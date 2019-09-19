@@ -34,13 +34,9 @@ namespace Tests
             ArmyBase armyBase = sBase.armyBase;
             Soldier soldier = sBase.soldier;
 
-            // Moves into neutral.
-            // TODO: Why do I have this state.
-            soldier.Update(1);
             soldier.Attack(armyBase);
-            soldier.Update(1);
-            Assert.Fail();
-            //Assert.True(soldier.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            soldier.Update(0.1f);
+            Assert.True(soldier.StateMachine.IsInState<AttackState>());
         }
 
         [Test]
@@ -50,14 +46,14 @@ namespace Tests
             ArmyBase armyBase = sBase.armyBase;
             Soldier soldier = sBase.soldier;
 
-            // Moves into neutral.
-            // TODO: Why do I have this state.
-            soldier.Update(1);
             soldier.StartMoving();
+            soldier.Update(1);
+            Assert.True(soldier.StateMachine.IsInState<MovingState>());
+
             soldier.Attack(armyBase);
             soldier.Update(1);
-            Assert.Fail();
-            //Assert.True(soldier.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+
+            Assert.True(soldier.StateMachine.IsInState<AttackState>());
         }
 
         [Test]
@@ -67,14 +63,9 @@ namespace Tests
             ArmyBase armyBase = sBase.armyBase;
             Soldier soldier = sBase.soldier;
 
-            // Moves into neutral.
-            // TODO: Why do I have this state.
-            soldier.Update(1);
-            soldier.StartMoving();
             soldier.Attack(armyBase);
             soldier.Update(1);
-            Assert.Fail();
-            //Assert.False(armyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+            Assert.False(armyBase.StateMachine.IsInState<AttackState>());
         }
 
         [Test]
@@ -92,6 +83,7 @@ namespace Tests
             enemy.Init();
 
             int timeout = 100;
+            Assert.Fail("No die state yet");
             while (enemy.HP > 0)
             {
                 ally.Attack(enemy);
