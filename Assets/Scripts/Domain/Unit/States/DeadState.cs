@@ -1,5 +1,5 @@
 ﻿using System;
-public class DeadState : State
+public class DeadState : BaseUnitState
 {
     public DeadState()
     {

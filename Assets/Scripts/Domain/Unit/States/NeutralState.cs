@@ -1,5 +1,5 @@
 ﻿using System;
-public class NeutralState : State
+public class NeutralState : BaseUnitState
 {
 
     // TODO: Should the parameter here be a state or input?
