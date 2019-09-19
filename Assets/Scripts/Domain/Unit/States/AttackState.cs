@@ -1,10 +1,10 @@
 ﻿using System;
-public class AttackState : UnitState
+public class AttackState : BaseUnitState
 {
 
     public Transition Update(State state)
     {
-        // TODO: Only state to go here is death.
+        // TODO: Maybe it should attack the other object?
         return null;
     }
 
@@ -15,8 +15,8 @@ public class AttackState : UnitState
 
     public override Transition GetTransition(State state)
     {
-        GameController.Log("Transition to " + state.ToString());
-        throw new NotImplementedException();
+        Transition transition = base.GetTransition(state);
+        return transition;
     }
 
     public override Transition Update(Unit unit)

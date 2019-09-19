@@ -1,7 +1,7 @@
 ﻿using System;
-public class UnitState : State
+public class BaseUnitState : State
 {
-    public UnitState()
+    public BaseUnitState()
     {
     }
 

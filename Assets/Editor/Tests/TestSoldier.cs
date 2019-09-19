@@ -83,7 +83,7 @@ namespace Tests
             enemy.Init();
 
             int timeout = 100;
-            Assert.Fail("No die state yet");
+
             while (enemy.HP > 0)
             {
                 ally.Attack(enemy);
@@ -97,7 +97,7 @@ namespace Tests
                     break;
                 }
             }
-
+            Assert.True(enemy.StateMachine.IsInState<DeadState>());
 
         }
 
