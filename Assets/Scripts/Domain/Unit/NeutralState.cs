@@ -21,11 +21,16 @@ public class NeutralState : State
 
     public override Transition GetTransition(State state)
     {
+        // TODO: This feels horrible man. 
+        if (state is AttackState)
+        {
+            return new State.Transition(new AttackState(), TransitionType.TEMPORARY);
+        }
         if (state is MovingState)
         {
-
             return new State.Transition(new MovingState(),TransitionType.NORMAL);
         }
         return null;
-        }}
+        }
+}
         

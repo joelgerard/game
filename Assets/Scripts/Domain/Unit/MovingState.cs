@@ -10,7 +10,6 @@ public class MovingState : UnitState
     {
         if (state is AttackState)
         {
-       
             return new Transition(new AttackState(),State.TransitionType.TEMPORARY);
         }
         // TODO: Return null?

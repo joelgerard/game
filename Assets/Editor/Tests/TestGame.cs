@@ -35,9 +35,41 @@ namespace Tests
 
             game.Update(gu);
 
-            Assert.Fail();
-            //Assert.True(s.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
-            //Assert.False(game.Enemy.ArmyBase.oldStateMachine.IsInState<Unit.UnitHsm.Attack>());
+
+            Assert.True(s.StateMachine.IsInState<AttackState>());
+            Assert.False(game.Enemy.ArmyBase.StateMachine.IsInState<AttackState>());
+
+        }
+
+        [Test]
+        public void BaseAttacks()
+        {
+            Game game = new Game();
+            FakeGameService gameService = new FakeGameService(game);
+
+            game.Initialize();
+            gameService.RenderUnits(game.DrawMap());
+
+
+            Soldier s = game.AddSoldier(Allegiance.ALLY, new Vector2(1f, 1f));
+            s.StartMoving();
+            s.Name = "Soldier1";
+            gameService.RenderUnit(s);
+
+            game.OnUnitsCollide("Soldier1", "EnemyBaseSquare");
+            game.OnUnitsCollide("EnemyBaseSquare", "Soldier1");
+
+            GameUpdate gu = new GameUpdate()
+            {
+                deltaTime = 0.01f,
+                currentPath = null
+            };
+
+            game.Update(gu);
+
+
+            Assert.True(s.StateMachine.IsInState<AttackState>());
+            Assert.True(game.Enemy.ArmyBase.StateMachine.IsInState<AttackState>());
 
         }
 

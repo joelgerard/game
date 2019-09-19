@@ -96,6 +96,10 @@ public partial class Unit
         {
             OnDamagedEvent?.Invoke(this, PercentHealth);
         }
+        if (HP <=0)
+        {
+            GameController.Log("Unit " + this.Name + " destroyed");
+        }
         return HP > 0;
     }
 
@@ -126,12 +130,20 @@ public partial class Unit
         // TODO: Something is messed up here.
         // Statemachine returns something???
         StateMachine.Update(this);
-
+        if (Name != null) // && Name.Contains("Base"))
+        {
+            GameController.Log("State of base, " + Name + ", is " + StateMachine.CurrentState.ToString());
+        }
         if (StateMachine.IsInState<AttackState>())
         {
+
             // TODO: Should this really be here? Shouldn't this be in 
             // Attack state update?
             bool? alive = enemy?.Damage(1.0f * deltaTime);
+            if (Name.Contains("Base"))
+            {
+                GameController.Log("ATTACK FROM BASE to " + enemy?.Name + " HP => " + enemy?.HP);
+            }
             if (alive != null && alive == false)
             {
                 StateMachine.ResumePrevState();

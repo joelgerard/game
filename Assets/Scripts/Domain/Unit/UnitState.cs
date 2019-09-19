@@ -7,6 +7,10 @@ public class UnitState : State
 
     public override Transition GetTransition(State state)
     {
+        if (state is AttackState)
+        {
+            return new Transition(new AttackState(), State.TransitionType.TEMPORARY);
+        }
         return null;
     }
 

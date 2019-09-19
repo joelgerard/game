@@ -15,6 +15,7 @@ public class AttackState : UnitState
 
     public override Transition GetTransition(State state)
     {
+        GameController.Log("Transition to " + state.ToString());
         throw new NotImplementedException();
     }
 

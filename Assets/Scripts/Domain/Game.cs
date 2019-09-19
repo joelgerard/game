@@ -44,8 +44,10 @@ public class Game
             }
         }
         // TODO: Need to call this once per frame?
+        // NOTE: If attacking, this is called once per frame.
         Player.Update(update.deltaTime, update.currentPath);
         Enemy.Update(update.deltaTime, Path);
+        
 
         return createdUnits;
     }

@@ -28,8 +28,16 @@ public class Army
         {
             soldier.Update(deltaTime);
         }
+
+        if (ArmyBase == null)
+        {
+            // TODO: Change to warning.
+            GameController.Log("WARNING: Base is null");
+        }
         // TODO: remove ?.
         ArmyBase?.Update(deltaTime);
+
+
         navigator.MoveUnits(deltaTime, Soldiers, path);
     }
 

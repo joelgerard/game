@@ -53,7 +53,7 @@ public class Navigator
                 {
                     soldier.Position =
                         Vector2.MoveTowards(soldier.Position, targetPos, soldier.Speed * deltaTime);
-                    GameController.Log("Moving soldier towards " + targetPos.ToString());
+                    //GameController.Log("Moving soldier towards " + targetPos.ToString());
                 }
                 else
                 {
@@ -62,7 +62,7 @@ public class Navigator
                     {
                         soldier.TargetPosition = Path.GetPosition(soldier.IndexOnPath);
                         soldier.IndexOnPath++;
-                        GameController.Log("Got pos to move to " + soldier.TargetPosition);
+                        //GameController.Log("Got pos to move to " + soldier.TargetPosition);
                     }
                     else 
                     {
