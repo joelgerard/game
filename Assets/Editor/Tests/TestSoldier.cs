@@ -98,7 +98,42 @@ namespace Tests
                 }
             }
             Assert.True(enemy.StateMachine.IsInState<DeadState>());
+        }
 
+        [Test]
+        public void UnitsMovesAttackAndMoves()
+        {
+            Soldier ally = new Soldier
+            {
+                Allegiance = Allegiance.ALLY
+            };
+            Soldier enemy = new Soldier()
+            {
+                Allegiance = Allegiance.ENEMY
+            };
+            ally.Init();
+            enemy.Init();
+            ally.StartMoving();
+            ally.Update(1);
+            Assert.True(ally.StateMachine.IsInState<MovingState>());
+            ally.Attack(enemy);
+            enemy.Attack(ally);
+
+            int timeout = 100;
+
+            while (enemy.HP > 0)
+            {
+                ally.Update(1);
+                enemy.Update(1);
+                timeout--;
+                if (timeout == 0)
+                {
+                    Assert.Fail("Timeout");
+                    break;
+                }
+            }
+            ally.Update(1);
+            Assert.True(ally.StateMachine.IsInState<MovingState>());
         }
 
 

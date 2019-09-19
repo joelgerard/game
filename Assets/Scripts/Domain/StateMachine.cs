@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 public class StateMachine
 {
-    State currentState;
-    public Stack<State> States { get; } = new Stack<State>();
+    IState currentState;
+    public Stack<IState> States { get; } = new Stack<IState>();
 
-    public State CurrentState
+    public IState CurrentState
     {
         get
         {
@@ -19,7 +19,7 @@ public class StateMachine
         }
     }
 
-    public void SetState(State state)
+    public void SetState(IState state)
     {
         if (States.Count > 0)
         {
@@ -28,7 +28,7 @@ public class StateMachine
         PushState(state);
     }
 
-    public void PushState(State state)
+    public void PushState(IState state)
     {
         States.Push(state);
     }
@@ -58,18 +58,18 @@ public class StateMachine
     }
 
     // TODO: What does first, update or transition?
-    public State Transition(State desiredState)
+    public IState Transition(IState desiredState)
     {
         State.Transition transition = CurrentState.GetTransition(desiredState);
 
         // TODO: DRY with update fn
         if (transition != null)
         {
-            if (transition.TransitionType == State.TransitionType.NORMAL)
+            if (transition.StateType == State.StateType.NORMAL)
             {
                 SetState(transition.State);
             }
-            else if (transition.TransitionType == State.TransitionType.TEMPORARY)
+            else if (transition.StateType == State.StateType.TEMPORARY)
             {
                 PushState(transition.State);
             }
@@ -82,21 +82,28 @@ public class StateMachine
         }
     }
 
-    // FIXME: Update should update the state, not make a move to transition.
-    public State Update(Unit unit)
+    public IState Update(Unit unit, float deltaTime)
     {
-        // all wrong here
-        // TODO: Transition has a type inside.
-        State.Transition transition = CurrentState.Update(unit);
+        State.Transition transition = CurrentState.Update(unit, deltaTime);
         if (transition != null)
         {
-            if (transition.TransitionType == State.TransitionType.NORMAL)
+            if (transition.TransitionType == State.TransitionType.ENTER)
             {
-                SetState(transition.State);
+                if (transition.StateType == State.StateType.NORMAL)
+                {
+                    SetState(transition.State);
+                }
+                else if (transition.StateType == State.StateType.TEMPORARY)
+                {
+                    PushState(transition.State);
+                }
+            } else if (transition.TransitionType == State.TransitionType.EXIT)
+            {
+                States.Pop();
             }
-            else if (transition.TransitionType == State.TransitionType.TEMPORARY)
+            else
             {
-                PushState(transition.State);
+                throw new ArgumentException("Bad transition type");
             }
             return transition.State;
         }

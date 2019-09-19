@@ -18,7 +18,7 @@ public partial class Unit
     private Vector2 position = new Vector2();
 
 
-    protected Unit enemy = null;
+    public Unit Enemy { get; set; } = null;
 
     public event OnDestroyed OnDestroyedEvent;
     public delegate void OnDestroyed(Unit unitDestroyed);
@@ -111,7 +111,7 @@ public partial class Unit
             GameController.Log(this.Name + " is attacking " + otherUnit.Name);
             // TODO: Integrate HSM further. Better? Where should this "if" be? 
 
-            enemy = otherUnit;
+            Enemy = otherUnit;
             StateMachine.Transition(new AttackState());
             otherUnit.Defend(this);
         }
@@ -129,22 +129,8 @@ public partial class Unit
 
         // TODO: Something is messed up here.
         // Statemachine returns something???
-        StateMachine.Update(this);
-        if (Name != null) // && Name.Contains("Base"))
-        {
-            GameController.Log("State of base, " + Name + ", is " + StateMachine.CurrentState.ToString());
-        }
-        if (StateMachine.IsInState<AttackState>())
-        {
-
-            // TODO: Should this really be here? Shouldn't this be in 
-            // Attack state update?
-            bool? alive = enemy?.Damage(1.0f * deltaTime);
-            if (alive != null && alive == false)
-            {
-                StateMachine.ResumePrevState();
-            }
-        }
+        // I Guess if there is a new state, then it can pass back to the renderer
+        IState newState = StateMachine.Update(this, deltaTime);
     }
 
     /** ############ SHARED STATES ########### */

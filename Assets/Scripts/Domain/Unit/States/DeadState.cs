@@ -1,16 +1,16 @@
 ﻿using System;
-public class DeadState : BaseUnitState
+public class DeadState : BaseUnitState, IState
 {
     public DeadState()
     {
     }
 
-    public override Transition GetTransition(State state)
+    public override Transition GetTransition(IState state)
     {
         return null;
     }
 
-    public override Transition Update(Unit unit)
+    public override Transition Update(Unit unit, float deltaTime)
     {
         return null;
     }
