@@ -16,18 +16,20 @@ public class GameService
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
 
+    GameObject allyPrefab;
     TrailRenderer trailPrefab;
     PathRenderer pathRenderer;
 
     // TODO: Remove
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
-    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab)
+    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject allyPrefab)
     {
         this.RectanglePrefab = rectanglePrefab;
         this.TrianglePrefab = trianglePrefab;
         this.CirclePrefab = circlePrefab;
         this.trailPrefab = trailPrefab;
+        this.allyPrefab = allyPrefab;
 
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
@@ -106,9 +108,13 @@ public class GameService
 
     public GameObject RenderUnit(Soldier soldier)
     {
-        // TODO: Be more dry?
-        SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
-        MoveableObject soldierMono = sr.Draw(soldier.Position);
+        // TODO: This renders a square. I'm figuring out unity. Fix.
+        //SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
+
+        SoldierRenderer sr = new SoldierRenderer(allyPrefab);
+
+
+        MoveableObjectWrapper soldierMono = sr.Draw(soldier.Position);
         BindUnitEvents(sr, soldierMono, soldier);
 
         // TODO: Remove. Temp
@@ -116,7 +122,7 @@ public class GameService
         {
             soldier.StartMoving();
         }
-        return soldierMono.gameObject;
+        return soldierMono.GameObject;
     }
 
     public GameObject RenderUnit(ArmyBase armyBase)
@@ -125,6 +131,22 @@ public class GameService
         MoveableObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
         BindUnitEvents(abr, renderedBaseObject, armyBase);
         return renderedBaseObject.gameObject;
+    }
+
+    public void BindUnitEvents(IUnitRenderer renderer, MoveableObjectWrapper movingObject, Unit unit)
+    {
+        // TODO: Need bindings on sprite. 
+        if (movingObject.MoveableObject != null)
+        {
+            movingObject.MoveableObject.OnEnterEvent += Shape_OnEnterEvent;
+        }
+        else
+        {
+            //Rigidbody2D body = movingObject.GameObject.GetComponent<Rigidbody2D>();
+            //Collider2D collider = movingObject.GameObject.GetComponent<Collider2D>();
+        }
+        unit.OnDamagedEvent += renderer.DrawDamage;
+        unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
     public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
