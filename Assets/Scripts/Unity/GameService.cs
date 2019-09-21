@@ -142,8 +142,9 @@ public class GameService
         }
         else
         {
-            //Rigidbody2D body = movingObject.GameObject.GetComponent<Rigidbody2D>();
-            //Collider2D collider = movingObject.GameObject.GetComponent<Collider2D>();
+            // TODO: How to detect the collider has collided?
+            SoldierController soldierController = movingObject.GameObject.GetComponent<SoldierController>();
+            soldierController.OnEnterEvent += Shape_OnEnterEvent;
         }
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
@@ -162,6 +163,7 @@ public class GameService
         RenderUnits(game.DrawMap());
     }
 
+    // TODO: Not a very good name for this event. 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {
         game.OnUnitsCollide(thisObject.name, otherObject.name);
