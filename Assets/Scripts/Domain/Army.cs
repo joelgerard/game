@@ -20,13 +20,17 @@ public class Army
     }
 
 
-    public void Update(float deltaTime, IPath path)
+    public List<UnitEvent> Update(float deltaTime, IPath path)
     {
-
+        List<UnitEvent> unitEvents = new List<UnitEvent>();
         // TODO: Must be a better way than this.
         foreach (Soldier soldier in Soldiers)
         {
-            soldier.Update(deltaTime);
+            UnitEvent ue = soldier.Update(deltaTime);
+            if (ue != null)
+            {
+                unitEvents.Add(ue);
+            }
         }
 
         if (ArmyBase == null)
@@ -39,6 +43,7 @@ public class Army
 
 
         navigator.MoveUnits(deltaTime, Soldiers, path);
+        return unitEvents;
     }
 
     public TerritoryType Territory { get; set; } = TerritoryType.South;

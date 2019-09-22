@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using static UnitGameEvents;
 
 namespace Tests
 {
@@ -72,6 +73,8 @@ namespace Tests
             Assert.True(game.Enemy.ArmyBase.StateMachine.IsInState<AttackState>());
 
         }
+
+
 
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use

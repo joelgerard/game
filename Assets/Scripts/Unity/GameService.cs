@@ -49,12 +49,38 @@ public class GameService
 
         // Once the game has updated itself, it will return new objects that
         // are in the game but have not been drawn or created on the Unity side.
-        RenderUnits(game.Update(update.GameUpdate));
+        FrameUpdate fu = game.Update(update.GameUpdate);
+        RenderUnits(fu.CreatedEvents);
+        HandleUnitEvents(fu.UnitEvents);
+    }
+
+    void HandleUnitEvents(List<UnitEvent> events)
+    {
+        // TODO: Create this each time?
+        SoldierRenderer sr = new SoldierRenderer(allyPrefab);
+        foreach (dynamic ue in events)
+        {
+            sr.HandleEvent(ue);
+        }
     }
 
     public void GameTurnUpdate()
     {
-        RenderUnits(game.TurnUpdate());
+        // FIXME:
+        //RenderUnits(game.TurnUpdate());
+    }
+
+    private void RenderUnits(List<UnitCreatedEvent> es)
+    {
+        // TODO: Is dynamic a smell here? It is nice...
+        // Saves me messing around with interfaces.
+        //foreach (dynamic unit in units)
+        foreach(UnitCreatedEvent e in es)
+        {
+            dynamic unit = e.Unit;
+            unit.GameObject = RenderUnit(unit);
+            game.OnUnitRenderedEvent(unit);
+        }
     }
 
     private void RenderUnits(List<Unit> units)
@@ -67,6 +93,7 @@ public class GameService
             game.OnUnitRenderedEvent(unit);
         }
     }
+
 
 
 
@@ -168,13 +195,7 @@ public class GameService
     {
         game.OnUnitsCollide(thisObject.name, otherObject.name);
 
-        // TODO: Temp hack to test. FIXME
-        if (thisObject.name.Contains("Soldier") && otherObject.name.Contains("Enemy"))
-        {
-            Animator animator = thisObject.GetComponent<Animator>();
-            animator.Play("Explosion");
-            ;
-        }
+
 
     }
 

@@ -38,4 +38,6 @@ public class AttackState : BaseUnitState, IState
             return null;
         }
     }
+
+    public UnitEvent GetAssociatedEvent() { return null; }
 }

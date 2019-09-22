@@ -34,25 +34,27 @@ public class Game
 
     // TODO: This should return commands to make the renderer do something.
     // e.g. switch unit to dying animation. 
-    start here next time
-    public List<Unit> Update(GameUpdate update)
+    public FrameUpdate Update(GameUpdate update)
     {
-        List<Unit> createdUnits = new List<Unit>();
+        //List<Unit> createdUnits = new List<Unit>();
+        FrameUpdate frameUpdate = new FrameUpdate();
         foreach(GameEvent curEvent in update.GameEvents)
         {
             // TODO: consider moving to different function.
+            // FIXME: Dispatch this properly
             if (curEvent is HomeBaseClickEvent)
             {
-                createdUnits.Add(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
+                frameUpdate.AddCreatedEvent(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
             }
         }
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
-        Player.Update(update.deltaTime, update.currentPath);
+        List<UnitEvent> unitEvents = Player.Update(update.deltaTime, update.currentPath);
+        frameUpdate.UnitEvents.AddRange(unitEvents);
         Enemy.Update(update.deltaTime, Path);
         
 
-        return createdUnits;
+        return frameUpdate;
     }
 
     // Used to control game logic like army growth etc.

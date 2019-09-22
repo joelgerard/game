@@ -28,6 +28,7 @@ public abstract class State
             this.TransitionType = transitionType;
         }
 
+
         public StateType StateType { get; set; } = StateType.NORMAL;
         public TransitionType TransitionType { get; set; }
         public IState State { get; set; }

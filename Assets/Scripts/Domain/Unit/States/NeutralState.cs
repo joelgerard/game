@@ -32,5 +32,7 @@ public class NeutralState : BaseUnitState, IState
         }
         throw new ArgumentException("Cannot transition to the requested state. " + state.ToString(), "state");
     }
+
+    public UnitEvent GetAssociatedEvent() { return null; }
 }
         

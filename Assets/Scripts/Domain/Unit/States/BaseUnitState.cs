@@ -18,10 +18,14 @@ public class BaseUnitState : State
     public override Transition Update(Unit unit, float deltaTime)
     {
         // This one makes sense and applies to all units.
-        if (unit.HP <= 0)
+        // FIXME: and test. Transitions only apply when moving states
+        // This will stay in the same state and trigger a transition.
+        if (!(this is DyingState) && unit.HP <= 0)
         {
             return new Transition(new DyingState(),StateType.NORMAL);
         }
         return null;
     }
+
+    public UnitEvent AssociatedEvent { get; set; } = null;
 }

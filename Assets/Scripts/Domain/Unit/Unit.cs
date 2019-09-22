@@ -123,14 +123,21 @@ public partial class Unit
         // TODO: write this
     }
 
-    public virtual void Update(float deltaTime)
+    public virtual UnitEvent Update(float deltaTime)
     {
         //oldStateMachine.Update(deltaTime);
 
         // TODO: Something is messed up here.
         // Statemachine returns something???
         // I Guess if there is a new state, then it can pass back to the renderer
-        IState newState = StateMachine.Update(this, deltaTime);
+        State.Transition transition = StateMachine.Update(this, deltaTime);
+        if (transition != null)
+        {
+            UnitEvent ue = transition.State.GetAssociatedEvent();
+            ue.Unit = this;
+            return ue;
+        }
+        return null;
     }
 
     /** ############ SHARED STATES ########### */

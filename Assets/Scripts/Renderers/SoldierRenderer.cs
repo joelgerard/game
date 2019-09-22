@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static UnitGameEvents;
 
 public class SoldierRenderer : IUnitRenderer
 {
@@ -59,4 +60,12 @@ public class SoldierRenderer : IUnitRenderer
     {
         throw new NotImplementedException();
     }
+
+    public void HandleEvent(UnitDyingEvent dyingEvent)
+    {
+        Animator animator = dyingEvent.Unit.GameObject.GetComponent<Animator>();
+        animator.Play("Explosion");
+        // TODO: How do you know when the animation is finished?
+    }
+
 }

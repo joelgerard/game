@@ -82,11 +82,17 @@ public class StateMachine
         }
     }
 
-    public IState Update(Unit unit, float deltaTime)
+    public State.Transition Update(Unit unit, float deltaTime)
     {
         State.Transition transition = CurrentState.Update(unit, deltaTime);
         if (transition != null)
         {
+            GameController.Log("Unit " + unit.Name + " seeking state " + transition.State.GetType().ToString());
+            IState nextState = transition.State;
+            if (nextState.GetType().Equals(CurrentState.GetType()))
+            {
+                throw new Exception("Cannot transition from a state to itself: " + CurrentState.GetType().ToString());
+            }
             if (transition.TransitionType == State.TransitionType.ENTER)
             {
                 if (transition.StateType == State.StateType.NORMAL)
@@ -105,7 +111,7 @@ public class StateMachine
             {
                 throw new ArgumentException("Bad transition type");
             }
-            return transition.State;
+            return transition;
         }
         else
         {

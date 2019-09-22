@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
@@ -136,7 +137,25 @@ namespace Tests
             Assert.True(ally.StateMachine.IsInState<MovingState>());
         }
 
+        // FIXME: Move this to soldier tests.
+        [Test]
+        public void RepeatedStateChangeCallsDontTriggerTransition()
+        {
+            Soldier soldier = new Soldier();
+            soldier.HP = 10;
+            soldier.StateMachine.SetState(new MovingState());
+            UnitEvent ue = soldier.Update(1);
+            Assert.Null(ue);
 
+            // This triggers a dying event. 
+            soldier.HP = 0;
+            ue = soldier.Update(1);
+            Assert.True(ue is UnitGameEvents.UnitDyingEvent);
+
+            // Nothing happened to justify an event here.
+            ue = soldier.Update(1);
+            Assert.Null(ue);
+        }
 
 
 

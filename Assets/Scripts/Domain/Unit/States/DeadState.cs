@@ -14,4 +14,7 @@ public class DeadState : BaseUnitState, IState
     {
         return null;
     }
+
+    public UnitEvent GetAssociatedEvent() { return null; }
+
 }
