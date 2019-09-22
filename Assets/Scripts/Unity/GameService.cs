@@ -167,6 +167,15 @@ public class GameService
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {
         game.OnUnitsCollide(thisObject.name, otherObject.name);
+
+        // TODO: Temp hack to test. FIXME
+        if (thisObject.name.Contains("Soldier") && otherObject.name.Contains("Enemy"))
+        {
+            Animator animator = thisObject.GetComponent<Animator>();
+            animator.Play("Explosion");
+            ;
+        }
+
     }
 
     void PathRenderer_OnReadyEvent()

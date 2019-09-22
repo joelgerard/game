@@ -32,6 +32,9 @@ public class Game
         AddArmy(); //TODO: Not yet used.
   }
 
+    // TODO: This should return commands to make the renderer do something.
+    // e.g. switch unit to dying animation. 
+    start here next time
     public List<Unit> Update(GameUpdate update)
     {
         List<Unit> createdUnits = new List<Unit>();
