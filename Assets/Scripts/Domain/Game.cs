@@ -57,6 +57,15 @@ public class Game
                 GameController.Log("Process units UnitsCollide");
                 ((UnitsCollideEvent)curEvent).Unit.Attack(((UnitsCollideEvent)curEvent).OtherUnit);
             }
+            if (curEvent is UnitExplosionComplete)
+            {
+                UnitExplosionComplete uec = (UnitExplosionComplete)curEvent;
+
+                // TODO: Lazy. No dead state? 
+                Unit unit = unitMap[uec.UnitName];
+                UnityEngine.GameObject.Destroy(unit.GameObject);
+                unitMap.Remove(uec.UnitName);
+            }
         }
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.

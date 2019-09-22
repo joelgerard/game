@@ -3,11 +3,15 @@ using System.Collections;
 using System;
 
 // TODO: This is a general unit? Clean up.
+// TODO: Not really a controller? Think about this. 
 public class SoldierController : MonoBehaviour
 {
     // TODO: Bad naming. This is really a collision event. 
     public event OnEnter OnEnterEvent;
     public delegate void OnEnter(GameObject thisObject, GameObject otherObject);
+
+    public event OnAnimation OnAnimationEvent;
+    public delegate void OnAnimation(GameObject gameObject, int animationId);
 
     // Use this for initialization
     void Start()
@@ -32,7 +36,6 @@ public class SoldierController : MonoBehaviour
 
     private void AnimationEvent(int animationId)
     {
-        // <<>>
-        throw new Exception("Unimplemented");    
+        OnAnimationEvent?.Invoke(this.gameObject, animationId);    
     }
 }

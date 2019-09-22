@@ -186,10 +186,14 @@ public class GameService
             // TODO: How to detect the collider has collided?
             SoldierController soldierController = movingObject.GameObject.GetComponent<SoldierController>();
             soldierController.OnEnterEvent += Shape_OnEnterEvent;
+            soldierController.OnAnimationEvent += SoldierController_OnAnimationEvent;
         }
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
+
+
+
 
     public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
     {
@@ -216,6 +220,19 @@ public class GameService
 
 
         gameUpdate.GameEvents.Add(gameEvent);
+    }
+
+    void SoldierController_OnAnimationEvent(GameObject gameObject, int animationId)
+    {
+        // TODO: Replace with Enum/CONST
+        if (animationId == 1)
+        {
+            UnitExplosionComplete gameEvent = new UnitExplosionComplete
+            {
+                UnitName = gameObject.name
+            };
+            gameUpdate.GameEvents.Add(gameEvent);
+    }
     }
 
     void PathRenderer_OnReadyEvent()
