@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 // TODO: This is a general unit? Clean up.
 public class SoldierController : MonoBehaviour
@@ -27,5 +28,11 @@ public class SoldierController : MonoBehaviour
         Diagnostics.NotNull(this.gameObject, "this.gameObject");
 
         OnEnterEvent?.Invoke(this.gameObject, other.gameObject);
+    }
+
+    private void AnimationEvent(int animationId)
+    {
+        // <<>>
+        throw new Exception("Unimplemented");    
     }
 }

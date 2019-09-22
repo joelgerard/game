@@ -91,12 +91,13 @@ public class StateMachine
         {
             GameController.Log("Unit " + unit.Name + " seeking state " + transition.State.GetType().ToString());
             IState nextState = transition.State;
-            if (nextState.GetType().Equals(CurrentState.GetType()))
-            {
-                throw new Exception("Cannot transition from a state to itself: " + CurrentState.GetType().ToString());
-            }
+
             if (transition.TransitionType == State.TransitionType.ENTER)
             {
+                if (nextState.GetType().Equals(CurrentState.GetType()))
+                {
+                    throw new Exception("Unit " + unit.Name + " cannot transition from this state to the same state: " + CurrentState.GetType().ToString());
+                }
                 if (transition.StateType == State.StateType.NORMAL)
                 {
                     SetState(transition.State);

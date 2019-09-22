@@ -65,6 +65,12 @@ public class SoldierRenderer : IUnitRenderer
     {
         Animator animator = dyingEvent.Unit.GameObject.GetComponent<Animator>();
         animator.Play("Explosion");
+        AnimationClip clip = animator.runtimeAnimatorController.animationClips[1];
+        AnimationEvent evt = new AnimationEvent();
+        evt.intParameter = 1;
+        evt.time = 3f;
+        evt.functionName = "AnimationEvent";
+        clip.AddEvent(evt);
         // TODO: How do you know when the animation is finished?
     }
 

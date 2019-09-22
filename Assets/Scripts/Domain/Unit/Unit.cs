@@ -90,7 +90,8 @@ public partial class Unit
         HP -= damage;
         if (HP <= 0 && OnDestroyedEvent != null)
         {
-            OnDestroyedEvent(this);
+            // TODO: Get rid of all these events like this.
+            //OnDestroyedEvent(this);
         }
         else
         {
@@ -134,8 +135,11 @@ public partial class Unit
         if (transition != null)
         {
             UnitEvent ue = transition.State.GetAssociatedEvent();
-            ue.Unit = this;
-            return ue;
+            if (ue != null)
+            { 
+                ue.Unit = this;
+                return ue;
+            }
         }
         return null;
     }
