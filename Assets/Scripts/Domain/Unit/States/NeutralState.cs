@@ -22,6 +22,7 @@ public class NeutralState : BaseUnitState, IState
     public override Transition GetTransition(IState state)
     {
         // TODO: This feels horrible man. 
+        // TODO: It is. Also, can just dispatch from here.
         if (state is AttackState)
         {
             return new State.Transition(new AttackState(), StateType.TEMPORARY);

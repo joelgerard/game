@@ -40,11 +40,22 @@ public class Game
         FrameUpdate frameUpdate = new FrameUpdate();
         foreach(GameEvent curEvent in update.GameEvents)
         {
+            GameController.Log("Handling event " + curEvent.GetType());
+
             // TODO: consider moving to different function.
             // FIXME: Dispatch this properly
             if (curEvent is HomeBaseClickEvent)
             {
                 frameUpdate.AddCreatedEvent(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
+            }
+            if (curEvent is UnitsCollideEvent)
+            {
+                // FIXME: WTF. OK. So all the event handling is happening in one place.
+                // However, it takes forever to get there and the issue remains the same.
+                // How do you move from one state to the next? 
+                // <<>> 
+                GameController.Log("Process units UnitsCollide");
+                ((UnitsCollideEvent)curEvent).Unit.Attack(((UnitsCollideEvent)curEvent).OtherUnit);
             }
         }
         // TODO: Need to call this once per frame?
@@ -125,6 +136,7 @@ public class Game
 
     public void OnPathReady()
     {
+        GameController.Log("Path ready");
         Player.StartMoving();
     }
 
@@ -187,7 +199,7 @@ public class Game
 
 
     // TODO: Why does this take strings?
-    public void OnUnitsCollide(String unit1Name, String unit2Name)
+    public GameEvent OnUnitsCollide(String unit1Name, String unit2Name)
     {
         Diagnostics.KeyExists(unitMap, unit1Name);
         Diagnostics.KeyExists(unitMap, unit2Name);
@@ -196,6 +208,7 @@ public class Game
 
         Unit unit = unitMap[unit1Name];
         Unit otherUnit = unitMap[unit2Name];
-        unit.Attack(otherUnit);
+
+        return new UnitsCollideEvent(unit, otherUnit);
     }
 }

@@ -8,7 +8,7 @@ public class BaseUnitState : State
     public override Transition GetTransition(IState state)
     {
         // TODO: WTF is going on in here? FIXME.
-        if (state is AttackState)
+        if (!(this is AttackState) && state is AttackState)
         {
             return new Transition(new AttackState(), State.StateType.TEMPORARY);
         }

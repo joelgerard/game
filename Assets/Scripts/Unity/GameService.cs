@@ -12,6 +12,8 @@ public class GameService
 
     private Game game = new Game();
 
+    GameUpdate gameUpdate = new GameUpdate();
+
     public RectangleObject RectanglePrefab;
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
@@ -42,6 +44,12 @@ public class GameService
 
     public void Update(GameServiceUpdate update)
     {
+        // Ohhh. This is confusing. Basically,
+        // the update object is used by other events,
+        // called outside of the update loop by unity.
+        // It gets reset every frame. 
+        gameUpdate.deltaTime = update.DeltaTime;
+
         // Get the input, which is compiled into a game update object.
         // This includes events that the game will need to loop through, e.g.
         // a player has added a solder to the base.
@@ -49,9 +57,12 @@ public class GameService
 
         // Once the game has updated itself, it will return new objects that
         // are in the game but have not been drawn or created on the Unity side.
-        FrameUpdate fu = game.Update(update.GameUpdate);
+        FrameUpdate fu = game.Update(gameUpdate);
+
         RenderUnits(fu.CreatedEvents);
         HandleUnitEvents(fu.UnitEvents);
+
+        gameUpdate = new GameUpdate();
     }
 
     void HandleUnitEvents(List<UnitEvent> events)
@@ -60,6 +71,7 @@ public class GameService
         SoldierRenderer sr = new SoldierRenderer(allyPrefab);
         foreach (dynamic ue in events)
         {
+
             sr.HandleEvent(ue);
         }
     }
@@ -117,7 +129,7 @@ public class GameService
 
         if (update.Click && clickedInBase)
         {
-            update.GameUpdate.GameEvents.Add(new HomeBaseClickEvent(update.MousePos));
+            gameUpdate.GameEvents.Add(new HomeBaseClickEvent(update.MousePos));
         }
 
         // TODO: Some cleanup with all these inputs
@@ -128,7 +140,9 @@ public class GameService
             trailRendererPath = pathRenderer.Draw(update.MainBehaviour.transform.position);
         }
 
-        update.GameUpdate.currentPath = trailRendererPath;
+        gameUpdate.currentPath = trailRendererPath;
+
+        // FIXME: Not sure about this update.
         return update;
     }
 
@@ -193,10 +207,15 @@ public class GameService
     // TODO: Not a very good name for this event. 
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {
-        game.OnUnitsCollide(thisObject.name, otherObject.name);
+        // TODO: This first line isn't neccessary. Just give the game objects
+        // in the event, and the lookup can be done later. Even better
+        // this whole event function can go away and become something general.
+        // It will mean that the UnitsCollideEvent will be renamed
+        // and the properties inside will be gameobjects.
+        GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
 
 
-
+        gameUpdate.GameEvents.Add(gameEvent);
     }
 
     void PathRenderer_OnReadyEvent()

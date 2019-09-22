@@ -19,7 +19,7 @@ public class StateMachine
         }
     }
 
-    public void SetState(IState state)
+    void SetState(IState state)
     {
         if (States.Count > 0)
         {
@@ -28,7 +28,7 @@ public class StateMachine
         PushState(state);
     }
 
-    public void PushState(IState state)
+    void PushState(IState state)
     {
         States.Push(state);
     }
@@ -40,7 +40,7 @@ public class StateMachine
     {
     }
 
-    public void ResumePrevState()
+    void ResumePrevState()
     {
         States.Pop();
     }
@@ -60,6 +60,7 @@ public class StateMachine
     // TODO: What does first, update or transition?
     public IState Transition(IState desiredState)
     {
+        GameController.Log("Seeking transition to state " + desiredState.GetType() + " from " + CurrentState.GetType());
         State.Transition transition = CurrentState.GetTransition(desiredState);
 
         // TODO: DRY with update fn
@@ -67,6 +68,7 @@ public class StateMachine
         {
             if (transition.StateType == State.StateType.NORMAL)
             {
+                GameController.Log("Setting state to normal " + transition.State.GetType());
                 SetState(transition.State);
             }
             else if (transition.StateType == State.StateType.TEMPORARY)

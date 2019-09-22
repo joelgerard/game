@@ -62,13 +62,10 @@ public class GameController : MonoBehaviour
         var mouseDown = Input.GetKeyDown(KeyCode.Mouse0);
         var mouseUp = Input.GetKeyUp(KeyCode.Mouse0);
 
-        GameUpdate update = new GameUpdate
-        { 
-            deltaTime = Time.deltaTime
-        };
+
         GameServiceUpdate gsUpdate = new GameServiceUpdate
         {
-            GameUpdate = update,
+            DeltaTime = Time.deltaTime,
             MouseUp = mouseUp,
             MouseDown = mouseDown,
             MousePos = mousePos,

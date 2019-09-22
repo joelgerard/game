@@ -143,7 +143,7 @@ namespace Tests
         {
             Soldier soldier = new Soldier();
             soldier.HP = 10;
-            soldier.StateMachine.SetState(new MovingState());
+            soldier.StateMachine.Transition(new MovingState());
             UnitEvent ue = soldier.Update(1);
             Assert.Null(ue);
 
