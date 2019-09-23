@@ -3,8 +3,11 @@ using System.Collections.Generic;
 
 public class StateMachine
 {
-    IState currentState;
     public Stack<IState> States { get; } = new Stack<IState>();
+
+    public StateMachine()
+    {
+    }
 
     public IState CurrentState
     {
@@ -31,13 +34,6 @@ public class StateMachine
     void PushState(IState state)
     {
         States.Push(state);
-    }
-
-    public event OnStateChange OnStateChangeEvent;
-    public delegate void OnStateChange(Unit unitDestroyed);
-
-    public StateMachine()
-    {
     }
 
     void ResumePrevState()

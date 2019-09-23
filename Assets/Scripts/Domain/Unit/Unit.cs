@@ -108,20 +108,13 @@ public partial class Unit
 
         if (otherUnit.Allegiance != this.Allegiance)
         {
-            GameController.Log(this.Name + " is attacking " + otherUnit.Name);
-            // TODO: Integrate HSM further. Better? Where should this "if" be? 
-
             Enemy = otherUnit;
             StateMachine.Transition(new AttackState());
-            otherUnit.Defend(this);
         }
 
     }
 
-    public virtual void Defend(Unit attackingUnit)
-    {
-        // TODO: write this
-    }
+
 
     public virtual UnitEvent Update(float deltaTime)
     {
