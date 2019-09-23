@@ -33,10 +33,10 @@ public class Game
         AddArmy(); //TODO: Not yet used.
   }
 
-    public FrameUpdate Update(GameUpdate update)
+    public GameUpdateResult Update(GameUpdate update)
     {
-        FrameUpdate frameUpdate = new FrameUpdate();
-        foreach(dynamic curEvent in update.GameEvents)
+        GameUpdateResult frameUpdate = new GameUpdateResult();
+        foreach(dynamic curEvent in update.UnityGameEvents)
         {
             UnitEvent unitEvent = HandleEvent(curEvent, frameUpdate);
             if (unitEvent != null)
@@ -45,7 +45,7 @@ public class Game
             }
 
         }
-        update.GameEvents.Clear();
+        update.UnityGameEvents.Clear();
 
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
@@ -57,19 +57,19 @@ public class Game
         return frameUpdate;
     }
 
-    private UnitEvent HandleEvent(HomeBaseClickEvent e, FrameUpdate frameUpdate)
+    private UnitEvent HandleEvent(HomeBaseClickEvent e, GameUpdateResult frameUpdate)
     {
         Unit soldier = AddSoldier(Allegiance.ALLY, e.pos);
         return new UnitCreatedEvent(soldier);
     }
 
-    private UnitEvent HandleEvent(UnitsCollideEvent e, FrameUpdate frameUpdate)
+    private UnitEvent HandleEvent(UnitsCollideEvent e, GameUpdateResult frameUpdate)
     {
         unitMap[e.Unit].Attack(unitMap[e.OtherUnit]);
         return null;
     }
 
-    private UnitEvent HandleEvent(UnitExplosionComplete e, FrameUpdate frameUpdate)
+    private UnitEvent HandleEvent(UnitExplosionComplete e, GameUpdateResult frameUpdate)
     {
         // TODO: Lazy. No dead state? Also, the UnityEngine piece should be removed.
         if (!unitMap.ContainsKey(e.UnitName))

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class FrameUpdate
+public class GameUpdateResult
 {
-    public FrameUpdate()
+    public GameUpdateResult()
     {
     }
 

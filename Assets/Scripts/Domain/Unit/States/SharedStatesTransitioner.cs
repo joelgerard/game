@@ -19,7 +19,7 @@ public class SharedStatesTransitioner
     public Transition Update(IState currentState, float deltaTime)
     {
         Unit unit = currentState.GetUnit();
-        if (unit.HP <= 0 && !(currentState is DyingState))
+        if (unit.HP <= 0 && !(currentState is DyingState || currentState is DeadState))
         {
             return new Transition(new DyingState(currentState.GetUnit()), StateType.NORMAL);
         }

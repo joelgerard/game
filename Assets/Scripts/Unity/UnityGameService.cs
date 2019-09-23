@@ -57,7 +57,7 @@ public class UnityGameService
 
         // Once the game has updated itself, it will return new objects that
         // are in the game but have not been drawn or created on the Unity side.
-        FrameUpdate fu = game.Update(gameUpdate);
+        GameUpdateResult fu = game.Update(gameUpdate);
 
 
         //RenderUnits(fu.CreatedEvents);
@@ -146,7 +146,7 @@ public class UnityGameService
 
         if (update.Click && clickedInBase)
         {
-            gameUpdate.GameEvents.Add(new HomeBaseClickEvent(update.MousePos));
+            gameUpdate.UnityGameEvents.Add(new HomeBaseClickEvent(update.MousePos));
         }
 
         // TODO: Some cleanup with all these inputs
@@ -237,7 +237,7 @@ public class UnityGameService
         //GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
 
         UnitsCollideEvent gameEvent = new UnitsCollideEvent(thisObject.name, otherObject.name);
-        gameUpdate.GameEvents.Add(gameEvent);
+        gameUpdate.UnityGameEvents.Add(gameEvent);
     }
 
     void SoldierController_OnAnimationEvent(GameObject gameObject, int animationId)
@@ -249,7 +249,7 @@ public class UnityGameService
             {
                 UnitName = gameObject.name
             };
-            gameUpdate.GameEvents.Add(gameEvent);
+            gameUpdate.UnityGameEvents.Add(gameEvent);
     }
     }
 

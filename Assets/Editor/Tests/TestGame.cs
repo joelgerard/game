@@ -32,7 +32,7 @@ namespace Tests
                 deltaTime=1,
                 currentPath=null
             };
-            gu.GameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
 
             game.Update(gu);
 
@@ -62,8 +62,8 @@ namespace Tests
                 deltaTime = 0.01f,
                 currentPath = null
             };
-            gu.GameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
-            gu.GameEvents.Add(new UnitsCollideEvent("EnemyBaseSquare", "Soldier1"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("EnemyBaseSquare", "Soldier1"));
             game.Update(gu);
 
 
@@ -97,8 +97,8 @@ namespace Tests
                 deltaTime = 1,
                 currentPath = null
             };
-            gu.GameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
-            gu.GameEvents.Add(new UnitsCollideEvent("Soldier2", "EnemyBaseSquare"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier2", "EnemyBaseSquare"));
 
             int i = 0;
             while (true)
@@ -106,11 +106,11 @@ namespace Tests
                 game.Update(gu);
                 if (s1.StateMachine.IsInState<DyingState>())
                 {
-                    gu.GameEvents.Add(new UnitExplosionComplete("Soldier1"));
+                    gu.UnityGameEvents.Add(new UnitExplosionComplete("Soldier1"));
                 }
                 if (s2.StateMachine.IsInState<DyingState>())
                 {
-                    gu.GameEvents.Add(new UnitExplosionComplete("Soldier2"));
+                    gu.UnityGameEvents.Add(new UnitExplosionComplete("Soldier2"));
                 }
                 if (s1.StateMachine.IsInState<DeadState>() &&
                    s2.StateMachine.IsInState<DeadState>()

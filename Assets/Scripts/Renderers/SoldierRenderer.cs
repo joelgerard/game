@@ -4,6 +4,12 @@ using static UnitGameEvents;
 
 public class SoldierRenderer : IUnitRenderer
 {
+    public static class ExplosionAnimation
+    {
+        public static readonly int ID = 1;
+        public static readonly float TIME = 3f;
+    }
+
     RectangleObject rectanglePrefab = null;
     GameObject allyPrefab = null;
 
@@ -34,12 +40,10 @@ public class SoldierRenderer : IUnitRenderer
             obw.GameObject = go;
 
             Animator animator = go.GetComponent<Animator>();
-            // TODO: Hard coded 1
-            AnimationClip clip = animator.runtimeAnimatorController.animationClips[1];
+            AnimationClip clip = animator.runtimeAnimatorController.animationClips[ExplosionAnimation.ID];
             AnimationEvent evt = new AnimationEvent();
-            // TODO: Hard coded 1.
-            evt.intParameter = 1;
-            evt.time = 3f;
+            evt.intParameter = ExplosionAnimation.ID;
+            evt.time = ExplosionAnimation.TIME;
             evt.functionName = "AnimationEvent";
 
             // TODO: Why is this event hooked up here? Should be hooked up in object creation.

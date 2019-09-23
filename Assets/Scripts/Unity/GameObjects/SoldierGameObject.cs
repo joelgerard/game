@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using static SoldierRenderer;
 
 // TODO: This is a general unit? Clean up.
 // TODO: Not really a controller? Think about this. 
@@ -38,11 +39,11 @@ public class SoldierGameObject : MonoBehaviour
 
     private void AnimationEvent(int animationId)
     {
-        animationEvents++;
-        // TODO: HArdcoded
-        if (animationId == 1 && animationEvents < 2) // FIXME: WHY????!!
+        // FIXME: WHY called twice????!!
+        if (animationId == ExplosionAnimation.ID && animationEvents < 1) 
         {
             OnAnimationEvent?.Invoke(this.gameObject, animationId);
         }
+        animationEvents++;
     }
 }
