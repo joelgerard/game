@@ -1,5 +1,6 @@
 ﻿using System;
 using static State;
+using static UnitGameEvents;
 
 public class DeadState : IState
 {
@@ -29,7 +30,14 @@ public class DeadState : IState
         return null;
     }
 
-    public UnitEvent GetAssociatedEvent() { return null; }
+    public UnitEvent GetAssociatedEvent() 
+    {
+        UnitDiedEvent unitDiedEvent = new UnitDiedEvent
+        {
+            Unit = this.GetUnit()
+        };
+        return unitDiedEvent; 
+    }
 
 
 

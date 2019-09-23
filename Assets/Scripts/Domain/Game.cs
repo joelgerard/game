@@ -81,14 +81,8 @@ public class Game
             throw new KeyNotFoundException("Couldn't find " + e.UnitName + " in unit map");
         }
         Unit unit = unitMap[e.UnitName];
-        unit.StateMachine.Transition(new DeadState(unit));
-        GameController.Log("Removing " + e.UnitName + " and it matches: " + (e.UnitName == unit.Name));
         unitMap.Remove(e.UnitName);
-        UnitDiedEvent unitDiedEvent = new UnitDiedEvent()
-        {
-            Unit = unit
-        };
-        return unitDiedEvent;
+        return unit.StateMachine.Transition(new DeadState(unit)).GetAssociatedEvent();
     }
 
     // Used to control game logic like army growth etc.
