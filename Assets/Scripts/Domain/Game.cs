@@ -36,46 +36,38 @@ public class Game
     // e.g. switch unit to dying animation. 
     public FrameUpdate Update(GameUpdate update)
     {
-        //List<Unit> createdUnits = new List<Unit>();
         FrameUpdate frameUpdate = new FrameUpdate();
-        foreach(GameEvent curEvent in update.GameEvents)
+        foreach(dynamic curEvent in update.GameEvents)
         {
-            GameController.Log("Handling event " + curEvent.GetType());
-
-            // TODO: consider moving to different function.
-            // FIXME: Dispatch this properly
-            if (curEvent is HomeBaseClickEvent)
-            {
-                frameUpdate.AddCreatedEvent(HomeBaseClickedEvent(curEvent as HomeBaseClickEvent));
-            }
-            if (curEvent is UnitsCollideEvent)
-            {
-                // FIXME: WTF. OK. So all the event handling is happening in one place.
-                // However, it takes forever to get there and the issue remains the same.
-                // How do you move from one state to the next? 
-                // <<>> 
-                GameController.Log("Process units UnitsCollide");
-                UnitsCollideEvent uce = (UnitsCollideEvent) curEvent;
-                unitMap[uce.Unit].Attack(unitMap[uce.OtherUnit]);
-            }
-            if (curEvent is UnitExplosionComplete)
-            {
-                UnitExplosionComplete uec = (UnitExplosionComplete)curEvent;
-
-                // TODO: Lazy. No dead state? 
-                Unit unit = unitMap[uec.UnitName];
-                UnityEngine.GameObject.Destroy(unit.GameObject);
-                unitMap.Remove(uec.UnitName);
-            }
+            HandleEvent(curEvent, frameUpdate);
         }
+
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
         List<UnitEvent> unitEvents = Player.Update(update.deltaTime, update.currentPath);
         frameUpdate.UnitEvents.AddRange(unitEvents);
         Enemy.Update(update.deltaTime, Path);
         
-
         return frameUpdate;
+    }
+
+    private void HandleEvent(HomeBaseClickEvent e, FrameUpdate frameUpdate)
+    {
+        Unit soldier = AddSoldier(Allegiance.ALLY, e.pos);
+        frameUpdate.AddCreatedEvent(soldier);
+    }
+
+    private void HandleEvent(UnitsCollideEvent e, FrameUpdate frameUpdate)
+    {
+        unitMap[e.Unit].Attack(unitMap[e.OtherUnit]);
+    }
+
+    private void HandleEvent(UnitExplosionComplete e, FrameUpdate frameUpdate)
+    {
+        // TODO: Lazy. No dead state? Also, the UnityEngine piece should be removed.
+        Unit unit = unitMap[e.UnitName];
+        UnityEngine.Object.Destroy(unit.GameObject);
+        unitMap.Remove(e.UnitName);
     }
 
     // Used to control game logic like army growth etc.
@@ -124,10 +116,7 @@ public class Game
         return (soldier.Allegiance == Allegiance.ALLY ? Player : Enemy);
     }
 
-    private Unit HomeBaseClickedEvent(HomeBaseClickEvent e)
-    {
-        return AddSoldier(Allegiance.ALLY, e.pos);
-    }
+
 
     public void OnUnitRenderedEvent(Unit unit)
     {
@@ -161,27 +150,9 @@ public class Game
 
         List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
         soldier.Init();
-        soldier.OnDestroyedEvent += Soldier_OnDestroyedEvent;
         soldiers.Add(soldier);
         return soldier;
     }
-
-    //public Soldier OnAddSoldier(GameObject gameObject, Allegiance allegiance)
-    //{
-    //    Soldier soldier = new Soldier()
-    //    {
-    //        Allegiance = allegiance,
-    //        GameObject = gameObject
-    //    };
-
-    //    // TODO: If statement here is bad. 
-    //    List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
-    //    soldier.Init();
-    //    soldier.OnDestroyedEvent+= Soldier_OnDestroyedEvent;
-    //    soldiers.Add(soldier);
-    //    unitMap.Add(gameObject.name, soldier);
-    //    return soldier;
-    //}
 
     void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
     {
@@ -190,21 +161,6 @@ public class Game
         unitMap.Remove(destroyedUnit.Name);
 
         GameController.Log("You win.");
-    }
-
-    void Soldier_OnDestroyedEvent(Unit unitDestroyed)
-    {
-        // TODO: Feels like all the units and gameobjects can be managed at once? 
-        // FIXME: What is happening to all the gameobjects? Is this a bug?
-        // Whatever it is, it has a null reference bug. 
-
-        // FIXME: This is only looking up player soldiers. What happens when the
-        // enemy soldier dies?
-        Army army = GetSoldierArmy(unitDestroyed);
-        // TODO: Why does this have to search by name when it already has the object?
-        Soldier soldier = army.Soldiers.Find((Soldier obj) => obj.GameObject.name == unitDestroyed.GameObject.name);
-        unitMap.Remove(unitDestroyed.GameObject.name);
-        army.Soldiers.Remove(soldier);
     }
 
 }
