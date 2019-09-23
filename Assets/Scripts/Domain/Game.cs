@@ -55,7 +55,8 @@ public class Game
                 // How do you move from one state to the next? 
                 // <<>> 
                 GameController.Log("Process units UnitsCollide");
-                ((UnitsCollideEvent)curEvent).Unit.Attack(((UnitsCollideEvent)curEvent).OtherUnit);
+                UnitsCollideEvent uce = (UnitsCollideEvent) curEvent;
+                unitMap[uce.Unit].Attack(unitMap[uce.OtherUnit]);
             }
             if (curEvent is UnitExplosionComplete)
             {
@@ -206,18 +207,4 @@ public class Game
         army.Soldiers.Remove(soldier);
     }
 
-
-    // TODO: Why does this take strings?
-    public GameEvent OnUnitsCollide(String unit1Name, String unit2Name)
-    {
-        Diagnostics.KeyExists(unitMap, unit1Name);
-        Diagnostics.KeyExists(unitMap, unit2Name);
-
-        GameController.Log("Unit " + unit1Name + " collided with " + unit2Name);
-
-        Unit unit = unitMap[unit1Name];
-        Unit otherUnit = unitMap[unit2Name];
-
-        return new UnitsCollideEvent(unit, otherUnit);
-    }
 }

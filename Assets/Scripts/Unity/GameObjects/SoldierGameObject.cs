@@ -4,11 +4,11 @@ using System;
 
 // TODO: This is a general unit? Clean up.
 // TODO: Not really a controller? Think about this. 
-public class SoldierController : MonoBehaviour
+public class SoldierGameObject : MonoBehaviour
 {
     // TODO: Bad naming. This is really a collision event. 
-    public event OnEnter OnEnterEvent;
-    public delegate void OnEnter(GameObject thisObject, GameObject otherObject);
+    public event OnCollision OnCollisionEvent;
+    public delegate void OnCollision(GameObject thisObject, GameObject otherObject);
 
     public event OnAnimation OnAnimationEvent;
     public delegate void OnAnimation(GameObject gameObject, int animationId);
@@ -31,7 +31,7 @@ public class SoldierController : MonoBehaviour
         Diagnostics.NotNull(other.gameObject, "other.gameObject");
         Diagnostics.NotNull(this.gameObject, "this.gameObject");
 
-        OnEnterEvent?.Invoke(this.gameObject, other.gameObject);
+        OnCollisionEvent?.Invoke(this.gameObject, other.gameObject);
     }
 
     private void AnimationEvent(int animationId)

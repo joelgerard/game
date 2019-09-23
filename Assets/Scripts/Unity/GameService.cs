@@ -71,7 +71,6 @@ public class GameService
         SoldierRenderer sr = new SoldierRenderer(allyPrefab);
         foreach (dynamic ue in events)
         {
-
             sr.HandleEvent(ue);
         }
     }
@@ -184,8 +183,8 @@ public class GameService
         else
         {
             // TODO: How to detect the collider has collided?
-            SoldierController soldierController = movingObject.GameObject.GetComponent<SoldierController>();
-            soldierController.OnEnterEvent += Shape_OnEnterEvent;
+            SoldierGameObject soldierController = movingObject.GameObject.GetComponent<SoldierGameObject>();
+            soldierController.OnCollisionEvent += Shape_OnEnterEvent;
             soldierController.OnAnimationEvent += SoldierController_OnAnimationEvent;
         }
         unit.OnDamagedEvent += renderer.DrawDamage;
@@ -209,6 +208,7 @@ public class GameService
     }
 
     // TODO: Not a very good name for this event. 
+    // TODO: Really, you could generalize this to an Event Object, same as the others.
     void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
     {
         // TODO: This first line isn't neccessary. Just give the game objects
@@ -216,9 +216,9 @@ public class GameService
         // this whole event function can go away and become something general.
         // It will mean that the UnitsCollideEvent will be renamed
         // and the properties inside will be gameobjects.
-        GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
+        //GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
 
-
+        UnitsCollideEvent gameEvent = new UnitsCollideEvent(thisObject.name, otherObject.name);
         gameUpdate.GameEvents.Add(gameEvent);
     }
 

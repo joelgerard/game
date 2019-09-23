@@ -1,10 +1,11 @@
 ﻿using System;
 public class UnitsCollideEvent : GameEvent
 {
-    public Unit Unit { get; set; }
-    public Unit OtherUnit { get; set; }
+    public String Unit { get; set; }
+    public String OtherUnit { get; set; }
 
-    public UnitsCollideEvent(Unit unit, Unit otherUnit)
+    // TODO: Why does this take strings?
+    public UnitsCollideEvent(String unit, String otherUnit)
     {
         Unit = unit;
         OtherUnit = otherUnit;
