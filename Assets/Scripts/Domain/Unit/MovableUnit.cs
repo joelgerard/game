@@ -30,7 +30,7 @@ public partial class MovableUnit : Unit
         }
         startMoving = true;
 
-        StateMachine.Transition(new MovingState());
+        StateMachine.Transition(new MovingState(this));
 
     }
 

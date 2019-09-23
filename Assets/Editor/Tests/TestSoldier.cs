@@ -57,17 +57,7 @@ namespace Tests
             Assert.True(soldier.StateMachine.IsInState<AttackState>());
         }
 
-        [Test]
-        public void UnitsDontAutoCounterAttack()
-        {
-            SoldierBase sBase = new SoldierBase();
-            ArmyBase armyBase = sBase.armyBase;
-            Soldier soldier = sBase.soldier;
 
-            soldier.Attack(armyBase);
-            soldier.Update(1);
-            Assert.False(armyBase.StateMachine.IsInState<AttackState>());
-        }
 
         [Test]
         public void UnitsAttackAndOneDies()
@@ -143,7 +133,7 @@ namespace Tests
         {
             Soldier soldier = new Soldier();
             soldier.HP = 10;
-            soldier.StateMachine.Transition(new MovingState());
+            soldier.StateMachine.Transition(new MovingState(soldier));
             UnitEvent ue = soldier.Update(1);
             Assert.Null(ue);
 

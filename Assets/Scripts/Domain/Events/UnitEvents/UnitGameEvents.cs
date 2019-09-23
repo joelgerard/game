@@ -1,9 +1,9 @@
 ﻿using System;
 public class UnitGameEvents
 {
-    Unit Unit { get; set; }
 
     public class UnitDyingEvent : UnitEvent { }
+    public class UnitDiedEvent : UnitEvent { }
 
     public UnitGameEvents()
     {

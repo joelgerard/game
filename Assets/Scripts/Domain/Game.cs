@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnitGameEvents;
 
 // This is the game as if it were a board game, i.e. no unity runtime stuff here.
 // Just logic. Should be able to instantiate and test this anywhere. 
@@ -37,35 +38,53 @@ public class Game
         FrameUpdate frameUpdate = new FrameUpdate();
         foreach(dynamic curEvent in update.GameEvents)
         {
-            HandleEvent(curEvent, frameUpdate);
+            UnitEvent unitEvent = HandleEvent(curEvent, frameUpdate);
+            if (unitEvent != null)
+            {
+                frameUpdate.UnitEvents.Add(unitEvent);
+            }
+
         }
+        update.GameEvents.Clear();
 
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
         List<UnitEvent> unitEvents = Player.Update(update.deltaTime, update.currentPath);
         frameUpdate.UnitEvents.AddRange(unitEvents);
         Enemy.Update(update.deltaTime, Path);
-        
+
+
         return frameUpdate;
     }
 
-    private void HandleEvent(HomeBaseClickEvent e, FrameUpdate frameUpdate)
+    private UnitEvent HandleEvent(HomeBaseClickEvent e, FrameUpdate frameUpdate)
     {
         Unit soldier = AddSoldier(Allegiance.ALLY, e.pos);
-        frameUpdate.AddCreatedEvent(soldier);
+        return new UnitCreatedEvent(soldier);
     }
 
-    private void HandleEvent(UnitsCollideEvent e, FrameUpdate frameUpdate)
+    private UnitEvent HandleEvent(UnitsCollideEvent e, FrameUpdate frameUpdate)
     {
         unitMap[e.Unit].Attack(unitMap[e.OtherUnit]);
+        return null;
     }
 
-    private void HandleEvent(UnitExplosionComplete e, FrameUpdate frameUpdate)
+    private UnitEvent HandleEvent(UnitExplosionComplete e, FrameUpdate frameUpdate)
     {
         // TODO: Lazy. No dead state? Also, the UnityEngine piece should be removed.
+        if (!unitMap.ContainsKey(e.UnitName))
+        {
+            throw new KeyNotFoundException("Couldn't find " + e.UnitName + " in unit map");
+        }
         Unit unit = unitMap[e.UnitName];
-        UnityEngine.Object.Destroy(unit.GameObject);
+        unit.StateMachine.Transition(new DeadState(unit));
+        GameController.Log("Removing " + e.UnitName + " and it matches: " + (e.UnitName == unit.Name));
         unitMap.Remove(e.UnitName);
+        UnitDiedEvent unitDiedEvent = new UnitDiedEvent()
+        {
+            Unit = unit
+        };
+        return unitDiedEvent;
     }
 
     // Used to control game logic like army growth etc.

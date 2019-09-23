@@ -5,4 +5,9 @@ public class UnitExplosionComplete : UnityGameEvent
     public UnitExplosionComplete()
     {
     }
+
+    public UnitExplosionComplete(string unitName)
+    {
+        UnitName = unitName;
+    }
 }

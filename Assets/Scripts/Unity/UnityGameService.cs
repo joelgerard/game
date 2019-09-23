@@ -59,7 +59,9 @@ public class UnityGameService
         // are in the game but have not been drawn or created on the Unity side.
         FrameUpdate fu = game.Update(gameUpdate);
 
-        RenderUnits(fu.CreatedEvents);
+
+        //RenderUnits(fu.CreatedEvents);
+
         HandleUnitEvents(fu.UnitEvents);
 
         gameUpdate = new GameUpdate();
@@ -71,7 +73,16 @@ public class UnityGameService
         SoldierRenderer sr = new SoldierRenderer(allyPrefab);
         foreach (dynamic ue in events)
         {
-            sr.HandleEvent(ue);
+            if (ue is UnitCreatedEvent)
+            {
+                // TODO: Think about this special case.
+                HandleUnitCreatedEvent(ue);
+
+            }
+            else
+            {
+                sr.HandleEvent(ue);
+            }
         }
     }
 
@@ -79,6 +90,13 @@ public class UnityGameService
     {
         // FIXME:
         //RenderUnits(game.TurnUpdate());
+    }
+
+    private void HandleUnitCreatedEvent(UnitCreatedEvent unitCreatedEvent)
+    {
+        dynamic unit = unitCreatedEvent.Unit;
+        unit.GameObject = RenderUnit(unit);
+        game.OnUnitRenderedEvent(unit);
     }
 
     private void RenderUnits(List<UnitCreatedEvent> es)

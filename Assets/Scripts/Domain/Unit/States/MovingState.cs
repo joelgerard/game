@@ -1,34 +1,34 @@
 ﻿using System;
-public class MovingState : BaseUnitState, IState
+using static State;
+
+public class MovingState : IState
 {
-    public MovingState()
+    private MovingState()
     {
 
     }
 
-    public override Transition GetTransition(IState state)
+    readonly Unit unit;
+
+    public MovingState(Unit unit)
     {
-        if (state is AttackState)
-        {
-            return new Transition(new AttackState(),State.StateType.TEMPORARY);
-        }
-        // TODO: Return null?
-        return null;
+        this.unit = unit;
     }
 
-    public override Transition Update(Unit unit, float deltaTime)
+    public Unit GetUnit()
     {
-        Transition trans = base.Update(unit, deltaTime);
-        if (trans != null)
-        {
-            return trans;
-        }
+        return unit;
+    }
 
-        // TODO: Should we use the navigator to move in here?
-        // Makes it hard I think. Think about it. Resolve the return trans
-        // if the answer is no, i.e. can just return base. 
-        //throw new NotImplementedException();
-        return null;
+
+    public Transition GetTransition(IState state)
+    {
+        return (new SharedStatesTransitioner()).GetTransition(state, this);
+    }
+
+    public Transition Update(Unit unit, float deltaTime)
+    {
+        return (new SharedStatesTransitioner()).Update(this, deltaTime);
     }
 
     public UnitEvent GetAssociatedEvent() { return null; }

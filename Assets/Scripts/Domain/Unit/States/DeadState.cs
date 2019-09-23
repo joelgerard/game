@@ -1,20 +1,36 @@
 ﻿using System;
-public class DeadState : BaseUnitState, IState
+using static State;
+
+public class DeadState : IState
 {
-    public DeadState()
+    readonly Unit unit;
+
+    public DeadState(Unit unit)
+    {
+        this.unit = unit;
+    }
+
+    public Unit GetUnit()
+    {
+        return unit;
+    }
+
+    private DeadState()
     {
     }
 
-    public override Transition GetTransition(IState state)
+    public  Transition GetTransition(IState state)
     {
         return null;
     }
 
-    public override Transition Update(Unit unit, float deltaTime)
+    public  Transition Update(Unit unit, float deltaTime)
     {
         return null;
     }
 
     public UnitEvent GetAssociatedEvent() { return null; }
+
+
 
 }

@@ -14,7 +14,7 @@ public class SoldierRenderer : IUnitRenderer
 
     public SoldierRenderer(GameObject allyPrefab)
     {
-        this.allyPrefab = allyPrefab; 
+        this.allyPrefab = allyPrefab;
     }
 
     public MoveableObjectWrapper Draw(Vector2 position)
@@ -32,6 +32,18 @@ public class SoldierRenderer : IUnitRenderer
             go.transform.position = position;
             go.name = name;
             obw.GameObject = go;
+
+            Animator animator = go.GetComponent<Animator>();
+            // TODO: Hard coded 1
+            AnimationClip clip = animator.runtimeAnimatorController.animationClips[1];
+            AnimationEvent evt = new AnimationEvent();
+            // TODO: Hard coded 1.
+            evt.intParameter = 1;
+            evt.time = 3f;
+            evt.functionName = "AnimationEvent";
+
+            // TODO: Why is this event hooked up here? Should be hooked up in object creation.
+            clip.AddEvent(evt);
         }
         else
         {
@@ -63,15 +75,16 @@ public class SoldierRenderer : IUnitRenderer
 
     public void HandleEvent(UnitDyingEvent dyingEvent)
     {
+
         Animator animator = dyingEvent.Unit.GameObject.GetComponent<Animator>();
         animator.Play("Explosion");
-        AnimationClip clip = animator.runtimeAnimatorController.animationClips[1];
-        AnimationEvent evt = new AnimationEvent();
-        evt.intParameter = 1;
-        evt.time = 3f;
-        evt.functionName = "AnimationEvent";
-        clip.AddEvent(evt);
-        // TODO: How do you know when the animation is finished?
+
+
     }
 
+    public void HandleEvent(UnitDiedEvent unitDiedEvent)
+    {
+        // TODO: Object pooling at some point. 
+        UnityEngine.Object.Destroy(unitDiedEvent.Unit.GameObject);
+    }
 }

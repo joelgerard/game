@@ -6,6 +6,8 @@ using System;
 // TODO: Not really a controller? Think about this. 
 public class SoldierGameObject : MonoBehaviour
 {
+    int animationEvents=0;
+
     // TODO: Bad naming. This is really a collision event. 
     public event OnCollision OnCollisionEvent;
     public delegate void OnCollision(GameObject thisObject, GameObject otherObject);
@@ -36,6 +38,11 @@ public class SoldierGameObject : MonoBehaviour
 
     private void AnimationEvent(int animationId)
     {
-        OnAnimationEvent?.Invoke(this.gameObject, animationId);    
+        animationEvents++;
+        // TODO: HArdcoded
+        if (animationId == 1 && animationEvents < 2) // FIXME: WHY????!!
+        {
+            OnAnimationEvent?.Invoke(this.gameObject, animationId);
+        }
     }
 }

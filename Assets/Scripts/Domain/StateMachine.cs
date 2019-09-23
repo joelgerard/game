@@ -4,8 +4,14 @@ using System.Collections.Generic;
 public class StateMachine
 {
     public Stack<IState> States { get; } = new Stack<IState>();
+    Unit unit;
 
-    public StateMachine()
+    public StateMachine(Unit unit)
+    {
+        this.unit = unit;
+    }
+
+    private StateMachine()
     {
     }
 
@@ -16,7 +22,7 @@ public class StateMachine
             if (States.Count < 1)
             {
                 // TODO: Think about this. 
-                return new NeutralState();
+                return new NeutralState(this.unit);
             }
             return States.Peek();
         }

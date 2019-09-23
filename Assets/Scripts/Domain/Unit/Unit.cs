@@ -32,12 +32,13 @@ public partial class Unit
 
     public Unit()
     {
+        StateMachine = new StateMachine(this);
     }
 
     public Allegiance Allegiance {get;set;}
     public float HP { get; set; }
     public float TotalHP { get; set; }
-    public StateMachine StateMachine { get; set; } = new StateMachine();
+    public StateMachine StateMachine { get; set; }
 
 
     public virtual void Init()
@@ -84,9 +85,14 @@ public partial class Unit
         }
     }
 
-    public virtual bool Damage(float damage)
+    public virtual bool Damage(Unit enemyUnit, float damage)
     {
         HP -= damage;
+        if (!StateMachine.IsInState<AttackState>())
+        {
+            this.Enemy = enemyUnit;
+            this.StateMachine.Transition(new AttackState(this));
+        }
         if (HP <= 0 && OnDestroyedEvent != null)
         {
             // TODO: Get rid of all these events like this.
@@ -94,6 +100,7 @@ public partial class Unit
         }
         else
         {
+            // TODO: Get rid of this event.
             OnDamagedEvent?.Invoke(this, PercentHealth);
         }
         if (HP <=0)
@@ -109,7 +116,7 @@ public partial class Unit
         if (otherUnit.Allegiance != this.Allegiance)
         {
             Enemy = otherUnit;
-            StateMachine.Transition(new AttackState());
+            StateMachine.Transition(new AttackState(this));
         }
 
     }

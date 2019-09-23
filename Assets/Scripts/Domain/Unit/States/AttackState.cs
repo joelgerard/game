@@ -1,8 +1,19 @@
 ﻿using System;
 using static State;
 
-public class AttackState : BaseUnitState, IState
+public class AttackState : IState
 {
+    readonly Unit unit;
+
+    public AttackState(Unit unit)
+    {
+        this.unit = unit;
+    }
+
+    private AttackState()
+    {
+
+    }
 
     public Transition Update(IState state)
     {
@@ -15,22 +26,21 @@ public class AttackState : BaseUnitState, IState
         return new Transition(this, StateType.TEMPORARY, TransitionType.EXIT);
     }
 
-    public override Transition GetTransition(IState state)
+    public  Transition GetTransition(IState state)
     {
-        Transition transition = base.GetTransition(state);
-        return transition;
+        return (new SharedStatesTransitioner()).GetTransition(state,this);
     }
 
-    public override Transition Update(Unit unit, float deltaTime)
+    public  Transition Update(Unit unit, float deltaTime)
     {
-        Transition transition = base.Update(unit, deltaTime);
+        Transition transition = (new SharedStatesTransitioner()).Update(this, deltaTime);
         if (transition != null)
         {
             return transition;
         }
         else
         {
-            bool? alive = unit.Enemy?.Damage(1.0f * deltaTime);
+            bool? alive = unit.Enemy?.Damage(unit, 1.0f * deltaTime);
             if (alive != null && alive == false)
             {
                 return Exit();
@@ -40,4 +50,9 @@ public class AttackState : BaseUnitState, IState
     }
 
     public UnitEvent GetAssociatedEvent() { return null; }
+
+    public Unit GetUnit()
+    {
+        return unit;
+    }
 }
