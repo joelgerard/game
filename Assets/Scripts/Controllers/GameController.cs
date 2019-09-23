@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class GameController : MonoBehaviour
 {
-    public GameService gameService = new GameService();
+    public UnityGameService gameService = new UnityGameService();
     public RectangleObject RectanglePrefab;
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
         var mouseUp = Input.GetKeyUp(KeyCode.Mouse0);
 
 
-        GameServiceUpdate gsUpdate = new GameServiceUpdate
+        UnityGameServiceUpdate gsUpdate = new UnityGameServiceUpdate
         {
             DeltaTime = Time.deltaTime,
             MouseUp = mouseUp,

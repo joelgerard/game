@@ -7,7 +7,7 @@ using UnityEngine;
 // Probably can't instantiate this out of the runtime, but the majority of game
 // logic should go in Game.cs and co.
 // TODO: ObjectPool
-public class GameService
+public class UnityGameService
 {
 
     private Game game = new Game();
@@ -42,7 +42,7 @@ public class GameService
         DrawMap();
     }
 
-    public void Update(GameServiceUpdate update)
+    public void Update(UnityGameServiceUpdate update)
     {
         // Ohhh. This is confusing. Basically,
         // the update object is used by other events,
@@ -108,7 +108,7 @@ public class GameService
 
 
 
-    private GameServiceUpdate ParseInput(GameServiceUpdate update)
+    private UnityGameServiceUpdate ParseInput(UnityGameServiceUpdate update)
     {
         bool clickedInBase = false;
 
