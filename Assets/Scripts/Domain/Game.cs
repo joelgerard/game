@@ -32,8 +32,6 @@ public class Game
         AddArmy(); //TODO: Not yet used.
   }
 
-    // TODO: This should return commands to make the renderer do something.
-    // e.g. switch unit to dying animation. 
     public FrameUpdate Update(GameUpdate update)
     {
         FrameUpdate frameUpdate = new FrameUpdate();
@@ -115,8 +113,6 @@ public class Game
     {
         return (soldier.Allegiance == Allegiance.ALLY ? Player : Enemy);
     }
-
-
 
     public void OnUnitRenderedEvent(Unit unit)
     {
