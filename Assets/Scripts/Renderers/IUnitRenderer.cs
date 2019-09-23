@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+// TODO: What's this for?
 public interface IUnitRenderer
 {
     MoveableObject Draw(Vector2 position);

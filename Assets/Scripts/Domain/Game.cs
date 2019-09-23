@@ -60,7 +60,11 @@ public class Game
     private UnitEvent HandleEvent(HomeBaseClickEvent e, GameUpdateResult frameUpdate)
     {
         Unit soldier = AddSoldier(Allegiance.ALLY, e.pos);
-        return new UnitCreatedEvent(soldier);
+        UnitCreatedEvent unitCreatedEvent = new UnitCreatedEvent
+        {
+            Unit = soldier
+        };
+        return unitCreatedEvent;
     }
 
     private UnitEvent HandleEvent(UnitsCollideEvent e, GameUpdateResult frameUpdate)

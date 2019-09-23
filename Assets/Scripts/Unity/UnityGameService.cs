@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnitGameEvents;
 
 // This class joins unity runtime stuff to the game domain. It's coordinating
 // input from the unity game controller with the domain model. 
