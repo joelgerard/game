@@ -9,9 +9,8 @@ public class SoldierGameObject : MonoBehaviour
 {
     int animationEvents=0;
 
-    // TODO: Bad naming. This is really a collision event. 
     public event OnCollision OnCollisionEvent;
-    public delegate void OnCollision(GameObject thisObject, GameObject otherObject);
+    public delegate void OnCollision(UnityGameEvent unityGameEvent);
 
     public event OnAnimation OnAnimationEvent;
     public delegate void OnAnimation(GameObject gameObject, int animationId);
@@ -34,7 +33,9 @@ public class SoldierGameObject : MonoBehaviour
         Diagnostics.NotNull(other.gameObject, "other.gameObject");
         Diagnostics.NotNull(this.gameObject, "this.gameObject");
 
-        OnCollisionEvent?.Invoke(this.gameObject, other.gameObject);
+        UnitsCollideEvent unitsCollideEvent = 
+            new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
+        OnCollisionEvent?.Invoke(unitsCollideEvent);
     }
 
     private void AnimationEvent(int animationId)

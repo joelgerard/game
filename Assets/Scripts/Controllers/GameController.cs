@@ -50,8 +50,6 @@ public class GameController : MonoBehaviour
         Debug.LogWarning(msg);
     }
 
-
-
     private void Update()
     {
 

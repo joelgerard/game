@@ -39,6 +39,4 @@ public class DeadState : IState
         return unitDiedEvent; 
     }
 
-
-
 }

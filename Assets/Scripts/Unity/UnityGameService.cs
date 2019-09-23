@@ -197,14 +197,14 @@ public class UnityGameService
         // TODO: Need bindings on sprite. 
         if (movingObject.MoveableObject != null)
         {
-            movingObject.MoveableObject.OnEnterEvent += Shape_OnEnterEvent;
+            //movingObject.MoveableObject.OnEnterEvent += Shape_OnEnterEvent;
         }
         else
         {
             // TODO: How to detect the collider has collided?
-            SoldierGameObject soldierController = movingObject.GameObject.GetComponent<SoldierGameObject>();
-            soldierController.OnCollisionEvent += Shape_OnEnterEvent;
-            soldierController.OnAnimationEvent += SoldierController_OnAnimationEvent;
+            SoldierGameObject soldierGameObject = movingObject.GameObject.GetComponent<SoldierGameObject>();
+            soldierGameObject.OnCollisionEvent += HandleUnityGameEvent; //Shape_OnEnterEvent;
+            soldierGameObject.OnAnimationEvent += SoldierController_OnAnimationEvent;
         }
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
@@ -215,7 +215,7 @@ public class UnityGameService
 
     public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
     {
-        movingObject.OnEnterEvent += Shape_OnEnterEvent;
+        //movingObject.OnEnterEvent += Shape_OnEnterEvent;
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
@@ -228,16 +228,21 @@ public class UnityGameService
 
     // TODO: Not a very good name for this event. 
     // TODO: Really, you could generalize this to an Event Object, same as the others.
-    void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
-    {
-        // TODO: This first line isn't neccessary. Just give the game objects
-        // in the event, and the lookup can be done later. Even better
-        // this whole event function can go away and become something general.
-        // It will mean that the UnitsCollideEvent will be renamed
-        // and the properties inside will be gameobjects.
-        //GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
+    //void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
+    //{
+    //    // TODO: This first line isn't neccessary. Just give the game objects
+    //    // in the event, and the lookup can be done later. Even better
+    //    // this whole event function can go away and become something general.
+    //    // It will mean that the UnitsCollideEvent will be renamed
+    //    // and the properties inside will be gameobjects.
+    //    //GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
 
-        UnitsCollideEvent gameEvent = new UnitsCollideEvent(thisObject.name, otherObject.name);
+    //    UnitsCollideEvent gameEvent = new UnitsCollideEvent(thisObject.name, otherObject.name);
+    //    gameUpdate.UnityGameEvents.Add(gameEvent);
+    //}
+
+    void HandleUnityGameEvent(UnityGameEvent gameEvent)
+    {
         gameUpdate.UnityGameEvents.Add(gameEvent);
     }
 
