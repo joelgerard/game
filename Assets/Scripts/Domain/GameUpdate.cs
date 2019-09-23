@@ -5,5 +5,5 @@ public class GameUpdate
 {
     public float deltaTime;
     public IPath currentPath;
-    public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
+    public List<UnityGameEvent> GameEvents { get; set; } = new List<UnityGameEvent>();
 }

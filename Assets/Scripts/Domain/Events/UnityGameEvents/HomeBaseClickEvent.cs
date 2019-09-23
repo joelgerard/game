@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomeBaseClickEvent : GameEvent
+public class HomeBaseClickEvent : UnityGameEvent
 {
     public Vector2 pos;
 

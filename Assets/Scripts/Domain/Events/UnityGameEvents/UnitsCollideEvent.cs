@@ -1,5 +1,5 @@
 ﻿using System;
-public class UnitsCollideEvent : GameEvent
+public class UnitsCollideEvent : UnityGameEvent
 {
     public String Unit { get; set; }
     public String OtherUnit { get; set; }

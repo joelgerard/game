@@ -1,5 +1,5 @@
 ﻿using System;
-public class UnitExplosionComplete : GameEvent
+public class UnitExplosionComplete : UnityGameEvent
 {
     public string UnitName { get; set; }
     public UnitExplosionComplete()
