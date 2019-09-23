@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static MovableUnit.MovableUnitHsm;
-using static Soldier.SoldierHsm;
 
 public class Navigator
 {
