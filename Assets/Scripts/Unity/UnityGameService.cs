@@ -59,10 +59,6 @@ public class UnityGameService
         // Once the game has updated itself, it will return new objects that
         // are in the game but have not been drawn or created on the Unity side.
         GameUpdateResult fu = game.Update(gameUpdate);
-
-
-        //RenderUnits(fu.CreatedEvents);
-
         HandleUnitEvents(fu.UnitEvents);
 
         gameUpdate = new GameUpdate();
@@ -70,8 +66,8 @@ public class UnityGameService
 
     void HandleUnitEvents(List<UnitEvent> events)
     {
-        // TODO: Create this each time?
-        SoldierRenderer sr = new SoldierRenderer(allyPrefab);
+        // TODO: Create this each time? And why is it a soldier renderer?
+        SoldierRenderer soldierRenderer = new SoldierRenderer(allyPrefab);
         foreach (dynamic ue in events)
         {
             if (ue is UnitCreatedEvent)
@@ -82,7 +78,7 @@ public class UnityGameService
             }
             else
             {
-                sr.HandleEvent(ue);
+                soldierRenderer.HandleEvent(ue);
             }
         }
     }
@@ -171,16 +167,9 @@ public class UnityGameService
         //SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
 
         SoldierRenderer sr = new SoldierRenderer(allyPrefab);
-
-
         MoveableObjectWrapper soldierMono = sr.Draw(soldier.Position);
         BindUnitEvents(sr, soldierMono, soldier);
 
-        // TODO: Remove. Temp
-        if (soldier.Allegiance == Allegiance.ENEMY)
-        {
-            soldier.StartMoving();
-        }
         return soldierMono.GameObject;
     }
 
@@ -197,25 +186,22 @@ public class UnityGameService
         // TODO: Need bindings on sprite. 
         if (movingObject.MoveableObject != null)
         {
+            // TODO: FIXME: Does this break the base onenter?
             //movingObject.MoveableObject.OnEnterEvent += Shape_OnEnterEvent;
         }
         else
         {
-            // TODO: How to detect the collider has collided?
             SoldierGameObject soldierGameObject = movingObject.GameObject.GetComponent<SoldierGameObject>();
-            soldierGameObject.OnCollisionEvent += HandleUnityGameEvent; //Shape_OnEnterEvent;
-            soldierGameObject.OnAnimationEvent += SoldierController_OnAnimationEvent;
+            soldierGameObject.OnCollisionEvent += HandleUnityGameEvent; 
+            soldierGameObject.OnAnimationEvent += HandleUnityGameEvent;
         }
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
-
-
-
     public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
     {
-        //movingObject.OnEnterEvent += Shape_OnEnterEvent;
+        // FIXME: This is duplicated above
         unit.OnDamagedEvent += renderer.DrawDamage;
         unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
@@ -226,37 +212,9 @@ public class UnityGameService
         RenderUnits(game.DrawMap());
     }
 
-    // TODO: Not a very good name for this event. 
-    // TODO: Really, you could generalize this to an Event Object, same as the others.
-    //void Shape_OnEnterEvent(GameObject thisObject, GameObject otherObject)
-    //{
-    //    // TODO: This first line isn't neccessary. Just give the game objects
-    //    // in the event, and the lookup can be done later. Even better
-    //    // this whole event function can go away and become something general.
-    //    // It will mean that the UnitsCollideEvent will be renamed
-    //    // and the properties inside will be gameobjects.
-    //    //GameEvent gameEvent = game.OnUnitsCollide(thisObject.name, otherObject.name);
-
-    //    UnitsCollideEvent gameEvent = new UnitsCollideEvent(thisObject.name, otherObject.name);
-    //    gameUpdate.UnityGameEvents.Add(gameEvent);
-    //}
-
     void HandleUnityGameEvent(UnityGameEvent gameEvent)
     {
         gameUpdate.UnityGameEvents.Add(gameEvent);
-    }
-
-    void SoldierController_OnAnimationEvent(GameObject gameObject, int animationId)
-    {
-        // TODO: Replace with Enum/CONST
-        if (animationId == 1)
-        {
-            UnitExplosionComplete gameEvent = new UnitExplosionComplete
-            {
-                UnitName = gameObject.name
-            };
-            gameUpdate.UnityGameEvents.Add(gameEvent);
-    }
     }
 
     void PathRenderer_OnReadyEvent()

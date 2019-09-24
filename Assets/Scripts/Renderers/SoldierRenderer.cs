@@ -46,7 +46,6 @@ public class SoldierRenderer : IUnitRenderer
             evt.time = ExplosionAnimation.TIME;
             evt.functionName = "AnimationEvent";
 
-            // TODO: Why is this event hooked up here? Should be hooked up in object creation.
             clip.AddEvent(evt);
         }
         else
@@ -79,11 +78,8 @@ public class SoldierRenderer : IUnitRenderer
 
     public void HandleEvent(UnitDyingEvent dyingEvent)
     {
-
         Animator animator = dyingEvent.Unit.GameObject.GetComponent<Animator>();
         animator.Play("Explosion");
-
-
     }
 
     public void HandleEvent(UnitDiedEvent unitDiedEvent)

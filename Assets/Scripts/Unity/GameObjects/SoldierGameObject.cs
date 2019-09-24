@@ -13,7 +13,7 @@ public class SoldierGameObject : MonoBehaviour
     public delegate void OnCollision(UnityGameEvent unityGameEvent);
 
     public event OnAnimation OnAnimationEvent;
-    public delegate void OnAnimation(GameObject gameObject, int animationId);
+    public delegate void OnAnimation(UnityGameEvent unityGameEvent);
 
     // Use this for initialization
     void Start()
@@ -43,7 +43,12 @@ public class SoldierGameObject : MonoBehaviour
         // FIXME: WHY called twice????!!
         if (animationId == ExplosionAnimation.ID && animationEvents < 1) 
         {
-            OnAnimationEvent?.Invoke(this.gameObject, animationId);
+            UnitExplosionComplete gameEvent = new UnitExplosionComplete
+            {
+                UnitName = this.name
+            };
+            OnAnimationEvent?.Invoke(gameEvent);
+
         }
         animationEvents++;
     }

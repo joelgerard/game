@@ -67,6 +67,7 @@ public class Game
         return unitCreatedEvent;
     }
 
+    // TODO: Shouldn't these go to the unit directly?
     private UnitEvent HandleEvent(UnitsCollideEvent e, GameUpdateResult frameUpdate)
     {
         unitMap[e.Unit].Attack(unitMap[e.OtherUnit]);
@@ -173,6 +174,7 @@ public class Game
         //unitMap.Remove(destroyedUnit.GameObject.name);
         unitMap.Remove(destroyedUnit.Name);
 
+        // FIXME: This is broken.
         GameController.Log("You win.");
     }
 
