@@ -6,7 +6,8 @@ public class PathRenderer
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
     public event OnReady OnReadyEvent;
     public delegate void OnReady();
-    TrailRenderer trailPrefab;
+
+    readonly TrailRenderer trailPrefab;
     public bool StartDrawing { get; set; }
 
     public PathRenderer(TrailRenderer trailPrefab)

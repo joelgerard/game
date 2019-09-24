@@ -27,37 +27,16 @@ public class BoxSoldierRenderer : IUnitRenderer
         this.allyPrefab = allyPrefab;
     }
 
-    public MoveableObjectWrapper Draw(Vector2 position)
+    public MoveableObject Draw(Vector2 position)
     {
         return Draw(position, "Soldier_" + Guid.NewGuid().ToString());
     }
 
-    public MoveableObjectWrapper Draw(Vector2 position, string name)
+    public MoveableObject Draw(Vector2 position, string name)
     {
-        // TODO: This is new and needs to be worked out.
-        MoveableObjectWrapper obw = new MoveableObjectWrapper();
-        if (allyPrefab != null)
-        {
-            GameObject go = UnityEngine.Object.Instantiate(allyPrefab);
-            go.transform.position = position;
-            go.name = name;
-            obw.GameObject = go;
 
-            Animator animator = go.GetComponent<Animator>();
-            AnimationClip clip = animator.runtimeAnimatorController.animationClips[ExplosionAnimation.ID];
-            AnimationEvent evt = new AnimationEvent();
-            evt.intParameter = ExplosionAnimation.ID;
-            evt.time = ExplosionAnimation.TIME;
-            evt.functionName = "AnimationEvent";
-
-            clip.AddEvent(evt);
-        }
-        else
-        {
-            RectangleObject dr = new RectangleObject();
-            obw.MoveableObject = dr.Draw(name, this.rectanglePrefab, position, 0.1f, 0.1f);
-        }
-        return obw;
+        RectangleObject dr = new RectangleObject();
+        return dr.Draw(name, this.rectanglePrefab, position, 0.1f, 0.1f);
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)

@@ -194,13 +194,11 @@ public class UnityGameService
 
     public void BindArmyBaseEvents(ArmyBaseRenderer renderer, GameObject movingObject, Unit unit)
     {
-        // FIXME: This is duplicated above
         unit.OnDamagedEvent += renderer.DrawDamage;
 
         ArmyBaseUnityGameObject armyBaseGameObject = movingObject.GetComponent<ArmyBaseUnityGameObject>();
         armyBaseGameObject.OnCollisionEvent += HandleUnityGameEvent;
 
-        //unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
     // TODO: Move out of here once Map is more complicated.
