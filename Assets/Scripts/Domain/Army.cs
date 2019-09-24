@@ -35,8 +35,7 @@ public class Army
 
         if (ArmyBase == null)
         {
-            // TODO: Change to warning.
-            GameController.Log("WARNING: Base is null");
+            GameController.LogWarning("WARNING: Base is null");
         }
         // TODO: remove ?.
         ArmyBase?.Update(deltaTime);
@@ -49,14 +48,9 @@ public class Army
     public TerritoryType Territory { get; set; } = TerritoryType.South;
 
     // TODO: Returns Soldier?
-    public Soldier AddSoldier(Soldier soldier)
+    public void AddSoldier(Soldier soldier)
     {
         Soldiers.Add(soldier);
-
-        /*Soldier soldier = new Soldier();
-        Soldiers.Add(soldier);
-        return soldier;*/
-        return null;
     }
 
     public void StartMoving()

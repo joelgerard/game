@@ -68,6 +68,7 @@ public class Game
     }
 
     // TODO: Shouldn't these go to the unit directly?
+    // They should because it's hard to know if a base or soldier is killed
     private UnitEvent HandleEvent(UnitsCollideEvent e, GameUpdateResult frameUpdate)
     {
         unitMap[e.Unit].Attack(unitMap[e.OtherUnit]);
@@ -76,18 +77,12 @@ public class Game
 
     private UnitEvent HandleEvent(UnitExplosionComplete e, GameUpdateResult frameUpdate)
     {
-        // TODO: Lazy. No dead state? Also, the UnityEngine piece should be removed.
-        if (!unitMap.ContainsKey(e.UnitName))
-        {
-            throw new KeyNotFoundException("Couldn't find " + e.UnitName + " in unit map");
-        }
         Unit unit = unitMap[e.UnitName];
         unitMap.Remove(e.UnitName);
         return unit.StateMachine.Transition(new DeadState(unit)).GetAssociatedEvent();
     }
 
     // Used to control game logic like army growth etc.
-    //public List<TurnUpdate> TurnUpdate()
     public List<Unit> TurnUpdate()
     {
         List<Unit> createdUnits = new List<Unit>();
@@ -134,9 +129,7 @@ public class Game
 
     public void OnUnitRenderedEvent(Unit unit)
     {
-        // TODO: Think about this naming.
         unit.Name = unit.GameObject.name;
-
         this.unitMap.Add(unit.GameObject.name, unit);
     }
 
