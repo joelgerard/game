@@ -19,20 +19,23 @@ public class UnityGameService
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
 
-    GameObject allyPrefab;
+    GameObject soldierPrefab;
+    GameObject armyBasePrefab;
+
     TrailRenderer trailPrefab;
     PathRenderer pathRenderer;
 
     // TODO: Remove
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
-    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject allyPrefab)
+    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab)
     {
         this.RectanglePrefab = rectanglePrefab;
         this.TrianglePrefab = trianglePrefab;
         this.CirclePrefab = circlePrefab;
         this.trailPrefab = trailPrefab;
-        this.allyPrefab = allyPrefab;
+        this.soldierPrefab = soldierPrefab;
+        this.armyBasePrefab = armyBasePrefab;
 
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
@@ -67,7 +70,7 @@ public class UnityGameService
     void HandleUnitEvents(List<UnitEvent> events)
     {
         // TODO: Create this each time? And why is it a soldier renderer?
-        SoldierRenderer soldierRenderer = new SoldierRenderer(allyPrefab);
+        SoldierRenderer soldierRenderer = new SoldierRenderer(soldierPrefab);
         foreach (dynamic ue in events)
         {
             if (ue is UnitCreatedEvent)
@@ -163,47 +166,41 @@ public class UnityGameService
 
     public GameObject RenderUnit(Soldier soldier)
     {
-        // TODO: This renders a square. I'm figuring out unity. Fix.
-        //SoldierRenderer sr = new SoldierRenderer(RectanglePrefab);
+        SoldierRenderer sr = new SoldierRenderer(soldierPrefab);
+        GameObject soldierMono = sr.Draw(soldier.Position);
+        BindSoldierEvents(sr, soldierMono, soldier);
 
-        SoldierRenderer sr = new SoldierRenderer(allyPrefab);
-        MoveableObjectWrapper soldierMono = sr.Draw(soldier.Position);
-        BindUnitEvents(sr, soldierMono, soldier);
-
-        return soldierMono.GameObject;
+        return soldierMono;
     }
 
     public GameObject RenderUnit(ArmyBase armyBase)
     {
-        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.RectanglePrefab);
-        MoveableObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
-        BindUnitEvents(abr, renderedBaseObject, armyBase);
-        return renderedBaseObject.gameObject;
+        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.armyBasePrefab);
+        GameObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
+        BindArmyBaseEvents(abr, renderedBaseObject, armyBase);
+        return renderedBaseObject;
     }
 
-    public void BindUnitEvents(IUnitRenderer renderer, MoveableObjectWrapper movingObject, Unit unit)
+    public void BindSoldierEvents(SoldierRenderer renderer, GameObject movingObject, Unit unit)
     {
-        // TODO: Need bindings on sprite. 
-        if (movingObject.MoveableObject != null)
-        {
-            // TODO: FIXME: Does this break the base onenter?
-            //movingObject.MoveableObject.OnEnterEvent += Shape_OnEnterEvent;
-        }
-        else
-        {
-            SoldierGameObject soldierGameObject = movingObject.GameObject.GetComponent<SoldierGameObject>();
-            soldierGameObject.OnCollisionEvent += HandleUnityGameEvent; 
-            soldierGameObject.OnAnimationEvent += HandleUnityGameEvent;
-        }
+        // These are unity game generated events.
+        SoldierGameObject soldierGameObject = movingObject.GetComponent<SoldierGameObject>();
+        soldierGameObject.OnCollisionEvent += HandleUnityGameEvent; 
+        soldierGameObject.OnAnimationEvent += HandleUnityGameEvent;
+
+        // These are game simulator events.
         unit.OnDamagedEvent += renderer.DrawDamage;
-        unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
-    public void BindUnitEvents(IUnitRenderer renderer, MoveableObject movingObject, Unit unit)
+    public void BindArmyBaseEvents(ArmyBaseRenderer renderer, GameObject movingObject, Unit unit)
     {
         // FIXME: This is duplicated above
         unit.OnDamagedEvent += renderer.DrawDamage;
-        unit.OnDestroyedEvent += renderer.DrawDestroyed;
+
+        ArmyBaseUnityGameObject armyBaseGameObject = movingObject.GetComponent<ArmyBaseUnityGameObject>();
+        armyBaseGameObject.OnCollisionEvent += HandleUnityGameEvent;
+
+        //unit.OnDestroyedEvent += renderer.DrawDestroyed;
     }
 
     // TODO: Move out of here once Map is more complicated.

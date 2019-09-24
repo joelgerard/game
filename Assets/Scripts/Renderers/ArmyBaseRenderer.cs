@@ -1,32 +1,39 @@
 ﻿using System;
 using UnityEngine;
+using static UnitGameEvents;
 
-public class ArmyBaseRenderer : IUnitRenderer
+public class ArmyBaseRenderer
 {
-    RectangleObject rectanglePrefab;
+    readonly GameObject armyBasePrefab = null;
 
-    public ArmyBaseRenderer(RectangleObject rectanglePrefab)
+    public ArmyBaseRenderer(GameObject armyBasePrefab)
     {
-        this.rectanglePrefab = rectanglePrefab;
+        this.armyBasePrefab = armyBasePrefab;
     }
 
-    public MoveableObject Draw(Vector2 position, string name)
+    public GameObject Draw(Vector2 position)
     {
-        return rectanglePrefab.Draw(name, rectanglePrefab, position, 1.1f, 1.1f);
+        return Draw(position, "ArmyBase_" + Guid.NewGuid().ToString());
     }
 
-    public MoveableObject Draw(Vector2 position)
+    public GameObject Draw(Vector2 position, string name)
     {
-        return Draw(position, "Base_" + Guid.NewGuid().ToString());
+
+        GameObject go = UnityEngine.Object.Instantiate(armyBasePrefab);
+        go.transform.position = position;
+        go.name = name;
+
+
+        return go;
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)
     {
-        RectangleObject.SetColorRed(unitDamaged.GameObject,1- percentHealth);
     }
 
-    public void DrawDestroyed(Unit unit)
-    {
-        UnityEngine.Object.Destroy(unit.GameObject);
-    }
+    public void HandleEvent(UnitDyingEvent dyingEvent) => throw new NotImplementedException();
+
+    public void HandleEvent(UnitDiedEvent unitDiedEvent) =>
+        // TODO: Object pooling at some point. 
+        throw new NotImplementedException();
 }

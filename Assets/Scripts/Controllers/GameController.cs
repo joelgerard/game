@@ -15,7 +15,8 @@ public class GameController : MonoBehaviour
     public RectangleObject RectanglePrefab;
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
-    public GameObject AllyPrefab;
+    public GameObject SoldierPrefab;
+    public GameObject ArmyBasePrefab;
 
 
 
@@ -32,7 +33,7 @@ public class GameController : MonoBehaviour
     {
         // TODO: Is this slow, canonical unity way of doing things? Use fixedUpdate?
         InvokeRepeating("GameTurnUpdate", 0.1f, 0.1f);  //1s delay, repeat every 1s
-        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab, AllyPrefab); //, baseObj);
+        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab, SoldierPrefab, ArmyBasePrefab); //, baseObj);
     }
 
     void GameTurnUpdate()
