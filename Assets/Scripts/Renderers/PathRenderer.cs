@@ -31,7 +31,7 @@ public class PathRenderer
                 trailRendererPath.TrailRenderer = UnityEngine.Object.Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
                 StartDrawing = false;
             }
-            else
+            else if (trailRendererPath.TrailRenderer != null) // FIXME: Temp hack for back init somewhere else.
             {
                 Diagnostics.NotNull(trailRendererPath, "trailRendererPath");
                 Diagnostics.NotNull(trailRendererPath.TrailRenderer, "trailRendererPath.TrailRenderer");

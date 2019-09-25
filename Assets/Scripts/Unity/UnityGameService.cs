@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnitGameEvents;
@@ -19,6 +20,11 @@ public class UnityGameService
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
 
+    SoldierRenderer soldierRenderer;
+
+    Dictionary<Type, Func<Unit, GameObject>> UnitRenderers;
+    Dictionary<Type, Action<UnitEvent>> RenderedEventHandlers;
+
     GameObject soldierPrefab;
     GameObject armyBasePrefab;
 
@@ -28,6 +34,39 @@ public class UnityGameService
     // TODO: Remove
     UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
 
+    public UnityGameService()
+    {
+        UnitRenderers = new Dictionary<Type, Func<Unit, GameObject>>
+        {
+            {typeof (Soldier), (unit) =>
+                this.RenderUnit((Soldier)unit) },
+            {typeof (ArmyBase), (unit) =>
+                this.RenderUnit((ArmyBase)unit) },
+        };
+
+        RenderedEventHandlers = new Dictionary<Type, Action<UnitEvent>>
+        {
+            {typeof (UnitCreatedEvent), (createdEvent) =>
+                this.HandleUnitCreatedEvent((UnitCreatedEvent)createdEvent) },
+            {typeof (UnitDyingEvent), (createdEvent) =>
+                soldierRenderer.HandleEvent((UnitDyingEvent) createdEvent) },
+            {typeof (UnitDiedEvent), (createdEvent) =>
+                soldierRenderer.HandleEvent((UnitDiedEvent) createdEvent) }
+
+
+        };
+        //UnityGameEventHandlers = new Dictionary<Type, Func<UnityGameEvent, GameUpdateResult, UnitEvent>>
+        //{
+
+        //    {typeof (ClickInPlayerBaseEvent), (gameEvent,gameUpdate) =>
+        //        this.HandleEvent((ClickInPlayerBaseEvent)gameEvent,gameUpdate) },
+        //    {typeof (UnitsCollideEvent), (gameEvent,gameUpdate) =>
+        //        this.HandleEvent((UnitsCollideEvent)gameEvent,gameUpdate) },
+        //    {typeof (UnitExplosionComplete), (gameEvent,gameUpdate) =>
+        //        this.HandleEvent((UnitExplosionComplete)gameEvent,gameUpdate) }
+        //};
+    }
+
     public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab)
     {
         this.RectanglePrefab = rectanglePrefab;
@@ -36,6 +75,7 @@ public class UnityGameService
         this.trailPrefab = trailPrefab;
         this.soldierPrefab = soldierPrefab;
         this.armyBasePrefab = armyBasePrefab;
+        soldierRenderer = new SoldierRenderer(soldierPrefab);
 
         pathRenderer = new PathRenderer(trailPrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
@@ -61,7 +101,16 @@ public class UnityGameService
 
         // Once the game has updated itself, it will return new objects that
         // are in the game but have not been drawn or created on the Unity side.
-        GameUpdateResult fu = game.Update(gameUpdate);
+        GameUpdateResult fu;
+        try
+        {
+            fu = game.Update(gameUpdate);
+        }
+        catch(Exception e)
+        {
+            GameController.Log("game.Update failed " + e.ToString());
+            throw e;
+        }
         HandleUnitEvents(fu.UnitEvents);
 
         gameUpdate = new GameUpdate();
@@ -76,19 +125,21 @@ public class UnityGameService
     void HandleUnitEvents(List<UnitEvent> events)
     {
         // TODO: Create this each time? And why is it a soldier renderer?
-        SoldierRenderer soldierRenderer = new SoldierRenderer(soldierPrefab);
-        foreach (dynamic ue in events)
-        {
-            if (ue is UnitCreatedEvent)
-            {
-                // TODO: Think about this special case.
-                HandleUnitCreatedEvent(ue);
 
-            }
-            else
-            {
-                soldierRenderer.HandleEvent(ue);
-            }
+        //foreach (dynamic ue in events)
+        foreach(UnitEvent ue in events)
+        {
+            RenderedEventHandlers[ue.GetType()](ue);
+            //if (ue is UnitCreatedEvent)
+            //{
+            //    // TODO: Think about this special case.
+            //    HandleUnitCreatedEvent(ue);
+
+            //}
+            //else
+            //{
+            //    soldierRenderer.HandleEvent(ue);
+            //}
         }
     }
 
@@ -96,31 +147,29 @@ public class UnityGameService
 
     private void HandleUnitCreatedEvent(UnitCreatedEvent unitCreatedEvent)
     {
-        dynamic unit = unitCreatedEvent.Unit;
-        unit.GameObject = RenderUnit(unit);
+        Unit unit = unitCreatedEvent.Unit;
+        unit.GameObject = UnitRenderers[unit.GetType()](unit); //RenderUnit(unit);
         game.OnUnitRenderedEvent(unit);
     }
 
-    private void RenderUnits(List<UnitCreatedEvent> es)
-    {
-        // TODO: Is dynamic a smell here? It is nice...
-        // Saves me messing around with interfaces.
-        //foreach (dynamic unit in units)
-        foreach(UnitCreatedEvent e in es)
-        {
-            dynamic unit = e.Unit;
-            unit.GameObject = RenderUnit(unit);
-            game.OnUnitRenderedEvent(unit);
-        }
-    }
+    //private void RenderUnits(List<UnitCreatedEvent> es)
+    //{
+    //    // TODO: Is dynamic a smell here? It is nice...
+    //    // Saves me messing around with interfaces.
+    //    //foreach (dynamic unit in units)
+    //    foreach(UnitCreatedEvent e in es)
+    //    {
+    //        dynamic unit = e.Unit;
+    //        unit.GameObject = RenderUnit(unit);
+    //        game.OnUnitRenderedEvent(unit);
+    //    }
+    //}
 
     private void RenderUnits(List<Unit> units)
     {
-        // TODO: Is dynamic a smell here? It is nice...
-        // Saves me messing around with interfaces.
-        foreach (dynamic unit in units)
+        foreach (Unit unit in units)
         {
-            unit.GameObject = RenderUnit(unit);
+            unit.GameObject = UnitRenderers[unit.GetType()](unit); //RenderUnit(unit);
             game.OnUnitRenderedEvent(unit);
         }
     }
@@ -146,10 +195,15 @@ public class UnityGameService
         // If you draw before clicking, you're fucked. 
         pathRenderer.StartDrawing |= update.MouseUp;
 
-        if (update.Click && clickedInBase)
+        if (update.Click) // && clickedInBase)
         {
-            gameUpdate.UnityGameEvents.Add(new AddSoldierEvent(update.MousePos, Allegiance.ALLY));
+            gameUpdate.UnityGameEvents.Add(new ClickInPlayerBaseEvent(update.MousePos, Allegiance.ALLY));
         }
+
+        //if (update.Click)
+        //{
+        //    GameController.Log("Click " + update.MousePos.ToString());
+        //}
 
         // TODO: Some cleanup with all these inputs
         bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));

@@ -12,6 +12,12 @@ public class Game
     public Army Enemy { get { return Armies[0]; } }
     public AI AI { get; set; } = new AI();
 
+    /// <summary>
+    /// Because, yeah, il2cpp doesn't support Dynamic
+    /// </summary>
+    Dictionary<Type, Func<UnityGameEvent, GameUpdateResult, UnitEvent>> UnityGameEventHandlers;
+
+
     // TODO: This path is hard coded for now.
     public Path Path { get; set; } = new Path();
 
@@ -21,6 +27,16 @@ public class Game
 
     public Game()
     {
+        UnityGameEventHandlers = new Dictionary<Type, Func<UnityGameEvent, GameUpdateResult, UnitEvent>>
+        {
+
+            {typeof (ClickInPlayerBaseEvent), (gameEvent,gameUpdate) => 
+                this.HandleEvent((ClickInPlayerBaseEvent)gameEvent,gameUpdate) },
+            {typeof (UnitsCollideEvent), (gameEvent,gameUpdate) => 
+                this.HandleEvent((UnitsCollideEvent)gameEvent,gameUpdate) },
+            {typeof (UnitExplosionComplete), (gameEvent,gameUpdate) => 
+                this.HandleEvent((UnitExplosionComplete)gameEvent,gameUpdate) }
+        };
     }
 
     public void Initialize()
@@ -31,27 +47,50 @@ public class Game
 
         // Player
         AddArmy(); //TODO: Not yet used.
-  }
+    }
 
     public GameUpdateResult Update(GameUpdate update)
     {
         GameUpdateResult frameUpdate = new GameUpdateResult();
-        foreach(dynamic curEvent in update.UnityGameEvents)
+
+        // il2cpp doesn't support dynamic keyword :( :( :(
+        //foreach (dynamic curEvent in update.UnityGameEvents)
+        foreach(UnityGameEvent curEvent in update.UnityGameEvents)
         {
-            UnitEvent unitEvent = HandleEvent(curEvent, frameUpdate);
-            if (unitEvent != null)
+            if (curEvent != null)
             {
-                frameUpdate.UnitEvents.Add(unitEvent);
+                UnitEvent unitEvent = UnityGameEventHandlers[curEvent.GetType()](curEvent, frameUpdate);
+                if (unitEvent != null)
+                {
+                    frameUpdate.UnitEvents.Add(unitEvent);
+                }
             }
+
 
         }
         update.UnityGameEvents.Clear();
-
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
-        frameUpdate.UnitEvents.AddRange(Player.Update(update.deltaTime, update.currentPath));
-        frameUpdate.UnitEvents.AddRange(Enemy.Update(update.deltaTime, Path));
+        try
+        {
+            frameUpdate.UnitEvents.AddRange(Player.Update(update.deltaTime, update.currentPath));
 
+        }
+        catch (Exception err)
+        {
+            GameController.Log("Player update failed " + err.ToString());
+            throw err;
+        }
+        try
+        {
+            frameUpdate.UnitEvents.AddRange(Enemy.Update(update.deltaTime, Path));
+
+        }
+        catch (Exception err)
+        {
+            GameController.Log("Enemy update failed " + err.ToString());
+            throw err;
+        }
 
         return frameUpdate;
     }
@@ -65,7 +104,7 @@ public class Game
         return turnUpdate;
     }
 
-    private UnitEvent HandleEvent(AddSoldierEvent e, GameUpdateResult frameUpdate)
+    private UnitEvent HandleEvent(ClickInPlayerBaseEvent e, GameUpdateResult frameUpdate)
     {
         Unit soldier = AddSoldier(e.allegiance, e.pos);
         UnitCreatedEvent unitCreatedEvent = new UnitCreatedEvent
@@ -103,7 +142,8 @@ public class Game
         //Enemy.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
         // Enemy
-        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
+        //Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
+        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, 0f));
         Player.ArmyBase.Name = "PlayerBaseSquare";
         //Player.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 

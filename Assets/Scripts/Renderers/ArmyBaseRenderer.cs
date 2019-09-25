@@ -18,13 +18,28 @@ public class ArmyBaseRenderer
 
     public GameObject Draw(Vector2 position, string name)
     {
+        try 
+        { 
+        Diagnostics.NotNull(armyBasePrefab, "armyBasePrefab in Draw");
 
+        armyBasePrefab.SetActive(true);
         GameObject go = UnityEngine.Object.Instantiate(armyBasePrefab);
+
+        Diagnostics.NotNull(go, "go in Draw");
+
+        //go.GetComponent<Sprite>().
+        go.SetActive(true);
+
         go.transform.position = position;
         go.name = name;
 
 
         return go;
+        } catch( Exception e)
+        {
+            GameController.Log("Error rendering base "  + e.ToString());
+            throw e;
+        }
     }
 
     public void DrawDamage(Unit unitDamaged, float percentHealth)

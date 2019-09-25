@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddSoldierEvent : UnityGameEvent
+public class ClickInPlayerBaseEvent : UnityGameEvent
 {
     public Vector2 pos;
     public Allegiance allegiance;
 
-    public AddSoldierEvent(Vector2 pos, Allegiance allegiance)
+    public ClickInPlayerBaseEvent(Vector2 pos, Allegiance allegiance)
     {
         this.pos = pos;
         this.allegiance = allegiance;

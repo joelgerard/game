@@ -53,7 +53,6 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-
         var mousePos = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
 

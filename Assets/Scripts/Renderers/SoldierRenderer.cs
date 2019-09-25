@@ -27,7 +27,9 @@ public class SoldierRenderer
     {
 
         GameObject go = UnityEngine.Object.Instantiate(soldierPrefab);
-        go.transform.position = position;
+        Vector3 v3 = new Vector3(position.x, position.y, -1);
+        go.transform.position = v3;
+
         go.name = name;
 
         Animator animator = go.GetComponent<Animator>();
