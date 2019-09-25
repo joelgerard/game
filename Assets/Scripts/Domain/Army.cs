@@ -35,9 +35,13 @@ public class Army
         }
 
         UnitEvent armyBaseEvent = ArmyBase.Update(deltaTime);
-        if (armyBaseEvent is UnitDyingEvent)
+        if (armyBaseEvent is UnitDyingEvent && ArmyBase.Allegiance == Allegiance.ENEMY)
         {
             GameController.Log("YOU WIN");
+        }
+        if (armyBaseEvent is UnitDyingEvent && ArmyBase.Allegiance == Allegiance.ALLY)
+        {
+            GameController.Log("YOU LOSE");
         }
 
 
