@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static UnitGameEvents;
 
 public class Army
 {
@@ -33,12 +34,11 @@ public class Army
             }
         }
 
-        if (ArmyBase == null)
+        UnitEvent armyBaseEvent = ArmyBase.Update(deltaTime);
+        if (armyBaseEvent is UnitDyingEvent)
         {
-            GameController.LogWarning("WARNING: Base is null");
+            GameController.Log("YOU WIN");
         }
-        // TODO: remove ?.
-        ArmyBase?.Update(deltaTime);
 
 
         navigator.MoveUnits(deltaTime, Soldiers, path);
