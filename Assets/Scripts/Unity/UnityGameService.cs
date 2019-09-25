@@ -189,15 +189,10 @@ public class UnityGameService
         SoldierGameObject soldierGameObject = movingObject.GetComponent<SoldierGameObject>();
         soldierGameObject.OnCollisionEvent += HandleUnityGameEvent; 
         soldierGameObject.OnAnimationEvent += HandleUnityGameEvent;
-
-        // These are game simulator events.
-        unit.OnDamagedEvent += renderer.DrawDamage;
     }
 
     public void BindArmyBaseEvents(ArmyBaseRenderer renderer, GameObject movingObject, Unit unit)
     {
-        unit.OnDamagedEvent += renderer.DrawDamage;
-
         ArmyBaseUnityGameObject armyBaseGameObject = movingObject.GetComponent<ArmyBaseUnityGameObject>();
         armyBaseGameObject.OnCollisionEvent += HandleUnityGameEvent;
 
