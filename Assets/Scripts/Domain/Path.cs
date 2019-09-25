@@ -19,9 +19,5 @@ public class Path : IPath
         // TODO: This always returns the player base.
         Vector2 vector2 = new Vector2(-0.1f, -4.2f);
         return vector2;
-           
-        //return target;
-
-
     }
 }

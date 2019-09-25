@@ -67,6 +67,12 @@ public class UnityGameService
         gameUpdate = new GameUpdate();
     }
 
+    public void GameTurnUpdate()
+    {
+        GameUpdateResult fu = game.TurnUpdate();
+        HandleUnitEvents(fu.UnitEvents);
+    }
+
     void HandleUnitEvents(List<UnitEvent> events)
     {
         // TODO: Create this each time? And why is it a soldier renderer?
@@ -86,11 +92,7 @@ public class UnityGameService
         }
     }
 
-    public void GameTurnUpdate()
-    {
-        // FIXME:
-        //RenderUnits(game.TurnUpdate());
-    }
+
 
     private void HandleUnitCreatedEvent(UnitCreatedEvent unitCreatedEvent)
     {
@@ -146,7 +148,7 @@ public class UnityGameService
 
         if (update.Click && clickedInBase)
         {
-            gameUpdate.UnityGameEvents.Add(new HomeBaseClickEvent(update.MousePos));
+            gameUpdate.UnityGameEvents.Add(new AddSoldierEvent(update.MousePos, Allegiance.ALLY));
         }
 
         // TODO: Some cleanup with all these inputs

@@ -10,20 +10,10 @@ public enum Allegiance
 
 public partial class Unit
 {
-    // TODO: no public
-    //public Hsm.StateMachine oldStateMachine = new Hsm.StateMachine();
-    //public partial class UnitHsm { }
-
     private Vector2 position = new Vector2();
 
 
     public Unit Enemy { get; set; } = null;
-
-    public event OnDestroyed OnDestroyedEvent;
-    public delegate void OnDestroyed(Unit unitDestroyed);
-
-    public event OnDamaged OnDamagedEvent;
-    public delegate void OnDamaged(Unit unitDamaged, float percentHealth);
 
     // TODO: Think about this.
     public GameObject GameObject { set; get; }
@@ -43,10 +33,6 @@ public partial class Unit
 
     public virtual void Init()
     {
-        // TODO: Init new state machine?
-
-        //oldStateMachine.Init<UnitHsm.Root>(this);
-        //oldStateMachine.TraceLevel = Hsm.TraceLevel.Diagnostic;
         TotalHP = HP = 10;
     }
 
@@ -88,25 +74,15 @@ public partial class Unit
     public virtual bool Damage(Unit enemyUnit, float damage)
     {
         HP -= damage;
+
+        // Attack back if not in attack state and somebody is
+        // attacking this unit. 
         if (!StateMachine.IsInState<AttackState>())
         {
             this.Enemy = enemyUnit;
             this.StateMachine.Transition(new AttackState(this));
         }
-        if (HP <= 0 && OnDestroyedEvent != null)
-        {
-            // TODO: Get rid of all these events like this.
-            //OnDestroyedEvent(this);
-        }
-        else
-        {
-            // TODO: Get rid of this event.
-            OnDamagedEvent?.Invoke(this, PercentHealth);
-        }
-        if (HP <=0)
-        {
-            GameController.Log("Unit " + this.Name + " destroyed");
-        }
+
         return HP > 0;
     }
 
@@ -142,12 +118,4 @@ public partial class Unit
         }
         return null;
     }
-
-    /** ############ SHARED STATES ########### */
-    // C# HSM doesn't yet support shared states.
-    //protected virtual Transition GetNeutralTransition()
-    //{
-    //    return Transition.Sibling<Neutral>();
-    //}
-
 }

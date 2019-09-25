@@ -49,17 +49,25 @@ public class Game
 
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
-        List<UnitEvent> unitEvents = Player.Update(update.deltaTime, update.currentPath);
-        frameUpdate.UnitEvents.AddRange(unitEvents);
-        Enemy.Update(update.deltaTime, Path);
+        frameUpdate.UnitEvents.AddRange(Player.Update(update.deltaTime, update.currentPath));
+        frameUpdate.UnitEvents.AddRange(Enemy.Update(update.deltaTime, Path));
 
 
         return frameUpdate;
     }
 
-    private UnitEvent HandleEvent(HomeBaseClickEvent e, GameUpdateResult frameUpdate)
+    // Used to control game logic like army growth etc.
+    // TODO: Not sure this should return same class as UpdatE()
+    public GameUpdateResult TurnUpdate()
     {
-        Unit soldier = AddSoldier(Allegiance.ALLY, e.pos);
+        GameUpdateResult turnUpdate = new GameUpdateResult();
+        turnUpdate.UnitEvents.AddRange(AI.GetAIInput(this, Player, Enemy));
+        return turnUpdate;
+    }
+
+    private UnitEvent HandleEvent(AddSoldierEvent e, GameUpdateResult frameUpdate)
+    {
+        Unit soldier = AddSoldier(e.allegiance, e.pos);
         UnitCreatedEvent unitCreatedEvent = new UnitCreatedEvent
         {
             Unit = soldier
@@ -82,13 +90,7 @@ public class Game
         return unit.StateMachine.Transition(new DeadState(unit)).GetAssociatedEvent();
     }
 
-    // Used to control game logic like army growth etc.
-    public List<Unit> TurnUpdate()
-    {
-        List<Unit> createdUnits = new List<Unit>();
-        createdUnits.AddRange(AI.Update(this, Player, Enemy));
-        return createdUnits;
-    }
+
 
     // TODO: Public?
     public List<Unit> DrawMap()
@@ -96,7 +98,9 @@ public class Game
         // Enemy
         Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, new Vector2(0f, 3f));
         Enemy.ArmyBase.Name = "EnemyBaseSquare";
-        Enemy.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
+
+        // FIXME: This event is removed.
+        //Enemy.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
         // Enemy
         Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));

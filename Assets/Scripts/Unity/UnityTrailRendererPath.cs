@@ -7,7 +7,6 @@ public class UnityTrailRendererPath : IPath
 
     public UnityTrailRendererPath()
     {
-        //this.TrailRenderer = tr;
     }
 
     public TrailRenderer TrailRenderer { get; set; }
