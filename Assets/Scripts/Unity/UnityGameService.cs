@@ -22,6 +22,7 @@ public class UnityGameService
 
     SoldierRenderer soldierRenderer;
 
+    // Replace when IL2CPP introduces 'dynamic' keyword support.
     Dictionary<Type, Func<Unit, GameObject>> UnitRenderers;
     Dictionary<Type, Action<UnitEvent>> RenderedEventHandlers;
 
@@ -55,16 +56,6 @@ public class UnityGameService
 
 
         };
-        //UnityGameEventHandlers = new Dictionary<Type, Func<UnityGameEvent, GameUpdateResult, UnitEvent>>
-        //{
-
-        //    {typeof (ClickInPlayerBaseEvent), (gameEvent,gameUpdate) =>
-        //        this.HandleEvent((ClickInPlayerBaseEvent)gameEvent,gameUpdate) },
-        //    {typeof (UnitsCollideEvent), (gameEvent,gameUpdate) =>
-        //        this.HandleEvent((UnitsCollideEvent)gameEvent,gameUpdate) },
-        //    {typeof (UnitExplosionComplete), (gameEvent,gameUpdate) =>
-        //        this.HandleEvent((UnitExplosionComplete)gameEvent,gameUpdate) }
-        //};
     }
 
     public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab)
@@ -152,24 +143,11 @@ public class UnityGameService
         game.OnUnitRenderedEvent(unit);
     }
 
-    //private void RenderUnits(List<UnitCreatedEvent> es)
-    //{
-    //    // TODO: Is dynamic a smell here? It is nice...
-    //    // Saves me messing around with interfaces.
-    //    //foreach (dynamic unit in units)
-    //    foreach(UnitCreatedEvent e in es)
-    //    {
-    //        dynamic unit = e.Unit;
-    //        unit.GameObject = RenderUnit(unit);
-    //        game.OnUnitRenderedEvent(unit);
-    //    }
-    //}
-
     private void RenderUnits(List<Unit> units)
     {
         foreach (Unit unit in units)
         {
-            unit.GameObject = UnitRenderers[unit.GetType()](unit); //RenderUnit(unit);
+            unit.GameObject = UnitRenderers[unit.GetType()](unit); 
             game.OnUnitRenderedEvent(unit);
         }
     }
@@ -195,15 +173,11 @@ public class UnityGameService
         // If you draw before clicking, you're fucked. 
         pathRenderer.StartDrawing |= update.MouseUp;
 
-        if (update.Click) // && clickedInBase)
+        if (update.Click && clickedInBase)
         {
             gameUpdate.UnityGameEvents.Add(new ClickInPlayerBaseEvent(update.MousePos, Allegiance.ALLY));
         }
 
-        //if (update.Click)
-        //{
-        //    GameController.Log("Click " + update.MousePos.ToString());
-        //}
 
         // TODO: Some cleanup with all these inputs
         bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));

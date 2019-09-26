@@ -138,14 +138,9 @@ public class Game
         Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, new Vector2(0f, 3f));
         Enemy.ArmyBase.Name = "EnemyBaseSquare";
 
-        // FIXME: This event is removed.
-        //Enemy.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
-
         // Enemy
-        //Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
-        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, 0f));
+        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
         Player.ArmyBase.Name = "PlayerBaseSquare";
-        //Player.ArmyBase.OnDestroyedEvent += EnemyBase_OnDestroyedEvent;
 
         return new List<Unit>
         {

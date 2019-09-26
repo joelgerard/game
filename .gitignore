@@ -11,7 +11,9 @@ Obj/
 UnityGenerated/
 Library/
 Assets/AssetStoreTools*
-
+# ==================
+# The dir with the iOS build
+iwar/
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
 # ===================================== #
