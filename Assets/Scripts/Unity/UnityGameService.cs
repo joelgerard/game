@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnitGameEvents;
 
 // This class joins unity runtime stuff to the game domain. It's coordinating
@@ -75,6 +76,14 @@ public class UnityGameService
 
         // TODO: This should just be another event eventually. 
         DrawMap();
+
+        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+        resetButton.onClick.AddListener(ResetButton_ClickEvent);
+    }
+
+    public void ResetButton_ClickEvent()
+    {
+        GameController.Log("Click");
     }
 
     public void Update(UnityGameServiceUpdate update)
