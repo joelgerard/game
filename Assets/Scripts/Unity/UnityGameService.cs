@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using static GameEvents;
 using static UnitGameEvents;
 
 // This class joins unity runtime stuff to the game domain. It's coordinating
@@ -20,12 +22,13 @@ public class UnityGameService
     public RectangleObject RectanglePrefab;
     public Shape CirclePrefab;
     public Shape TrianglePrefab;
+    private GameObject gameOverPanel;
 
     SoldierRenderer soldierRenderer;
 
     // Replace when IL2CPP introduces 'dynamic' keyword support.
     Dictionary<Type, Func<Unit, GameObject>> UnitRenderers;
-    Dictionary<Type, Action<UnitEvent>> RenderedEventHandlers;
+    Dictionary<Type, Action<GameEvent>> RenderedEventHandlers;
 
     GameObject soldierPrefab;
     GameObject armyBasePrefab;
@@ -46,17 +49,18 @@ public class UnityGameService
                 this.RenderUnit((ArmyBase)unit) },
         };
 
-        RenderedEventHandlers = new Dictionary<Type, Action<UnitEvent>>
+        RenderedEventHandlers = new Dictionary<Type, Action<GameEvent>>
         {
             {typeof (UnitCreatedEvent), (createdEvent) =>
                 this.HandleUnitCreatedEvent((UnitCreatedEvent)createdEvent) },
-            {typeof (UnitDyingEvent), (createdEvent) =>
-                soldierRenderer.HandleEvent((UnitDyingEvent) createdEvent) },
-            {typeof (UnitDiedEvent), (createdEvent) =>
-                soldierRenderer.HandleEvent((UnitDiedEvent) createdEvent) }
-
-
+            {typeof (GameOverEvent), (gameOverEvent) =>
+                this.HandleGameOverEvent((GameOverEvent)gameOverEvent) },
+            {typeof (UnitDyingEvent), (unitDyingEvent) =>
+                soldierRenderer.HandleEvent((UnitDyingEvent) unitDyingEvent) },
+            {typeof (UnitDiedEvent), (unitDiedEvent) =>
+                soldierRenderer.HandleEvent((UnitDiedEvent) unitDiedEvent) }
         };
+
     }
 
     public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab)
@@ -77,8 +81,14 @@ public class UnityGameService
         // TODO: This should just be another event eventually. 
         DrawMap();
 
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+
+
+
+        UnityEngine.UI.Button resetButton = GameObject.Find("ResetButton").GetComponent<UnityEngine.UI.Button>();
         resetButton.onClick.AddListener(ResetButton_ClickEvent);
+
+        gameOverPanel = GameObject.Find("GameOverPanel");
+        gameOverPanel.SetActive(false);
     }
 
     public void ResetButton_ClickEvent()
@@ -111,7 +121,7 @@ public class UnityGameService
             GameController.Log("game.Update failed " + e.ToString());
             throw e;
         }
-        HandleUnitEvents(fu.UnitEvents);
+        HandleUnitEvents(fu.GameEvents);
 
         gameUpdate = new GameUpdate();
     }
@@ -119,31 +129,30 @@ public class UnityGameService
     public void GameTurnUpdate()
     {
         GameUpdateResult fu = game.TurnUpdate();
-        HandleUnitEvents(fu.UnitEvents);
+        HandleUnitEvents(fu.GameEvents);
     }
 
-    void HandleUnitEvents(List<UnitEvent> events)
+    void HandleUnitEvents(List<GameEvent> events)
     {
-        // TODO: Create this each time? And why is it a soldier renderer?
-
         //foreach (dynamic ue in events)
-        foreach(UnitEvent ue in events)
+        foreach(GameEvent ue in events)
         {
             RenderedEventHandlers[ue.GetType()](ue);
-            //if (ue is UnitCreatedEvent)
-            //{
-            //    // TODO: Think about this special case.
-            //    HandleUnitCreatedEvent(ue);
-
-            //}
-            //else
-            //{
-            //    soldierRenderer.HandleEvent(ue);
-            //}
         }
     }
 
+    private void HandleGameOverEvent(GameOverEvent gameOverEvent)
+    {
+        string text = "You lost!";
+        if (gameOverEvent.isPlayerWinner)
+        {
+            text = "You won!";
+        }
 
+        gameOverPanel.SetActive(true);
+        UnityEngine.UI.Text gameOverText = GameObject.Find("GameOverText").GetComponent<UnityEngine.UI.Text>();
+        gameOverText.text = text;
+    }
 
     private void HandleUnitCreatedEvent(UnitCreatedEvent unitCreatedEvent)
     {

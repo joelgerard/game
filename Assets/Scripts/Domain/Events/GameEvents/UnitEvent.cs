@@ -1,5 +1,5 @@
 ﻿using System;
-public class UnitEvent
+public class UnitEvent : GameEvent
 {
     public Unit Unit { get; set; }
     public UnitEvent()

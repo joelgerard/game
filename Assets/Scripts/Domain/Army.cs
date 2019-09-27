@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static GameEvents;
 using static UnitGameEvents;
 
 public class Army
@@ -21,32 +22,40 @@ public class Army
     }
 
 
-    public List<UnitEvent> Update(float deltaTime, IPath path)
+    public List<GameEvent> Update(float deltaTime, IPath path)
     {
-        List<UnitEvent> unitEvents = new List<UnitEvent>();
+        List<GameEvent> gameEvents = new List<GameEvent>();
         // TODO: Must be a better way than this.
         foreach (Soldier soldier in Soldiers)
         {
             UnitEvent ue = soldier.Update(deltaTime);
             if (ue != null)
             {
-                unitEvents.Add(ue);
+                gameEvents.Add(ue);
             }
         }
 
         UnitEvent armyBaseEvent = ArmyBase.Update(deltaTime);
         if (armyBaseEvent is UnitDyingEvent && ArmyBase.Allegiance == Allegiance.ENEMY)
         {
-            GameController.Log("YOU WIN");
+            GameOverEvent gameOverEvent = new GameOverEvent
+            {
+                isPlayerWinner = true
+            };
+            gameEvents.Add(gameOverEvent);
         }
         if (armyBaseEvent is UnitDyingEvent && ArmyBase.Allegiance == Allegiance.ALLY)
         {
-            GameController.Log("YOU LOSE");
+            GameOverEvent gameOverEvent = new GameOverEvent
+            {
+                isPlayerWinner = false
+            };
+            gameEvents.Add(gameOverEvent);
         }
 
 
         navigator.MoveUnits(deltaTime, Soldiers, path);
-        return unitEvents;
+        return gameEvents;
     }
 
     public TerritoryType Territory { get; set; } = TerritoryType.South;

@@ -62,7 +62,7 @@ public class Game
                 UnitEvent unitEvent = UnityGameEventHandlers[curEvent.GetType()](curEvent, frameUpdate);
                 if (unitEvent != null)
                 {
-                    frameUpdate.UnitEvents.Add(unitEvent);
+                    frameUpdate.GameEvents.Add(unitEvent);
                 }
             }
 
@@ -71,26 +71,10 @@ public class Game
         update.UnityGameEvents.Clear();
         // TODO: Need to call this once per frame?
         // NOTE: If attacking, this is called once per frame.
-        try
-        {
-            frameUpdate.UnitEvents.AddRange(Player.Update(update.deltaTime, update.currentPath));
-
-        }
-        catch (Exception err)
-        {
-            GameController.Log("Player update failed " + err.ToString());
-            throw err;
-        }
-        try
-        {
-            frameUpdate.UnitEvents.AddRange(Enemy.Update(update.deltaTime, Path));
-
-        }
-        catch (Exception err)
-        {
-            GameController.Log("Enemy update failed " + err.ToString());
-            throw err;
-        }
+        // This is noted, because if enough time elapses between frames, damage
+        // goes up quite a bit.
+        frameUpdate.GameEvents.AddRange(Player.Update(update.deltaTime, update.currentPath));
+        frameUpdate.GameEvents.AddRange(Enemy.Update(update.deltaTime, Path));
 
         return frameUpdate;
     }
@@ -100,7 +84,7 @@ public class Game
     public GameUpdateResult TurnUpdate()
     {
         GameUpdateResult turnUpdate = new GameUpdateResult();
-        turnUpdate.UnitEvents.AddRange(AI.GetAIInput(this, Player, Enemy));
+        turnUpdate.GameEvents.AddRange(AI.GetAIInput(this, Player, Enemy));
         return turnUpdate;
     }
 
@@ -200,14 +184,14 @@ public class Game
         return soldier;
     }
 
-    void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
-    {
-        // TODO: This can be cleaned up DRY. 
-        //unitMap.Remove(destroyedUnit.GameObject.name);
-        unitMap.Remove(destroyedUnit.Name);
+    //void EnemyBase_OnDestroyedEvent(Unit destroyedUnit)
+    //{
+    //    // TODO: This can be cleaned up DRY. 
+    //    //unitMap.Remove(destroyedUnit.GameObject.name);
+    //    unitMap.Remove(destroyedUnit.Name);
 
-        // FIXME: This is broken.
-        GameController.Log("You win.");
-    }
+    //    // FIXME: This is broken.
+    //    GameController.Log("You win.");
+    //}
 
 }

@@ -14,7 +14,7 @@ public class GameUpdateResult
 
     //public List<UnitCreatedEvent> CreatedEvents { get; set; } = new List<UnitCreatedEvent>();
 
-    public List<UnitEvent> UnitEvents { get; set; } = new List<UnitEvent>();
+    public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
 
 
 }
