@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
 
 
     [SerializeField] TrailRenderer trailPrefab;
-
+    [SerializeField] LineRenderer LinePrefab;
     //[SerializeField] RectangleObject PlayerBaseSquare;
 
 
@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour
     {
         // TODO: Is this slow, canonical unity way of doing things? Use fixedUpdate?
         InvokeRepeating("GameTurnUpdate", 0.1f, 0.1f);  //1s delay, repeat every 1s
-        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab, SoldierPrefab, ArmyBasePrefab); //, baseObj);
+        gameService.Initialize(RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab, SoldierPrefab, ArmyBasePrefab, LinePrefab); //, baseObj);
 
 
     }

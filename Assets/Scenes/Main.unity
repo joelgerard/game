@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 369260879}
   - component: {fileID: 369260878}
   m_Layer: 5
-  m_Name: MatchResultText
+  m_Name: GameOverText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -580,6 +580,8 @@ MonoBehaviour:
     type: 3}
   trailPrefab: {fileID: 5937699014009640764, guid: 0e9f5642c303a4201b48cdd0200c1110,
     type: 3}
+  LinePrefab: {fileID: 3025278250270407881, guid: 270ac9bd706d940c590962f14dab9062,
+    type: 3}
 --- !u!4 &861756838
 Transform:
   m_ObjectHideFlags: 0
@@ -729,8 +731,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: 53}
-  m_SizeDelta: {x: -518.9, y: -373.8}
+  m_AnchoredPosition: {x: -12, y: -4.100006}
+  m_SizeDelta: {x: -518.9, y: -487.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1962371585
 MonoBehaviour:

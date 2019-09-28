@@ -34,10 +34,12 @@ public class UnityGameService
     GameObject armyBasePrefab;
 
     TrailRenderer trailPrefab;
+    LineRenderer linePrefab;
+
     PathRenderer pathRenderer;
 
     // TODO: Remove
-    UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
+    PathGameObject pathGameObject = null;  //new UnityTrailRendererPath();
 
     public UnityGameService()
     {
@@ -63,7 +65,7 @@ public class UnityGameService
 
     }
 
-    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab)
+    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab, LineRenderer linePrefab)
     {
         this.RectanglePrefab = rectanglePrefab;
         this.TrianglePrefab = trianglePrefab;
@@ -71,9 +73,12 @@ public class UnityGameService
         this.trailPrefab = trailPrefab;
         this.soldierPrefab = soldierPrefab;
         this.armyBasePrefab = armyBasePrefab;
+        this.linePrefab = linePrefab;
+
         soldierRenderer = new SoldierRenderer(soldierPrefab);
 
-        pathRenderer = new PathRenderer(trailPrefab);
+        //pathRenderer = new PathRenderer(trailPrefab);
+        pathRenderer = new PathRenderer(linePrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
 
         game.Initialize();
@@ -184,7 +189,7 @@ public class UnityGameService
 
         if (update.MouseDown)
         {
-            trailRendererPath.TrailRenderer = null;
+            pathGameObject = null;
         }
 
         // FIXME: STartDrawing is initialized improperly. 
@@ -202,10 +207,10 @@ public class UnityGameService
 
         if (!clickedInBase &&  clickAndDragging)
         {
-            trailRendererPath = pathRenderer.Draw(update.MainBehaviour.transform.position);
+            pathGameObject = pathRenderer.Draw(update.MousePos); //(update.MainBehaviour.transform.position);
         }
 
-        gameUpdate.currentPath = trailRendererPath;
+        gameUpdate.currentPath = pathGameObject;
 
         // FIXME: Not sure about this update.
         return update;

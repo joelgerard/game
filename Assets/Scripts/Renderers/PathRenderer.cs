@@ -3,44 +3,46 @@ using UnityEngine;
 
 public class PathRenderer
 {
-    UnityTrailRendererPath trailRendererPath = new UnityTrailRendererPath();
+    PathGameObject pathGameObject = null;
+
     public event OnReady OnReadyEvent;
     public delegate void OnReady();
 
-    readonly TrailRenderer trailPrefab;
+    readonly LineRenderer lineRendererPrefab;
+
     public bool StartDrawing { get; set; }
 
-    public PathRenderer(TrailRenderer trailPrefab)
+
+    public PathRenderer(LineRenderer linePrefab)
     {
-        this.trailPrefab = trailPrefab;
+        this.lineRendererPrefab = linePrefab;
     }
 
-
-
     // TODO: rename/remove okToDrawTrail
-    public UnityTrailRendererPath Draw(Vector3 position )
+    public PathGameObject Draw(Vector3 position )
     {
         Plane plane = new Plane(Camera.main.transform.forward * -1, position);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float distance;
-        if (plane.Raycast(ray, out distance))
+
+        if ( plane.Raycast(ray, out float distance))
         {
             if (StartDrawing)
             {
-                GameController.Log("Start drawing");
-                trailRendererPath.TrailRenderer = UnityEngine.Object.Instantiate(trailPrefab, ray.GetPoint(distance), Quaternion.identity);
+                pathGameObject =
+                 UnityEngine.Object.Instantiate(lineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<PathGameObject>();
                 StartDrawing = false;
             }
-            else if (trailRendererPath.TrailRenderer != null) // FIXME: Temp hack for back init somewhere else.
+            else 
             {
-                Diagnostics.NotNull(trailRendererPath, "trailRendererPath");
-                Diagnostics.NotNull(trailRendererPath.TrailRenderer, "trailRendererPath.TrailRenderer");
-                Diagnostics.NotNull(trailRendererPath.TrailRenderer.transform, "trailRendererPath.TrailRenderer.transform");
-                Diagnostics.NotNull(ray, "ray");
-                trailRendererPath.TrailRenderer.transform.position = ray.GetPoint(distance);
+                if (pathGameObject != null)
+                {
+                    // TODO: Check distance from points.
+                    Vector3 hitpoint = ray.GetPoint(distance);
+                    pathGameObject.AddPosition(hitpoint);
+                }
             }
             OnReadyEvent?.Invoke();
         }
-        return trailRendererPath;
+        return pathGameObject;
     }
 }
