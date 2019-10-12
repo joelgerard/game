@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 7510787839746766491}
   - component: {fileID: 5357695598127657214}
   - component: {fileID: 330862937907731646}
+  - component: {fileID: -6335924257379517919}
   m_Layer: 0
-  m_Name: Ally
+  m_Name: Soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,3 +163,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b1a386b64484200b6d5c254da64fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &-6335924257379517919
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682233331086425014}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1

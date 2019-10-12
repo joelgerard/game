@@ -25,8 +25,18 @@ public class ArmyBaseUnityGameObject : MonoBehaviour
         Diagnostics.NotNull(other.gameObject, "other.gameObject");
         Diagnostics.NotNull(this.gameObject, "this.gameObject");
 
-        UnitsCollideEvent unitsCollideEvent =
-            new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
-        OnCollisionEvent?.Invoke(unitsCollideEvent);
+        CircleCollider2D sightCollider = this.GetComponent<CircleCollider2D>();
+        BoxCollider2D fightCollider = this.GetComponent<BoxCollider2D>();
+
+        CircleCollider2D otherSightCollider = other.GetComponent<CircleCollider2D>();
+        BoxCollider2D otherFightCollider = other.GetComponent<BoxCollider2D>();
+
+
+        if (fightCollider.IsTouching(otherFightCollider))
+        {
+            UnitsCollideEvent unitsCollideEvent =
+                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
+            OnCollisionEvent?.Invoke(unitsCollideEvent);
+        }
     }
 }

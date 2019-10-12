@@ -32,6 +32,8 @@ public class AI
             {
                 Unit = soldier
             };
+
+            // This actually tells the game to add a soldier.
             gameEvents.Add(unitCreatedEvent);
         }
         return gameEvents;

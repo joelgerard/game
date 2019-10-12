@@ -33,9 +33,24 @@ public class SoldierGameObject : MonoBehaviour
         Diagnostics.NotNull(other.gameObject, "other.gameObject");
         Diagnostics.NotNull(this.gameObject, "this.gameObject");
 
-        UnitsCollideEvent unitsCollideEvent = 
-            new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
-        OnCollisionEvent?.Invoke(unitsCollideEvent);
+        CircleCollider2D sightCollider = this.GetComponent<CircleCollider2D>();
+        BoxCollider2D fightCollider = this.GetComponent<BoxCollider2D>();
+
+        CircleCollider2D otherSightCollider = other.GetComponent<CircleCollider2D>();
+        BoxCollider2D otherFightCollider = other.GetComponent<BoxCollider2D>();
+
+        if (sightCollider.IsTouching(otherFightCollider))
+        {
+            GameController.Log("I see you " + other.gameObject.name);
+        }
+
+        if (fightCollider.IsTouching(otherFightCollider))
+        {
+            GameController.Log("I fight you.");
+            UnitsCollideEvent unitsCollideEvent = 
+                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
+            OnCollisionEvent?.Invoke(unitsCollideEvent);
+        }
     }
 
     private void AnimationEvent(int animationId)

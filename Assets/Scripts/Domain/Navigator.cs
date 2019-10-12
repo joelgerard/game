@@ -67,7 +67,7 @@ public class Navigator
                     {
                         // TODO: Start here <<>>. Soldier never stops moving at the end
                         // of this path.    
-                        GameController.Log("Stop moving?"); 
+                        //GameController.Log("Stop moving?"); 
                     }
                 }
 
