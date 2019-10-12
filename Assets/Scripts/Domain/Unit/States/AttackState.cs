@@ -23,6 +23,7 @@ public class AttackState : IState
 
     public Transition Exit()
     {
+        unit.Enemy = null;
         return new Transition(this, StateType.TEMPORARY, TransitionType.EXIT);
     }
 

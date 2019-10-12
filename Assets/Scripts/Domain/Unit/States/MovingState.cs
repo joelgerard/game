@@ -3,12 +3,12 @@ using static State;
 
 public class MovingState : IState
 {
-    private MovingState()
+    protected MovingState()
     {
 
     }
 
-    readonly Unit unit;
+    public readonly Unit unit;
 
     public MovingState(Unit unit)
     {
@@ -21,12 +21,12 @@ public class MovingState : IState
     }
 
 
-    public Transition GetTransition(IState state)
+    public virtual Transition GetTransition(IState state)
     {
         return (new SharedStatesTransitioner()).GetTransition(state, this);
     }
 
-    public Transition Update(Unit unit, float deltaTime)
+    public virtual Transition Update(Unit unit, float deltaTime)
     {
         return (new SharedStatesTransitioner()).Update(this, deltaTime);
     }

@@ -15,6 +15,7 @@ public class SharedStatesTransitioner
         }
 
 
+        // FIXME: Can everything move to the tracking state? What about bases?
        if (!(currentState is AttackState) && desiredState is TrackingState)
         {
             return new Transition(new TrackingState(currentState.GetUnit()), StateType.TEMPORARY);
