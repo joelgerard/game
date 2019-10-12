@@ -24,13 +24,14 @@ public class Navigator
         {
             //bool isMoving = soldier.StateMachine.IsInState<Moving>();
             bool isMoving = soldier.StateMachine.IsInState<MovingState>();
+            bool isTracking = soldier.StateMachine.IsInState<TrackingState>();
 
             Vector2 targetPos = soldier.TargetPosition;
-            if (isMoving)
+            if (isMoving || isTracking)
             {
 
                 // TODO: This is awkward.
-                if (soldier.IndexOnPath == 0)
+                if (soldier.IndexOnPath == 0 && isMoving)
                 {
                     // FIXME: This pathRendere seems to start from 1? 
                     // What is it? 0 or 1. It means the limits of the array aren't being
@@ -44,6 +45,11 @@ public class Navigator
                     }
                 }
 
+                if (isTracking)
+                {
+                    targetPos = soldier.Enemy.GameObject.transform.position;
+                }
+
                 // How close is the soldier to its target?
                 float distanceFromTarget = Vector2.Distance(soldier.Position, targetPos);
 
@@ -54,7 +60,7 @@ public class Navigator
                         Vector2.MoveTowards(soldier.Position, targetPos, soldier.Speed * deltaTime);
                     //GameController.Log("Moving soldier towards " + targetPos.ToString());
                 }
-                else
+                else if (isMoving)
                 {
                     int currentIndex = soldier.IndexOnPath; 
                     if (currentIndex != -1 && currentIndex < Path.Count())
@@ -72,6 +78,7 @@ public class Navigator
                 }
 
             }
+
         }
     }
 }

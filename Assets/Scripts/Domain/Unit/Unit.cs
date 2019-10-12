@@ -97,6 +97,15 @@ public partial class Unit
 
     }
 
+    public virtual void Track(Unit otherUnit)
+    {
+        if (otherUnit.Allegiance != this.Allegiance)
+        {
+            Enemy = otherUnit;
+            StateMachine.Transition(new TrackingState(this));
+        }
+    }
+
 
 
     public virtual UnitEvent Update(float deltaTime)

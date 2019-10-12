@@ -32,7 +32,7 @@ namespace Tests
                 deltaTime=1,
                 currentPath=null
             };
-            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare",UnitsCollideEvent.CollisionEventType.ATTACK));
 
             game.Update(gu);
 
@@ -62,8 +62,8 @@ namespace Tests
                 deltaTime = 0.01f,
                 currentPath = null
             };
-            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
-            gu.UnityGameEvents.Add(new UnitsCollideEvent("EnemyBaseSquare", "Soldier1"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare", UnitsCollideEvent.CollisionEventType.ATTACK));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("EnemyBaseSquare", "Soldier1", UnitsCollideEvent.CollisionEventType.ATTACK));
             game.Update(gu);
 
 
@@ -97,8 +97,8 @@ namespace Tests
                 deltaTime = 1,
                 currentPath = null
             };
-            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare"));
-            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier2", "EnemyBaseSquare"));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier1", "EnemyBaseSquare", UnitsCollideEvent.CollisionEventType.ATTACK));
+            gu.UnityGameEvents.Add(new UnitsCollideEvent("Soldier2", "EnemyBaseSquare", UnitsCollideEvent.CollisionEventType.ATTACK));
 
             int i = 0;
             while (true)

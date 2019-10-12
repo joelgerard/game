@@ -102,7 +102,20 @@ public class Game
     // They should because it's hard to know if a base or soldier is killed
     private UnitEvent HandleEvent(UnitsCollideEvent e, GameUpdateResult frameUpdate)
     {
-        unitMap[e.Unit].Attack(unitMap[e.OtherUnit]);
+        Unit thisUnit = unitMap[e.Unit];
+        Unit otherUnit = unitMap[e.OtherUnit];
+        switch (e.CollisionType)
+        {
+            case UnitsCollideEvent.CollisionEventType.ATTACK:
+                thisUnit.Attack(otherUnit);
+                break;
+
+            case UnitsCollideEvent.CollisionEventType.SIGHT:
+                thisUnit.Track(otherUnit);
+                break;
+
+        }
+
         return null;
     }
 

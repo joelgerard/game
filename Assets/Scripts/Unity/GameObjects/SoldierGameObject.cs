@@ -41,16 +41,20 @@ public class SoldierGameObject : MonoBehaviour
 
         if (sightCollider.IsTouching(otherFightCollider))
         {
-            GameController.Log("I see you " + other.gameObject.name);
+            UnitsCollideEvent unitsCollideEvent =
+                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name, UnitsCollideEvent.CollisionEventType.SIGHT);
+            OnCollisionEvent?.Invoke(unitsCollideEvent);
         }
 
         if (fightCollider.IsTouching(otherFightCollider))
         {
-            GameController.Log("I fight you.");
             UnitsCollideEvent unitsCollideEvent = 
-                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
+                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name,UnitsCollideEvent.CollisionEventType.ATTACK);
             OnCollisionEvent?.Invoke(unitsCollideEvent);
         }
+
+        // TODO: What happens if none of the above trigger? I would say nothing, e.g. SIGHT intersects SIGHT. 
+        // TODO: Is is okay if this happens multiple times per frame?
     }
 
     private void AnimationEvent(int animationId)

@@ -13,6 +13,13 @@ public class SharedStatesTransitioner
         {
             return new Transition(new AttackState(currentState.GetUnit()), State.StateType.TEMPORARY);
         }
+
+
+       if (!(currentState is AttackState) && desiredState is TrackingState)
+        {
+            return new Transition(new TrackingState(currentState.GetUnit()), StateType.TEMPORARY);
+        }
+
         return null;
     }
 

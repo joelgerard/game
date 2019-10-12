@@ -35,7 +35,7 @@ public class ArmyBaseUnityGameObject : MonoBehaviour
         if (fightCollider.IsTouching(otherFightCollider))
         {
             UnitsCollideEvent unitsCollideEvent =
-                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name);
+                new UnitsCollideEvent(this.gameObject.name, other.gameObject.name, UnitsCollideEvent.CollisionEventType.ATTACK);
             OnCollisionEvent?.Invoke(unitsCollideEvent);
         }
     }
