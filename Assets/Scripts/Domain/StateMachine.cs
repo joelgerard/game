@@ -62,12 +62,13 @@ public class StateMachine
     // TODO: What does first, update or transition?
     public IState Transition(IState desiredState)
     {
-        GameController.Log("Seeking transition to state " + desiredState.GetType() + " from " + CurrentState.GetType());
+        GameController.Log(unit?.Name + " is seeking transition from " + CurrentState.GetType() + " to state " + desiredState.GetType());
         State.Transition transition = CurrentState.GetTransition(desiredState);
 
         // TODO: DRY with update fn
         if (transition != null)
         {
+            GameController.Log("Granted transition for " + unit?.Name);
             if (transition.StateType == State.StateType.NORMAL)
             {
                 GameController.Log("Setting state to normal " + transition.State.GetType());

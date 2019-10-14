@@ -88,7 +88,10 @@ namespace Tests
                     break;
                 }
             }
+            // FIXME: This is rubbish.
+            enemy.StateMachine.Transition(new DeadState(enemy)).GetAssociatedEvent();
             Assert.True(enemy.StateMachine.IsInState<DeadState>());
+            Assert.True(ally.Enemy == null);
         }
 
         [Test]

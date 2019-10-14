@@ -117,15 +117,7 @@ public class UnityGameService
         // Once the game has updated itself, it will return new objects that
         // are in the game but have not been drawn or created on the Unity side.
         GameUpdateResult fu;
-        try
-        {
-            fu = game.Update(gameUpdate);
-        }
-        catch(Exception e)
-        {
-            GameController.Log("game.Update failed " + e.ToString());
-            throw e;
-        }
+        fu = game.Update(gameUpdate);
         HandleUnitEvents(fu.GameEvents);
 
         gameUpdate = new GameUpdate();
@@ -187,14 +179,17 @@ public class UnityGameService
         clickedInBase = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == "PlayerBaseSquare");
 
 
-        if (update.MouseDown)
+        if (!clickedInBase && update.MouseDown)
         {
             pathGameObject = null;
         }
 
         // FIXME: STartDrawing is initialized improperly. 
         // If you draw before clicking, you're fucked. 
-        pathRenderer.StartDrawing |= update.MouseUp;
+        if (!clickedInBase)
+        {
+            pathRenderer.StartDrawing |= update.MouseUp;
+        }
 
         if (update.Click && clickedInBase)
         {

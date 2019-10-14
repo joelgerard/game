@@ -53,10 +53,11 @@ public class Army
             gameEvents.Add(gameOverEvent);
         }
 
-
-        navigator.MoveUnits(deltaTime, Soldiers, path);
+        //navigator.MoveUnits(deltaTime, Soldiers, path);
         return gameEvents;
     }
+
+
 
     public TerritoryType Territory { get; set; } = TerritoryType.South;
 

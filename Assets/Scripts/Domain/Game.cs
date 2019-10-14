@@ -19,7 +19,10 @@ public class Game
 
 
     // TODO: This path is hard coded for now.
+    public List<Path> Paths { get; set; } = new List<Path>();
     public Path Path { get; set; } = new Path();
+
+    public int CurrentPathIndex { get; set; } = 0;
 
     // TODO: I guess string comp is expensive. 
     // TODO: Why is this here? 
@@ -73,8 +76,15 @@ public class Game
         // NOTE: If attacking, this is called once per frame.
         // This is noted, because if enough time elapses between frames, damage
         // goes up quite a bit.
+        // FIXME: Updating 1/2 the units, then moving them, then updating the other
+        // half causes problems. Need to axe this. 
         frameUpdate.GameEvents.AddRange(Player.Update(update.deltaTime, update.currentPath));
         frameUpdate.GameEvents.AddRange(Enemy.Update(update.deltaTime, Path));
+
+        // FIXME: See above.
+        Navigator navigator = new Navigator();
+        navigator.MoveUnits(update.deltaTime, Player.Soldiers, update.currentPath);
+        navigator.MoveUnits(update.deltaTime, Enemy.Soldiers, Path);
 
         return frameUpdate;
     }
@@ -194,6 +204,7 @@ public class Game
         List<Soldier> soldiers = (allegiance == Allegiance.ALLY ? Player.Soldiers : Enemy.Soldiers);
         soldier.Init();
         soldiers.Add(soldier);
+        soldier.StartMoving();
         return soldier;
     }
 

@@ -22,4 +22,16 @@ public class TrackingState : MovingState
         }
         return null;
     }
+
+    public override Transition Update(Unit unit, float deltaTime)
+    {
+        Transition transition = base.Update(unit, deltaTime);
+
+        if (transition!= null && unit.Enemy != null && unit.Enemy.IsDeadOrDying())
+        {
+            return Exit();
+        }
+
+        return null;
+    }
 }

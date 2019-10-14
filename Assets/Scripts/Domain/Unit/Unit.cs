@@ -86,6 +86,12 @@ public partial class Unit
         return HP > 0;
     }
 
+    public bool IsDeadOrDying()
+    {
+        return StateMachine.IsInState<DyingState>() ||
+                StateMachine.IsInState<DeadState>();
+    }
+
     public virtual void Attack(Unit otherUnit)
     {
 
@@ -99,7 +105,7 @@ public partial class Unit
 
     public virtual void Track(Unit otherUnit)
     {
-        if (otherUnit.Allegiance != this.Allegiance)
+        if (otherUnit.Allegiance != this.Allegiance && !otherUnit.IsDeadOrDying())
         {
             Enemy = otherUnit;
             StateMachine.Transition(new TrackingState(this));

@@ -24,6 +24,14 @@ public class PathGameObject : MonoBehaviour, IPath
         
     }
 
+    public void DestroyList()
+    {
+        points.Clear();
+        lineRenderer.positionCount = 0;
+        lineRenderer.SetPositions(points.ToArray());
+        Destroy(lineRenderer.gameObject);
+    }
+
     public Vector2 GetPosition(int index)
     {
         return points[index];

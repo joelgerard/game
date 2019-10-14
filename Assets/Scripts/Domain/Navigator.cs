@@ -47,6 +47,10 @@ public class Navigator
 
                 if (isTracking)
                 {
+                    if (soldier.Enemy.GameObject == null)
+                    {
+                        GameController.LogWarning("Soldier (" + soldier.Name + ") has enemy with name " + soldier.Enemy.Name + " is bad. It's state is " + soldier.Enemy.StateMachine.CurrentState);
+                    }
                     targetPos = soldier.Enemy.GameObject.transform.position;
                 }
 

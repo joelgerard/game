@@ -28,6 +28,10 @@ public class PathRenderer
         {
             if (StartDrawing)
             {
+                if (pathGameObject != null)
+                {
+                    pathGameObject.DestroyList();
+                }
                 pathGameObject =
                  UnityEngine.Object.Instantiate(lineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity).GetComponent<PathGameObject>();
                 StartDrawing = false;
