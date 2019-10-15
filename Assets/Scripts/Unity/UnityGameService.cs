@@ -19,24 +19,17 @@ public class UnityGameService
 
     GameUpdate gameUpdate = new GameUpdate();
 
-    public RectangleObject RectanglePrefab;
-    public Shape CirclePrefab;
-    public Shape TrianglePrefab;
+    GameController gameController;
+
     private GameObject gameOverPanel;
 
     SoldierRenderer soldierRenderer;
+    PathRenderer pathRenderer;
 
     // Replace when IL2CPP introduces 'dynamic' keyword support.
     Dictionary<Type, Func<Unit, GameObject>> UnitRenderers;
     Dictionary<Type, Action<GameEvent>> RenderedEventHandlers;
 
-    GameObject soldierPrefab;
-    GameObject armyBasePrefab;
-
-    TrailRenderer trailPrefab;
-    LineRenderer linePrefab;
-
-    PathRenderer pathRenderer;
 
     // TODO: Remove
     PathGameObject pathGameObject = null;  //new UnityTrailRendererPath();
@@ -49,6 +42,9 @@ public class UnityGameService
                 this.RenderUnit((Soldier)unit) },
             {typeof (ArmyBase), (unit) =>
                 this.RenderUnit((ArmyBase)unit) },
+            {typeof (Thing), (unit) =>
+                this.RenderUnit((Thing)unit) },
+
         };
 
         RenderedEventHandlers = new Dictionary<Type, Action<GameEvent>>
@@ -65,20 +61,13 @@ public class UnityGameService
 
     }
 
-    public void Initialize(RectangleObject rectanglePrefab, Shape circlePrefab, Shape trianglePrefab, TrailRenderer trailPrefab, GameObject soldierPrefab, GameObject armyBasePrefab, LineRenderer linePrefab)
+    public void Initialize(GameController gameController)
     {
-        this.RectanglePrefab = rectanglePrefab;
-        this.TrianglePrefab = trianglePrefab;
-        this.CirclePrefab = circlePrefab;
-        this.trailPrefab = trailPrefab;
-        this.soldierPrefab = soldierPrefab;
-        this.armyBasePrefab = armyBasePrefab;
-        this.linePrefab = linePrefab;
+        this.gameController = gameController;
 
-        soldierRenderer = new SoldierRenderer(soldierPrefab);
+        soldierRenderer = new SoldierRenderer(gameController.SoldierPrefab);
 
-        //pathRenderer = new PathRenderer(trailPrefab);
-        pathRenderer = new PathRenderer(linePrefab);
+        pathRenderer = new PathRenderer(gameController.LinePrefab);
         pathRenderer.OnReadyEvent += PathRenderer_OnReadyEvent;
 
         game.Initialize();
@@ -214,7 +203,7 @@ public class UnityGameService
 
     public GameObject RenderUnit(Soldier soldier)
     {
-        SoldierRenderer sr = new SoldierRenderer(soldierPrefab);
+        SoldierRenderer sr = new SoldierRenderer(gameController.SoldierPrefab);
         GameObject soldierMono = sr.Draw(soldier.Position);
         BindSoldierEvents(sr, soldierMono, soldier);
 
@@ -223,10 +212,16 @@ public class UnityGameService
 
     public GameObject RenderUnit(ArmyBase armyBase)
     {
-        ArmyBaseRenderer abr = new ArmyBaseRenderer(this.armyBasePrefab);
+        ArmyBaseRenderer abr = new ArmyBaseRenderer(gameController.ArmyBasePrefab);
         GameObject renderedBaseObject = abr.Draw(armyBase.Position, armyBase.Name);
         BindArmyBaseEvents(abr, renderedBaseObject, armyBase);
         return renderedBaseObject;
+    }
+
+    public GameObject RenderUnit(Thing thing)
+    {
+        SpriteRenderer spriteRenderer = new SpriteRenderer(gameController.GreenOrbPrefab);
+        return spriteRenderer.Draw(thing.Position, "GreenOrb");
     }
 
     public void BindSoldierEvents(SoldierRenderer renderer, GameObject movingObject, Unit unit)

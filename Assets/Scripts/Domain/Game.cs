@@ -33,11 +33,11 @@ public class Game
         UnityGameEventHandlers = new Dictionary<Type, Func<UnityGameEvent, GameUpdateResult, UnitEvent>>
         {
 
-            {typeof (ClickInPlayerBaseEvent), (gameEvent,gameUpdate) => 
+            {typeof (ClickInPlayerBaseEvent), (gameEvent,gameUpdate) =>
                 this.HandleEvent((ClickInPlayerBaseEvent)gameEvent,gameUpdate) },
-            {typeof (UnitsCollideEvent), (gameEvent,gameUpdate) => 
+            {typeof (UnitsCollideEvent), (gameEvent,gameUpdate) =>
                 this.HandleEvent((UnitsCollideEvent)gameEvent,gameUpdate) },
-            {typeof (UnitExplosionComplete), (gameEvent,gameUpdate) => 
+            {typeof (UnitExplosionComplete), (gameEvent,gameUpdate) =>
                 this.HandleEvent((UnitExplosionComplete)gameEvent,gameUpdate) }
         };
     }
@@ -58,7 +58,7 @@ public class Game
 
         // il2cpp doesn't support dynamic keyword :( :( :(
         //foreach (dynamic curEvent in update.UnityGameEvents)
-        foreach(UnityGameEvent curEvent in update.UnityGameEvents)
+        foreach (UnityGameEvent curEvent in update.UnityGameEvents)
         {
             if (curEvent != null)
             {
@@ -149,10 +149,17 @@ public class Game
         Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
         Player.ArmyBase.Name = "PlayerBaseSquare";
 
+        Thing pathOrigin = new Thing()
+        {
+            ThingType = Thing.ThingTypeEnum.PathOrigin,
+            Position = new Vector2(-1.1f, -1.6f)
+        };
+
         return new List<Unit>
         {
             Enemy.ArmyBase
             ,Player.ArmyBase
+            ,pathOrigin
         };
     }
 

@@ -103,6 +103,7 @@ public partial class Unit
 
     }
 
+    // TODO: This is not meant to be here. Move to moveableunit.
     public virtual void Track(Unit otherUnit)
     {
         if (otherUnit.Allegiance != this.Allegiance && !otherUnit.IsDeadOrDying())

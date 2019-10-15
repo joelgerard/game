@@ -32,6 +32,7 @@ public class SharedStatesTransitioner
             return new Transition(new DyingState(currentState.GetUnit()), StateType.NORMAL);
         }
 
+
         return null;
     }
 }
