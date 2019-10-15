@@ -141,7 +141,7 @@ public class UnityGameService
     private void HandleUnitCreatedEvent(UnitCreatedEvent unitCreatedEvent)
     {
         Unit unit = unitCreatedEvent.Unit;
-        unit.GameObject = UnitRenderers[unit.GetType()](unit); //RenderUnit(unit);
+        unit.GameObject = UnitRenderers[unit.GetType()](unit); 
         game.OnUnitRenderedEvent(unit);
     }
 
@@ -159,61 +159,35 @@ public class UnityGameService
 
     private UnityGameServiceUpdate ParseInput(UnityGameServiceUpdate update)
     {
-        bool clickedInBase = false;
 
         Collider2D hitCollider = Physics2D.OverlapPoint(update.MousePos);
 
-        clickedInBase = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == "PlayerBaseSquare");
-
+        bool clickedInBase = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == "PlayerBaseSquare");
         bool clickedInOrigin = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == GREEN_PATH_ORIGIN);
 
 
         if (Input.GetButtonDown("Fire1") && clickedInOrigin)
         {
-            GameController.Log("Click on " + hitCollider?.attachedRigidbody.gameObject.name + " " + clickedInOrigin);
             // Click, so start drawing a new line.
-
-            //pathRenderer.pathGameObject = null;
             pathRenderer.StartDrawing = true;
             pathRenderer.StopDrawing = false;
         }
         if (Input.GetButton("Fire1") && !pathRenderer.StopDrawing)
         {
-            //pathRenderer.StartDrawing = false;
             // Mouse is still down and we are dragging, so keep drawing.
-            gameUpdate.currentPath = pathRenderer.Draw(update.MousePos); //(update.MainBehaviour.transform.position);
+            gameUpdate.currentPath = pathRenderer.Draw(update.MousePos); 
         }
 
         // FIXME: OMFG. My brain is fried. This isn't needed. Can calcualte this if the other
         // vars are set corrrectly.
         pathRenderer.StopDrawing |= update.MouseUp;
 
-        //if (!clickedInBase && update.MouseDown)
-        //{
-        //    pathGameObject = null;
-        //}
-
-        //// FIXME: STartDrawing is initialized improperly. 
-        //// If you draw before clicking, you're fucked. 
-        //if (!clickedInBase)
-        //{
-        //    pathRenderer.StartDrawing |= update.MouseUp;
-        //}
-
+        // Give the soldiers the path object to follow.
         gameUpdate.currentPath = pathRenderer.PathGameObject;
 
         if (update.Click && clickedInBase)
         {
             gameUpdate.UnityGameEvents.Add(new ClickInPlayerBaseEvent(update.MousePos, Allegiance.ALLY));
-        }
-
-
-        // TODO: Some cleanup with all these inputs
-        bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));
-
-        if (!clickedInBase && clickAndDragging)
-        {
-            //pathGameObject = pathRenderer.Draw(update.MousePos); //(update.MainBehaviour.transform.position);
         }
 
 
