@@ -5,12 +5,15 @@ public class PathRenderer
 {
     PathGameObject pathGameObject = null;
 
+    public PathGameObject PathGameObject { get { return pathGameObject; } }
+
     public event OnReady OnReadyEvent;
     public delegate void OnReady();
 
     readonly LineRenderer lineRendererPrefab;
 
     public bool StartDrawing { get; set; }
+    public bool StopDrawing { get; set; } = false;
 
 
     public PathRenderer(LineRenderer linePrefab)

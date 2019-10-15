@@ -32,7 +32,7 @@ public class ArmyBaseUnityGameObject : MonoBehaviour
         BoxCollider2D otherFightCollider = other.GetComponent<BoxCollider2D>();
 
 
-        if (fightCollider.IsTouching(otherFightCollider))
+        if (fightCollider != null && otherFightCollider != null && fightCollider.IsTouching(otherFightCollider))
         {
             UnitsCollideEvent unitsCollideEvent =
                 new UnitsCollideEvent(this.gameObject.name, other.gameObject.name, UnitsCollideEvent.CollisionEventType.ATTACK);

@@ -17,6 +17,8 @@ public class UnityGameService
 
     private Game game = new Game();
 
+    const string GREEN_PATH_ORIGIN = "GreenPathOrigin";
+
     GameUpdate gameUpdate = new GameUpdate();
 
     GameController gameController;
@@ -29,10 +31,6 @@ public class UnityGameService
     // Replace when IL2CPP introduces 'dynamic' keyword support.
     Dictionary<Type, Func<Unit, GameObject>> UnitRenderers;
     Dictionary<Type, Action<GameEvent>> RenderedEventHandlers;
-
-
-    // TODO: Remove
-    PathGameObject pathGameObject = null;  //new UnityTrailRendererPath();
 
     public UnityGameService()
     {
@@ -167,18 +165,42 @@ public class UnityGameService
 
         clickedInBase = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == "PlayerBaseSquare");
 
+        bool clickedInOrigin = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == GREEN_PATH_ORIGIN);
 
-        if (!clickedInBase && update.MouseDown)
+
+        if (Input.GetButtonDown("Fire1") && clickedInOrigin)
         {
-            pathGameObject = null;
+            GameController.Log("Click on " + hitCollider?.attachedRigidbody.gameObject.name + " " + clickedInOrigin);
+            // Click, so start drawing a new line.
+
+            //pathRenderer.pathGameObject = null;
+            pathRenderer.StartDrawing = true;
+            pathRenderer.StopDrawing = false;
+        }
+        if (Input.GetButton("Fire1") && !pathRenderer.StopDrawing)
+        {
+            //pathRenderer.StartDrawing = false;
+            // Mouse is still down and we are dragging, so keep drawing.
+            gameUpdate.currentPath = pathRenderer.Draw(update.MousePos); //(update.MainBehaviour.transform.position);
         }
 
-        // FIXME: STartDrawing is initialized improperly. 
-        // If you draw before clicking, you're fucked. 
-        if (!clickedInBase)
-        {
-            pathRenderer.StartDrawing |= update.MouseUp;
-        }
+        // FIXME: OMFG. My brain is fried. This isn't needed. Can calcualte this if the other
+        // vars are set corrrectly.
+        pathRenderer.StopDrawing |= update.MouseUp;
+
+        //if (!clickedInBase && update.MouseDown)
+        //{
+        //    pathGameObject = null;
+        //}
+
+        //// FIXME: STartDrawing is initialized improperly. 
+        //// If you draw before clicking, you're fucked. 
+        //if (!clickedInBase)
+        //{
+        //    pathRenderer.StartDrawing |= update.MouseUp;
+        //}
+
+        gameUpdate.currentPath = pathRenderer.PathGameObject;
 
         if (update.Click && clickedInBase)
         {
@@ -189,12 +211,11 @@ public class UnityGameService
         // TODO: Some cleanup with all these inputs
         bool clickAndDragging = ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0));
 
-        if (!clickedInBase &&  clickAndDragging)
+        if (!clickedInBase && clickAndDragging)
         {
-            pathGameObject = pathRenderer.Draw(update.MousePos); //(update.MainBehaviour.transform.position);
+            //pathGameObject = pathRenderer.Draw(update.MousePos); //(update.MainBehaviour.transform.position);
         }
 
-        gameUpdate.currentPath = pathGameObject;
 
         // FIXME: Not sure about this update.
         return update;
@@ -221,7 +242,7 @@ public class UnityGameService
     public GameObject RenderUnit(Thing thing)
     {
         SpriteRenderer spriteRenderer = new SpriteRenderer(gameController.GreenOrbPrefab);
-        return spriteRenderer.Draw(thing.Position, "GreenOrb");
+        return spriteRenderer.Draw(thing.Position, GREEN_PATH_ORIGIN);
     }
 
     public void BindSoldierEvents(SoldierRenderer renderer, GameObject movingObject, Unit unit)

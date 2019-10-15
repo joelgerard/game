@@ -39,14 +39,16 @@ public class SoldierGameObject : MonoBehaviour
         CircleCollider2D otherSightCollider = other.GetComponent<CircleCollider2D>();
         BoxCollider2D otherFightCollider = other.GetComponent<BoxCollider2D>();
 
-        if (sightCollider.IsTouching(otherFightCollider))
+
+        // TODO: This sightcollider is duplicated in the base.
+        if (sightCollider!= null && otherFightCollider != null && sightCollider.IsTouching(otherFightCollider))
         {
             UnitsCollideEvent unitsCollideEvent =
                 new UnitsCollideEvent(this.gameObject.name, other.gameObject.name, UnitsCollideEvent.CollisionEventType.SIGHT);
             OnCollisionEvent?.Invoke(unitsCollideEvent);
         }
 
-        if (fightCollider.IsTouching(otherFightCollider))
+        if (fightCollider != null && otherFightCollider != null && fightCollider.IsTouching(otherFightCollider))
         {
             UnitsCollideEvent unitsCollideEvent = 
                 new UnitsCollideEvent(this.gameObject.name, other.gameObject.name,UnitsCollideEvent.CollisionEventType.ATTACK);
