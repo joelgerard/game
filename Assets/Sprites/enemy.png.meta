@@ -1,25 +1,40 @@
 fileFormatVersion: 2
-guid: 865d00b1c321447c29b1523a7fa806c5
+guid: a08f89974a8d74bb294123bc3f8a6dbe
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9101278813714116849
-    second: girl_0
+      213: 297761703447499198
+    second: enemy_0
   - first:
-      213: -5439765026384770559
-    second: girl_1
+      213: 3680619090928529440
+    second: enemy_1
   - first:
-      213: 7094056765176595939
-    second: girl_2
+      213: -6810697999950630716
+    second: enemy_2
   - first:
-      213: -5859545116844290178
-    second: girl_3
+      213: 1779747271024799556
+    second: enemy_3
   - first:
-      213: -8195894768214112226
-    second: girl_4
+      213: 8411463563914695271
+    second: enemy_4
   - first:
-      213: -5537787781625429618
-    second: girl_5
+      213: 3678316895343943306
+    second: enemy_5
+  - first:
+      213: 5468275346343796690
+    second: enemy_6
+  - first:
+      213: 3810199616485272264
+    second: enemy_7
+  - first:
+      213: 4258081263921899527
+    second: enemy_8
+  - first:
+      213: -6686358444854819152
+    second: enemy_9
+  - first:
+      213: 8966077861573107906
+    second: enemy_10
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -60,7 +75,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 32
@@ -128,127 +143,148 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: girl_0
+      name: enemy_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 15
-        height: 16
+        width: 35
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cb0e7cac016844e49a918f315ab1d8be
-      internalID: 9101278813714116849
+      spriteID: 3a3aa847a03454622903bf0a0c687721
+      internalID: 297761703447499198
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: girl_1
+      name: enemy_1
       rect:
         serializedVersion: 2
-        x: 15
+        x: 47
         y: 0
-        width: 15
-        height: 16
+        width: 34
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed7aeb48898434fb58f7d24354737541
-      internalID: -5439765026384770559
+      spriteID: 3c73f31a8dab44ce4be51e6f4d6663d0
+      internalID: 3680619090928529440
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: girl_2
+      name: enemy_2
       rect:
         serializedVersion: 2
-        x: 30
+        x: 98
         y: 0
-        width: 15
-        height: 16
+        width: 31
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 09276bff3f2214551b1aa688fc44e05e
-      internalID: 7094056765176595939
+      spriteID: 8a8f82503a3b843a298152b4ecc6fad5
+      internalID: -6810697999950630716
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: girl_3
+      name: enemy_3
       rect:
         serializedVersion: 2
-        x: 45
+        x: 152
         y: 0
-        width: 15
-        height: 16
+        width: 30
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d4ec5211d11b4c99a39351b2fecb964
-      internalID: -5859545116844290178
+      spriteID: 2d0439dd01c274d7e8b7299ec6a95a11
+      internalID: 1779747271024799556
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: girl_4
+      name: enemy_4
       rect:
         serializedVersion: 2
-        x: 60
+        x: 208
         y: 0
-        width: 15
-        height: 16
+        width: 31
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 01977c464e04341ac9b82459e55ae33a
-      internalID: -8195894768214112226
+      spriteID: 924d4de7e37e34d109cdbf1a1952dc36
+      internalID: 8411463563914695271
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: girl_5
+      name: enemy_5
       rect:
         serializedVersion: 2
-        x: 75
+        x: 255
         y: 0
-        width: 15
-        height: 16
+        width: 32
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8031e419cb2084bb1acbd21c87bc4114
-      internalID: -5537787781625429618
+      spriteID: 696a3ae45f82143ab9bf4189549bd4c3
+      internalID: 3678316895343943306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_6
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 0
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58c80a850a2ec4710b9809519d08a703
+      internalID: 5468275346343796690
       vertices: []
       indices: 
       edges: []

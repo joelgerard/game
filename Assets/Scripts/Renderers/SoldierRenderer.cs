@@ -39,6 +39,8 @@ public class SoldierRenderer
         evt.time = ExplosionAnimation.TIME;
         evt.functionName = "AnimationEvent";
 
+        animator.Play("Enemy_Walking");
+
         clip.AddEvent(evt);
         return go;
     }
