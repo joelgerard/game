@@ -142,17 +142,17 @@ public class Game
     public List<Unit> DrawMap()
     {
         // Enemy
-        Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, new Vector2(0f, 3f));
+        Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, new Vector2(-2.42f, 4.02f));
         Enemy.ArmyBase.Name = "EnemyBaseSquare";
 
         // Enemy
-        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(0f, -3f));
+        Player.ArmyBase = CreateBase(Allegiance.ALLY, new Vector2(8f, 0.11f));
         Player.ArmyBase.Name = "PlayerBaseSquare";
 
         Thing pathOrigin = new Thing()
         {
             ThingType = Thing.ThingTypeEnum.PathOrigin,
-            Position = new Vector2(-1.1f, -1.6f)
+            Position = new Vector2(8f, -1f)
         };
 
         return new List<Unit>

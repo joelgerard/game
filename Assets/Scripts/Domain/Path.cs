@@ -17,7 +17,7 @@ public class Path : IPath
     public Vector2 GetPosition(int index)
     {
         // TODO: This always returns the player base.
-        Vector2 vector2 = new Vector2(-0.1f, -4.2f);
+        Vector2 vector2 = new Vector2(8f, 0.11f);
         return vector2;
     }
 }

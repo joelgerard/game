@@ -40,6 +40,7 @@ public class PathGameObject : MonoBehaviour, IPath
     public void AddPosition(Vector3 position)
     {
         points.Add(position);
+        position.z = 0f;
         lineRenderer.positionCount = points.Count;
         lineRenderer.SetPositions(points.ToArray());
 
