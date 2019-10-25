@@ -61,6 +61,10 @@ public class UnityGameService
 
     public void Initialize(GameController gameController)
     {
+        // TODO: Move out of here.
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+
         this.gameController = gameController;
 
         soldierRenderer = new SoldierRenderer(gameController.SoldierPrefab);
@@ -165,6 +169,20 @@ public class UnityGameService
         bool clickedInBase = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == "PlayerBaseSquare");
         bool clickedInOrigin = (hitCollider != null && hitCollider.attachedRigidbody.gameObject.name == GREEN_PATH_ORIGIN);
 
+        if (Input.GetButtonDown("Fire1"))
+        {
+            // Screen coordinates. 0,0 is the bottom left no matter what the orientation of the screen is.
+            Vector3 position = Input.mousePosition;
+            GameController.Log("Mouse pos: " + position.ToString());
+            Plane plane = new Plane(Camera.main.transform.forward * -1, position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            plane.Raycast(ray, out float distance);
+            Vector3 hitpoint = ray.GetPoint(distance);
+            GameController.Log("Ray pos: " + hitpoint.ToString());
+            GameController.Log("World point pos: " + Camera.main.ScreenToWorldPoint(position).ToString());
+            GameController.Log("Screen point pos: " + Camera.main.WorldToScreenPoint(Camera.main.ScreenToWorldPoint(position)).ToString());
+            GameController.Log("Screen height x width (pos): " + Screen.height + " " + Screen.width);
+        }
 
         if (Input.GetButtonDown("Fire1") && clickedInOrigin)
         {
@@ -215,7 +233,7 @@ public class UnityGameService
 
     public GameObject RenderUnit(Thing thing)
     {
-        SpriteRenderer spriteRenderer = new SpriteRenderer(gameController.GreenOrbPrefab);
+        WarSpriteRenderer spriteRenderer = new WarSpriteRenderer(gameController.GreenOrbPrefab);
         return spriteRenderer.Draw(thing.Position, GREEN_PATH_ORIGIN);
     }
 
@@ -237,7 +255,7 @@ public class UnityGameService
     // TODO: Move out of here once Map is more complicated.
     protected void DrawMap()
     {
-        RenderUnits(game.DrawMap());
+        RenderUnits(game.DrawMap(gameController.Map.text,gameController.MapImage));
     }
 
     void HandleUnityGameEvent(UnityGameEvent gameEvent)

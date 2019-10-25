@@ -7,7 +7,7 @@ public partial class MovableUnit : Unit
     protected bool startMoving = false;
 
     public partial class MovableUnitHsm { }
-    public float Speed { get; set; } = 0.25f;
+    //public float Speed { get; set; } = 0.25f;
     public Vector2 TargetPosition {get;set;}
     public int IndexOnPath { get; set; } = 0;
 

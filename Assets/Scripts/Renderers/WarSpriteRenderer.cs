@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
 
-public class SpriteRenderer
+public class WarSpriteRenderer
 {
     readonly GameObject prefab = null;
 
-    public SpriteRenderer(GameObject prefab)
+    public WarSpriteRenderer(GameObject prefab)
     {
         this.prefab = prefab;
     }

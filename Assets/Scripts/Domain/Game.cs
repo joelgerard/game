@@ -12,6 +12,8 @@ public class Game
     public Army Enemy { get { return Armies[0]; } }
     public AI AI { get; set; } = new AI();
 
+    Map map = new Map();
+
     /// <summary>
     /// Because, yeah, il2cpp doesn't support Dynamic
     /// </summary>
@@ -83,8 +85,8 @@ public class Game
 
         // FIXME: See above.
         Navigator navigator = new Navigator();
-        navigator.MoveUnits(update.deltaTime, Player.Soldiers, update.currentPath);
-        navigator.MoveUnits(update.deltaTime, Enemy.Soldiers, Path);
+        navigator.MoveUnits(update.deltaTime, Player.Soldiers, update.currentPath, map);
+        navigator.MoveUnits(update.deltaTime, Enemy.Soldiers, Path, map);
 
         return frameUpdate;
     }
@@ -139,7 +141,7 @@ public class Game
 
 
     // TODO: Public?
-    public List<Unit> DrawMap()
+    public List<Unit> DrawMap(String mapCsv, GameObject mapImage)
     {
         // Enemy
         Enemy.ArmyBase = CreateBase(Allegiance.ENEMY, new Vector2(-2.42f, 4.02f));
@@ -155,12 +157,16 @@ public class Game
             Position = new Vector2(8f, -1f)
         };
 
+        map.Load(mapCsv, mapImage);
+
         return new List<Unit>
         {
             Enemy.ArmyBase
             ,Player.ArmyBase
             ,pathOrigin
         };
+
+
     }
 
     private ArmyBase CreateBase(Allegiance allegiance, Vector2 pos)

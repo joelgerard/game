@@ -18,7 +18,7 @@ namespace Tests
             FakeGameService gameService = new FakeGameService(game);
 
             game.Initialize();
-            gameService.RenderUnits(game.DrawMap());
+            gameService.RenderUnits(game.DrawMap(null,null));
 
 
             Soldier s = game.AddSoldier(Allegiance.ALLY, new Vector2(1f, 1f));
@@ -49,7 +49,7 @@ namespace Tests
             FakeGameService gameService = new FakeGameService(game);
 
             game.Initialize();
-            gameService.RenderUnits(game.DrawMap());
+            gameService.RenderUnits(game.DrawMap(null,null));
 
 
             Soldier s = game.AddSoldier(Allegiance.ALLY, new Vector2(1f, 1f));
@@ -79,7 +79,7 @@ namespace Tests
             FakeGameService gameService = new FakeGameService(game);
 
             game.Initialize();
-            gameService.RenderUnits(game.DrawMap());
+            gameService.RenderUnits(game.DrawMap(null,null));
 
 
             Soldier s1 = game.AddSoldier(Allegiance.ALLY, new Vector2(1f, 1f));

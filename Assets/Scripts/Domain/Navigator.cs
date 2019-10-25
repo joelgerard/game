@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Map;
 using static MovableUnit.MovableUnitHsm;
 
 public class Navigator
@@ -12,7 +13,7 @@ public class Navigator
 
     // TODO: Should this be in a state update for the army?
     // the state update has delta time. 
-    public void MoveUnits(float deltaTime, List<Soldier> soldiers, IPath Path)
+    public void MoveUnits(float deltaTime, List<Soldier> soldiers, IPath Path, Map map)
     {
         if (Path == null)
         {
@@ -60,8 +61,29 @@ public class Navigator
                 // TODO: This distance from target, why is it here?
                 if (distanceFromTarget > 0.01f)
                 {
+
+                    MapTileType mapTile = map.Get(soldier.Position);
+
+                    // TODO: Temp. Remove.
+                    if (soldier.GameObject != null)
+                    {
+                        SpriteRenderer m_SpriteRenderer = soldier.GameObject.GetComponent<SpriteRenderer>();
+                        switch (mapTile)
+                        {
+                            case Map.MapTileType.Forest:
+                                m_SpriteRenderer.color = Color.black;
+                                break;
+                            case Map.MapTileType.Grass:
+                                m_SpriteRenderer.color = Color.green;
+                                break;
+                            case Map.MapTileType.Road:
+                                m_SpriteRenderer.color = Color.yellow;
+                                break;
+                        }
+                    }
+                    float soldierSpeed = soldier.GetSpeed(mapTile);
                     soldier.Position =
-                        Vector2.MoveTowards(soldier.Position, targetPos, soldier.Speed * deltaTime);
+                        Vector2.MoveTowards(soldier.Position, targetPos, soldierSpeed * deltaTime);
                     //GameController.Log("Moving soldier towards " + targetPos.ToString());
                 }
                 else if (isMoving)

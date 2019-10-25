@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Editor\Tests\FakeGameService.cs" />
     <Compile Include="Assets\Editor\Tests\TestGame.cs" />
+    <Compile Include="Assets\Editor\Tests\TestMap.cs" />
     <Compile Include="Assets\Editor\Tests\TestSoldier.cs" />
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>/Users/joel/dev/git/war/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>

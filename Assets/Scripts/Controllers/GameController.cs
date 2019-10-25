@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
     public GameObject SoldierPrefab;
     public GameObject ArmyBasePrefab;
     public GameObject GreenOrbPrefab;
+    public GameObject MapImage;
+    public TextAsset Map;
 
 
 
@@ -35,7 +37,7 @@ public class GameController : MonoBehaviour
         // TODO: Is this slow, canonical unity way of doing things? Use fixedUpdate?
         InvokeRepeating("GameTurnUpdate", 0.1f, 0.1f);  //1s delay, repeat every 1s
 
-
+        MapImage = GameObject.Find("MapImage");
         //RectanglePrefab, CirclePrefab, TrianglePrefab, trailPrefab, SoldierPrefab, ArmyBasePrefab, LinePrefab
 
         gameService.Initialize(this); //, baseObj);
@@ -60,6 +62,7 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        // FIXME: Doing this here??? Old code from demo. Remove and fix.
         var mousePos = (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
 
